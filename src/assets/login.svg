@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 273 149" width="273" height="149">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <path d="M 40,10 
+           H 233 
+           a 40,40 0 0 1 40,40 
+           V 139 
+           H 50 
+           a 40,40 0 0 1 -40,-40 
+           V 50 
+           a 40,40 0 0 1 40,-40 Z" 
+        fill="#3b4ef8" 
+        filter="url(#shadow)" />
+
+  <text x="50%" 
+        y="50%" 
+        dominant-baseline="central" 
+        text-anchor="middle" 
+        fill="#ffffff" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+        font-size="32" 
+        font-weight="600" 
+        letter-spacing="0.5">
+    Anmelden
+  </text>
+</svg>

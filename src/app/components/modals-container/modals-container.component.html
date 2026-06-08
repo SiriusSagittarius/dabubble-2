@@ -1,0 +1,282 @@
+@if (membersPanelOpen()) {
+  <div class="members-panel-backdrop" (click)="closeMembersPanel()">
+    <section class="members-panel" (click)="$event.stopPropagation()" aria-label="Mitglieder">
+      <header class="members-panel-header">
+        <span class="members-panel-title">Mitglieder</span>
+        <button type="button" class="members-panel-close" aria-label="Mitglieder schliessen" (click)="closeMembersPanel()">x</button>
+      </header>
+      <div class="members-panel-list">
+        @for (member of database.activeChannelMembers(); track member.id) {
+          <button type="button" class="members-panel-item" (click)="closeMembersPanel(); openContactProfile(member.id)">
+            <span class="members-panel-avatar-wrap">
+              <span class="members-panel-avatar" [style.backgroundImage]="contactAvatarBackgroundImage(member.id)" [style.backgroundPosition]="contactAvatarBackgroundPosition(member.id)" [style.backgroundSize]="contactAvatarBackgroundSize(member.id)"></span>
+              <span class="members-panel-status" [class.online]="member.isOnline" [class.offline]="!member.isOnline" [attr.aria-label]="member.isOnline ? 'Aktiv' : 'Deaktiviert'"></span>
+            </span>
+            <span class="members-panel-name">
+              {{ member.name }}
+              @if (database.isCurrentUser(member.id)) {
+                <span class="members-panel-self-tag"> (Du)</span>
+              }
+            </span>
+          </button>
+        }
+        <button type="button" class="members-panel-add" (click)="closeMembersPanel(); openAddMembersPanel()">
+          <img src="/assets/add-members-button.svg" alt="" class="members-panel-add-icon" />
+          <span>Mitglieder hinzufügen</span>
+        </button>
+      </div>
+    </section>
+  </div>
+}
+
+@if (addMembersPanelOpen()) {
+  <div class="add-members-panel-backdrop" (click)="closeAddMembersPanel()">
+    <section class="add-members-panel" (click)="$event.stopPropagation()" aria-label="Mitglieder hinzufuegen">
+      <header class="add-members-panel-header">
+        <span class="add-members-panel-title">Leute hinzufügen</span>
+        <button type="button" class="add-members-panel-close" aria-label="Schliessen" (click)="closeAddMembersPanel()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="2" y1="2" x2="14" y2="14"></line>
+            <line x1="14" y1="2" x2="2" y2="14"></line>
+          </svg>
+        </button>
+      </header>
+      <div class="add-members-panel-body">
+        <div class="add-members-panel-channel-row">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="9" x2="20" y2="9"></line>
+            <line x1="4" y1="15" x2="20" y2="15"></line>
+            <line x1="10" y1="3" x2="8" y2="21"></line>
+            <line x1="16" y1="3" x2="14" y2="21"></line>
+          </svg>
+          <span>Entwicklerteam</span>
+        </div>
+        <div class="add-members-input-wrap">
+          @for (member of selectedAddMembers(); track member.id) {
+            <div class="add-members-selected-chip">
+              <img [src]="avatarSvgPath(member.id)" alt="" class="add-members-selected-avatar" />
+              <span class="add-members-selected-name">{{ member.name }}</span>
+              <button type="button" class="add-members-selected-remove" aria-label="Entfernen" (click)="removeSelectedMember(member.id)">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="2" y1="2" x2="10" y2="10"></line>
+                  <line x1="10" y1="2" x2="2" y2="10"></line>
+                </svg>
+              </button>
+            </div>
+          }
+          <input type="text" #addMemberInput class="add-members-panel-input" placeholder="Name eingeben" [(ngModel)]="addMembersName" (focus)="showAddMembersSuggestions.set(true)" (blur)="hideSuggestionsWithDelay()" />
+          @if (showAddMembersSuggestions() && addMembersSuggestions().length > 0) {
+            <div class="add-members-suggestions-list">
+              @for (user of addMembersSuggestions(); track user.id) {
+                <button type="button" class="suggestion-item" (click)="selectSuggestedMember(user.id)">
+                  <img [src]="avatarSvgPath(user.id)" alt="" class="suggestion-avatar" />
+                  <span class="suggestion-name">{{ user.name }}</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+        <button type="button" class="add-members-panel-submit" [class.add-members-panel-submit-disabled]="selectedAddMemberIds().length === 0" [disabled]="selectedAddMemberIds().length === 0" (click)="addMembersToChannel()">Hinzufügen</button>
+      </div>
+    </section>
+  </div>
+}
+
+@if (channelEditionOpen()) {
+  <div class="channel-edition-backdrop" (click)="closeChannelEdition()">
+    <section class="channel-edition-card" (click)="$event.stopPropagation()" aria-label="Channel Edition">
+      <header class="channel-edition-top-row">
+        <div class="channel-edition-top-title"># {{ database.activeChannel().name }}</div>
+        <button type="button" class="channel-edition-close" aria-label="Channel Edition schliessen" (click)="closeChannelEdition()">x</button>
+      </header>
+
+      <section class="channel-edition-section channel-edition-section-name" [class.channel-edition-section-editing]="channelNameEditMode">
+        <div class="channel-edition-section-row">
+          <span class="channel-edition-label">Channel-Name</span>
+          @if (channelNameEditMode) {
+            <button type="button" class="channel-edition-edit-button" (click)="saveChannelName()">Speichern</button>
+          } @else {
+            <button type="button" class="channel-edition-edit-button" (click)="editChannelName()">Bearbeiten</button>
+          }
+        </div>
+        @if (channelNameEditMode) {
+          <div class="channel-edition-name-edit-row">
+            <span class="channel-edition-channel-hash">#</span>
+            <input type="text" class="channel-edition-input" [(ngModel)]="channelNameDraft" />
+          </div>
+        } @else {
+          <div class="channel-edition-value channel-edition-value-channel">
+            <span class="channel-edition-channel-hash">#</span>
+            <span>{{ database.activeChannel().name }}</span>
+          </div>
+        }
+      </section>
+
+      <section class="channel-edition-section channel-edition-section-description" [class.channel-edition-section-editing]="channelDescriptionEditMode">
+        <div class="channel-edition-section-row">
+          <span class="channel-edition-label channel-edition-label-blue">Beschreibung</span>
+          @if (channelDescriptionEditMode) {
+            <button type="button" class="channel-edition-edit-button" (click)="saveChannelDescription()">Speichern</button>
+          } @else {
+            <button type="button" class="channel-edition-edit-button" (click)="editChannelDescription()">Bearbeiten</button>
+          }
+        </div>
+        @if (channelDescriptionEditMode) {
+          <input type="text" class="channel-edition-input channel-edition-input-description" placeholder="Dein Text hier" [(ngModel)]="channelDescriptionDraft" />
+        } @else {
+          <div class="channel-edition-value channel-edition-description">
+            {{ database.activeChannel().description || 'Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.' }}
+          </div>
+        }
+        <div class="channel-edition-divider"></div>
+        <section class="channel-edition-created-by">
+          <span class="channel-edition-created-label">Erstellt von</span>
+          <span class="channel-edition-created-user">{{ database.userName(database.activeChannel().createdBy) }}</span>
+        </section>
+      </section>
+
+      <button type="button" class="channel-edition-leave-button" (click)="handleChannelEditionAction()">{{ channelEditionActionLabel() }}</button>
+    </section>
+  </div>
+}
+
+@if (profileDialogOpen) {
+  <div class="profile-modal-backdrop" (click)="closeProfileDialog()">
+    <section class="profile-modal" role="dialog" aria-modal="true" [attr.aria-label]="'Profil von ' + (database.currentUser()?.name ?? 'Benutzer')" (click)="$event.stopPropagation()">
+      <div class="profile-modal-content">
+        <div class="profile-modal-top-row">
+            <span class="profile-modal-title">{{ profileEditMode ? 'Dein Profil bearbeiten' : 'Profil' }}</span>
+          <button type="button" class="profile-modal-close" aria-label="Fenster schliessen" (click)="closeProfileDialog()">X</button>
+        </div>
+
+        <div class="profile-modal-avatar-stage">
+          <div class="profile-modal-avatar">
+            <div class="profile-modal-avatar-image" [style.backgroundImage]="profileAvatarBackgroundImage()" [style.backgroundPosition]="profileAvatarBackgroundPosition()" [style.backgroundSize]="profileAvatarBackgroundSize()"></div>
+          </div>
+        </div>
+
+        @if (!profileEditMode) {
+          <section class="profile-modal-info">
+            <div class="profile-modal-name-row">
+              <h2 class="profile-modal-name">
+                {{ profileUser()?.name ?? 'Profil' }}
+                @if (isCurrentProfileUser()) {
+                  <span class="profile-modal-self-tag"> (Du)</span>
+                }
+              </h2>
+              @if (isCurrentProfileUser()) {
+                <button type="button" class="profile-modal-edit" (click)="editProfile()">Bearbeiten</button>
+              }
+            </div>
+            <div class="profile-modal-status-row">
+              <span class="profile-modal-status-dot" aria-hidden="true"></span>
+              <span class="profile-modal-status-text">{{ profileUser()?.isOnline ? 'Aktiv' : 'Deaktiviert' }}</span>
+            </div>
+          </section>
+
+          <section class="profile-modal-email">
+            <div class="profile-modal-email-heading">
+              <img src="/assets/mail.svg" alt="" class="profile-modal-email-icon" />
+              <span class="profile-modal-email-label">E-Mail-Adresse</span>
+            </div>
+            <p class="profile-modal-email-address">{{ profileUser()?.email ?? '' }}</p>
+          </section>
+
+          @if (!isCurrentProfileUser()) {
+            <div class="profile-modal-message-action">
+              <button type="button" class="profile-modal-message-button" (click)="messageProfileUser()">
+                <img src="/assets/mode_comment.svg" alt="" class="profile-modal-message-icon" />
+                <span>Nachricht</span>
+              </button>
+            </div>
+          }
+        } @else {
+          <section class="profile-modal-edit-panel" aria-label="Profil bearbeiten">
+            <div class="profile-modal-edit-label-row">
+              <img src="/assets/account_circle.svg" alt="" class="profile-modal-edit-label-icon" />
+              <label class="profile-modal-edit-label" for="profile-name-input">Vollständiger Name</label>
+            </div>
+            <div class="profile-modal-edit-field">
+              <input id="profile-name-input" type="text" class="profile-modal-edit-input" [value]="profileEditName" (input)="profileEditName = $any($event.target).value" />
+            </div>
+            <div class="profile-modal-edit-actions">
+              <button type="button" class="profile-modal-cancel" (click)="cancelProfileEdit()">Abbrechen</button>
+              <button type="button" class="profile-modal-save" [disabled]="!profileEditName.trim()" (click)="saveProfileEdit()">Speichern</button>
+            </div>
+          </section>
+        }
+      </div>
+    </section>
+  </div>
+}
+
+@if (addChannelDialogOpen()) {
+  <div class="add-channel-backdrop" (click)="closeAddChannelDialog()">
+    <section class="add-channel-dialog" [class.add-channel-members-dialog]="addChannelMembersStep" (click)="$event.stopPropagation()" [attr.aria-label]="addChannelMembersStep ? 'Leute hinzufügen' : 'Channel erstellen'">
+      <header class="add-channel-dialog-header">
+        <h2 class="add-channel-dialog-title">{{ addChannelMembersStep ? 'Leute hinzufügen' : 'Channel erstellen' }}</h2>
+        <button type="button" class="add-channel-dialog-close" aria-label="Channel Dialog schliessen" (click)="closeAddChannelDialog()">x</button>
+      </header>
+
+      @if (!addChannelMembersStep) {
+        <form class="add-channel-form" novalidate (submit)="createAddChannel(); $event.preventDefault()">
+          <p class="add-channel-dialog-copy">Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein, zum Beispiel <span>#marketing</span>.</p>
+          <label class="add-channel-label" for="add-channel-name">Channel-Name</label>
+          <div class="add-channel-field add-channel-name-field">
+            <span class="add-channel-hash" aria-hidden="true">#</span>
+            <input id="add-channel-name" name="addChannelName" type="text" class="add-channel-input add-channel-input-with-icon" placeholder="z. B. Kooperationsprojekte" [(ngModel)]="addChannelNameDraft" />
+          </div>
+          <label class="add-channel-label add-channel-description-label" for="add-channel-description">Beschreibung <span>(optional)</span></label>
+          <div class="add-channel-field">
+            <input id="add-channel-description" name="addChannelDescription" type="text" class="add-channel-input" placeholder="Dein Text hier" [(ngModel)]="addChannelDescriptionDraft" />
+          </div>
+          <div class="add-channel-actions">
+            <button type="submit" class="add-channel-submit" [disabled]="!addChannelNameDraft.trim()">Erstellen</button>
+          </div>
+        </form>
+      } @else {
+        <form class="add-channel-members-form" novalidate (submit)="finishAddChannelMembers(); $event.preventDefault()">
+          <label class="add-channel-member-option">
+            <input type="radio" name="addChannelMemberMode" value="all" [(ngModel)]="addChannelMemberMode" />
+            <span>Alle Mitglieder von Devspace hinzufügen</span>
+          </label>
+          <label class="add-channel-member-option">
+            <input type="radio" name="addChannelMemberMode" value="selected" [(ngModel)]="addChannelMemberMode" />
+            <span>Bestimmte Leute hinzufügen</span>
+          </label>
+
+          @if (addChannelMemberMode === 'selected') {
+            <div class="add-members-input-wrap">
+              @for (member of selectedAddMembers(); track member.id) {
+                <div class="add-members-selected-chip">
+                  <img [src]="avatarSvgPath(member.id)" alt="" class="add-members-selected-avatar" />
+                  <span class="add-members-selected-name">{{ member.name }}</span>
+                  <button type="button" class="add-members-selected-remove" aria-label="Entfernen" (click)="removeSelectedMember(member.id)">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round">
+                      <line x1="2" y1="2" x2="10" y2="10"></line>
+                      <line x1="10" y1="2" x2="2" y2="10"></line>
+                    </svg>
+                  </button>
+                </div>
+              }
+              <input type="text" name="memberSearch" class="add-members-panel-input" placeholder="Name eingeben" [(ngModel)]="addMembersName" (focus)="showAddMembersSuggestions.set(true)" (blur)="hideSuggestionsWithDelay()" />
+              @if (showAddMembersSuggestions() && addMembersSuggestions().length > 0) {
+                <div class="add-members-suggestions-list">
+                  @for (user of addMembersSuggestions(); track user.id) {
+                    <button type="button" class="suggestion-item" (click)="selectSuggestedMember(user.id)">
+                      <img [src]="avatarSvgPath(user.id)" alt="" class="suggestion-avatar" />
+                      <span class="suggestion-name">{{ user.name }}</span>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          }
+          <div class="add-channel-actions add-channel-members-actions">
+            <button type="submit" class="add-channel-submit">Erstellen</button>
+          </div>
+        </form>
+      }
+    </section>
+  </div>
+}

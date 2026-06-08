@@ -1,0 +1,1065 @@
+/* ==========================================
+   TODO VIEW LAYOUT (Aus Part 6)
+   ========================================== */
+.todo-view {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  border-radius: 30px;
+  background: #fff;
+  font-family: Nunito, sans-serif;
+}
+
+.todo-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 110px;
+  padding: 30px 45px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.todo-avatar-wrap {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.todo-body {
+  position: absolute;
+  inset: 110px 0 0 0;
+  padding: 40px 45px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.todo-title {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 33px;
+  color: #000;
+}
+
+.todo-list {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* ==========================================
+   MAIN CHAT HEADER & VERLAUF (Aus Part 6)
+   ========================================== */
+.chat-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 96px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 25px 45px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 70;
+}
+
+.chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 6px 10px;
+  margin-left: -10px;
+  transition: background-color 0.2s ease;
+}
+
+.chat-header-left:hover {
+  background: #eceefe;
+  color: #444df2;
+}
+
+.chat-header-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-header-title-hash {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+}
+
+.chat-header-left:hover .chat-header-title-hash,
+.chat-header-left:hover .chat-header-title-text {
+  color: #444df2;
+}
+
+.chat-header-title-text {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+}
+
+.chat-header-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.chat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.chat-header-members-click {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 6px 12px;
+  transition: background-color 0.2s ease;
+}
+
+.chat-header-members-click:hover {
+  background: #eceefe;
+}
+
+.chat-header-members-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.chat-header-member-avatar-mask {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin-left: -8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.chat-header-member-avatar-mask:first-child {
+  margin-left: 0;
+}
+
+.chat-header-member-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chat-header-members-count {
+  font-family: Nunito, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+.chat-header-add-member-btn {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: #eceefe;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.chat-header-add-member-btn:hover {
+  background: #dcdffd;
+}
+
+.chat-header-add-member-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.chat-body {
+  position: absolute;
+  inset: 96px 0 145px 0;
+  padding: 24px 45px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.chat-date-separator {
+  position: relative;
+  width: 100%;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.chat-date-separator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: #adb0d9;
+  z-index: 1;
+}
+
+.chat-date-text-box {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  padding: 0 20px;
+  border: 1px solid #adb0d9;
+  border-radius: 30px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000;
+}
+
+
+/* ==========================================
+   NACHRICHTEN-BOXEN & HOVER MENÜS (Aus Part 7)
+   ========================================== */
+.message-box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  transition: background-color 0.15s ease;
+}
+
+.message-box:hover {
+  background: #eceefe;
+}
+
+.message-box-avatar-wrapper {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  flex: 0 0 auto;
+}
+
+.message-box-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.message-box-content-area {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message-box-top-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.message-box-sender-name {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.message-box-time {
+  font-family: Nunito, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #686868;
+}
+
+.message-box-bubble {
+  width: fit-content;
+  max-width: 75%;
+  background: #eceefe;
+  border-radius: 0 30px 30px 30px;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+  word-break: break-word;
+}
+
+/* Eigene Nachrichten (Rechtsbündig) */
+.message-box-current-user {
+  flex-direction: row-reverse;
+}
+
+.message-box-current-user .message-box-top-row {
+  flex-direction: row-reverse;
+}
+
+.message-box-current-user .message-box-content-area {
+  align-items: flex-end;
+}
+
+.message-box-current-user .message-box-bubble {
+  background: #444df2;
+  color: #fff;
+  border-radius: 30px 0 30px 30px;
+}
+
+/* Schwebendes Aktionsmenü bei Hover */
+.message-hover-actions-menu {
+  position: absolute;
+  top: -20px;
+  right: 45px;
+  height: 46px;
+  border: 1px solid #adb0d9;
+  border-radius: 25px 25px 0 25px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 3px 15px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 80;
+  transition: opacity 0.15s ease;
+}
+
+.message-box-current-user .message-hover-actions-menu {
+  right: auto;
+  left: 45px;
+  border-radius: 25px 25px 25px 0;
+}
+
+.message-box:hover .message-hover-actions-menu {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.message-hover-action-btn {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.15s ease;
+}
+
+.message-hover-action-btn:hover {
+  background: #eceefe;
+}
+
+.message-hover-action-icon {
+  width: 24px;
+  height: 24px;
+}
+/* ==========================================
+   THREAD AUTOCOMPLETE & REAKTIONEN (Aus Part 8 & 9)
+   ========================================== */
+.thread-contact-suggestions-list {
+  position: absolute;
+  width: 340px;
+  max-width: calc(100% - 20px);
+  left: 0;
+  right: auto;
+  bottom: calc(100% + 8px);
+  background: #fff;
+  border: 1px solid #c7cbfa;
+  border-radius: 20px 20px 20px 0;
+  padding: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 30;
+}
+
+.thread-reaction-chip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.thread-reaction-chip-wrap:hover .reaction-hover-bubble,
+.thread-reaction-chip-wrap:focus-within .reaction-hover-bubble {
+  opacity: 1;
+}
+
+/* Teilen uns dieselbe Blasen-Logik wie im Chat */
+.reaction-hover-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: 140px;
+  padding: 10px;
+  border-radius: 18px 18px 18px 0px;
+  background: #444df2;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 18;
+}
+
+/* Spezifischer Scroll-Korrekturwert für den Emoji-Picker innerhalb des schmalen Threads */
+:host ::ng-deep .emoji-picker-popover-thread .emoji-mart-scroll {
+
+  padding-top: 10px;
+
+  padding-bottom: 8px;
+}
+
+.thread-emoji-picker-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+  background: transparent;
+}
+
+.thread-emoji-picker-layer .emoji-picker-popover-thread {
+  position: relative;
+  left: auto;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  width: min(680px, calc(100% - 32px));
+  max-width: min(680px, calc(100% - 32px));
+  transform: none;
+  margin: 0;
+}
+/* ==========================================
+   THREAD PANEL CONTAINER & LAYOUT (Aus Part 10 & 11)
+   ========================================== */
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  border-radius: 30px;
+  background: #eceefe;
+  overflow: hidden;
+  font-family: Nunito, sans-serif;
+}
+
+.thread-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  padding-top: 86px;
+  box-sizing: border-box;
+}
+
+
+
+
+.thread-header {
+  position: absolute;
+  inset: 86px 0 auto 0;
+  height: 96px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 28px 40px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  z-index: 2;
+}
+
+.thread-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.thread-title {
+  font-size: 24px;
+  line-height: 33px;
+  font-weight: 700;
+  color: #000;
+}
+
+.thread-channel {
+  font-size: 14px;
+  line-height: 19px;
+  color: #797ef3;
+  white-space: nowrap;
+}
+
+.thread-tag-prefix {
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 700;
+  color: #797ef3;
+}
+
+.thread-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.thread-close-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.thread-close-icon::before,
+.thread-close-icon::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 11px;
+  height: 2px;
+  border-radius: 2px;
+  background: #000;
+}
+
+.thread-close-icon::before { transform: rotate(45deg); }
+.thread-close-icon::after { transform: rotate(-45deg); }
+
+.thread-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 182px;
+  bottom: 250px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  padding: 12px 0 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.thread-body::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* ==========================================
+   THREAD MESSAGES & STRUCTURING (Aus Part 11 & 12)
+   ========================================== */
+.thread-message {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: 10px;
+
+  padding: 14px 18px;
+  background: transparent;
+  transition: background-color 0.12s ease;
+}
+
+.thread-message:hover {
+  background: #eceefe;
+}
+
+.thread-message:hover .thread-bubble,
+.thread-message:hover .thread-bubble-own,
+.thread-message:hover .thread-bubble-large {
+  background: #fff;
+  color: #000;
+}
+
+.thread-message-active {
+  z-index: 20 !important;
+}
+
+.thread-origin {
+  width: 100%;
+  min-height: 133px;
+  padding: 10px 0 10px 24px;
+}
+
+.thread-reply-large {
+  width: 100%;
+  min-height: 250px;
+  padding: 10px 20px;
+}
+
+.thread-reply-small {
+  width: 100%;
+  min-height: 150px;
+  justify-content: flex-end;
+  padding: 10px 20px 10px 0;
+}
+
+.thread-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.thread-message-left .thread-avatar {
+  transform: translateX(-8px);
+}
+
+.thread-origin .thread-avatar {
+  transform: translateX(0);
+}
+
+.thread-message-right .thread-avatar {
+  transform: translateX(18px);
+}
+
+.thread-content-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 282px;
+  flex: 0 0 auto;
+  position: relative;
+  min-width: 0;
+}
+
+.thread-content-wide {
+  width: 320px;
+}
+
+.thread-content-right {
+  width: fit-content;
+  max-width: 100%;
+  align-items: flex-end;
+}
+
+
+/* ==========================================
+   META-INFORMATIONEN & ZEITEN (Aus Part 11)
+   ========================================== */
+.thread-message-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  height: 25px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+.thread-message-meta-right {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.thread-message-name {
+  font-size: 18px;
+  line-height: 25px;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  min-width: max-content;
+}
+
+.thread-message-time {
+  font-size: 14px;
+  line-height: 16px;
+  color: #686868;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  min-width: max-content;
+}
+
+.thread-message-time-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+}
+
+
+/* ==========================================
+   SPEECH BUBBLES IN THREADS (Aus Part 12)
+   ========================================== */
+.thread-bubble {
+  margin: 0;
+  box-sizing: border-box;
+  padding: 15px;
+  border-radius: 0 20px 20px 20px;
+  background: #eceefe;
+  color: #000;
+  font-size: 18px;
+  line-height: 25px;
+  overflow-wrap: anywhere;
+}
+
+.thread-bubble-own {
+  width: 300px;
+  min-height: 55px;
+  border-radius: 20px 0 20px 20px;
+  background: #797ef3;
+  color: #fff;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.thread-separator {
+  position: relative;
+  width: auto;
+  height: 25px;
+  margin: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #adb0d9;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+.thread-separator-line {
+  height: 0;
+  border-top: 1px solid #adb0d9;
+  flex: 1;
+}
+
+
+/* ==========================================
+   HOVER ACTIONS & REAKTIONEN IM THREAD (Aus Part 11 & 12)
+   ========================================== */
+.thread-edit-box {
+  position: absolute;
+  left: 0;
+  width: 86px;
+  height: 45px;
+  flex: 0 0 auto;
+  padding: 0 8px;
+  margin-bottom: 30px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px 20px 0px 20px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0;
+  visibility: visible;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease,
+    visibility 0.12s ease;
+  box-sizing: border-box;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.thread-message-right:hover .thread-edit-box,
+.thread-message-right:focus-within .thread-edit-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.thread-message-left:hover .thread-hover-box,
+.thread-message-left:focus-within .thread-hover-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.thread-edit-icon-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.thread-edit-box-icon {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.thread-edit-box-icon:hover {
+  background: #eceefe;
+}
+
+.thread-edit-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 205px;
+  padding: 12px 18px;
+  border-radius: 0 20px 20px 20px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+  z-index: 8;
+}
+
+.thread-edit-menu-item {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #000;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.thread-edit-menu-item:hover,
+.thread-edit-menu-item:focus-visible {
+  outline: none;
+}
+
+.thread-reactions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: visible;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+.thread-reactions-own {
+  justify-content: flex-end;
+}
+
+.thread-reaction-chip,
+.thread-reaction-add {
+  height: 34px;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  border: 1px solid #adb0d9;
+  cursor: pointer;
+}
+
+.thread-reaction-emoji {
+  font-size: 25px;
+  line-height: 1;
+}
+
+.thread-reaction-plus {
+  font-size: 24px;
+  line-height: 1;
+}
+
+
+/* ==========================================
+   ALLGEMEINE MESSAGE REACTION ACTIONS (Aus Part 12)
+   ========================================== */
+.message-reaction-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid #adb0d9;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.message-reaction-action {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.message-reaction-action:hover,
+.message-reaction-action:focus-visible {
+  background: #eceefe;
+  outline: none;
+}
+
+.message-reaction-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.message-reaction-menu-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+
+/* ==========================================
+   ZUSÄTZLICHE UTILITIES & HOVERS (Aus Part 10)
+   ========================================== */
+.members-area:hover .members-icon {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(86%) saturate(2413%) hue-rotate(223deg)
+    brightness(99%) contrast(97%);
+}
+
+.action-button:hover,
+.action-button:focus-visible {
+  background: #fff;
+  outline: none;
+}
+
+.action-button:hover .action-icon,
+.action-button:focus-visible .action-icon {
+  filter: brightness(0) saturate(100%) invert(37%) sepia(85%) saturate(2442%) hue-rotate(225deg)
+    brightness(96%) contrast(96%);
+}
+
+.send-button {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.send-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.thread-input-box {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 30px;
+  max-width: 485px;
+  height: 145px;
+  border-top: 1px solid #adb0d9;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  background: #fff;
+  padding: 20px 20px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.thread-input {
+  width: 100%;
+  height: 40px;
+  border: 0;
+  outline: none;
+  resize: none;
+  padding: 0;
+  font: inherit;
+  font-size: 18px;
+  color: #000;
+  background: #fff;
+}
+
+.thread-input-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.thread-input-left-actions {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.thread-input-left-actions .action-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.thread-input-left-actions .action-icon,
+.thread-input-left-actions .action-icon-small {
+  width: 40px;
+  height: 40px;
+}
+
+.thread-input-left-actions .action-button:hover,
+.thread-input-left-actions .action-button:focus-visible {
+  background: #fff;
+  outline: none;
+}

@@ -1,0 +1,910 @@
+/* Profil- und Backdrop-Animationen */
+.profile-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  padding: 115px 50px 0 0;
+}
+.profile-modal {
+  width: 520px;
+  min-height: 640px;
+  border-radius: 30px 0 30px 30px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  padding: 40px 40px 36px;
+}
+
+.profile-modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-modal-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-modal-title {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #000;
+}
+
+.profile-modal-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-modal-avatar-stage {
+  width: 100%;
+  height: 220px;
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-modal-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #eceefe;
+}
+
+.profile-modal-avatar-image {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+
+.profile-modal-info,
+.profile-modal-email,
+.profile-modal-message-action,
+.profile-modal-edit-panel {
+  width: 100%;
+}
+
+.profile-modal-info {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.profile-modal-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.profile-modal-name {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #000;
+}
+
+.profile-modal-edit {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  color: #535af1;
+  transition: color 0.2s ease;
+}
+
+.profile-modal-edit:hover,
+.profile-modal-edit:focus-visible {
+  color: #444df2;
+  font-weight: 700;
+  outline: none;
+}
+
+.profile-modal-status-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-modal-status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #92c83e;
+}
+
+.profile-modal-status-dot.offline {
+  background: #adb0d9;
+}
+
+.profile-modal-status-text {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #92c83e;
+}
+
+.profile-modal-status-text.offline {
+  color: #adb0d9;
+}
+
+.profile-modal-email {
+  margin-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-modal-email-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-modal-email-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.profile-modal-email-label {
+  font-family: Nunito, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 27px;
+  color: #000;
+}
+
+.profile-modal-email-address {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #1a73e8;
+  margin-left: 34px;
+}
+
+.profile-modal-message-action {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-modal-message-button {
+  min-width: 160px;
+  height: 49px;
+  border: 0;
+  border-radius: 25px;
+  background: #444df2;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-modal-message-button:hover,
+.profile-modal-message-button:focus-visible {
+  background: #2733f0;
+  outline: none;
+}
+
+.profile-modal-edit-panel {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-modal-edit-label-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-modal-edit-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.profile-modal-edit-field {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #adb0d9;
+  border-radius: 30px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-modal-edit-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.profile-modal-input {
+  flex: 1 1 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.profile-modal-edit-field:focus-within {
+  border: 2px solid #444df2;
+  padding: 0 17px;
+}
+
+.profile-modal-edit-actions {
+  width: 100%;
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-modal-cancel,
+.profile-modal-save {
+  flex: 1 1 0;
+  height: 49px;
+  border-radius: 25px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.profile-modal-cancel {
+  border: 2px solid #444df2;
+  background: #fff;
+  color: #444df2;
+}
+
+.profile-modal-cancel:hover,
+.profile-modal-cancel:focus-visible {
+  background: #eceefe;
+  outline: none;
+}
+
+.profile-modal-save {
+  border: 0;
+  background: #444df2;
+  color: #fff;
+}
+
+.profile-modal-save:hover,
+.profile-modal-save:focus-visible {
+  background: #2733f0;
+  outline: none;
+}
+
+.profile-modal-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   KANALERSTELLUNGS MODAL (Aus Part 3)
+   ========================================== */
+.add-channel-modal-backdrop,
+.add-channel-backdrop,
+.members-panel-backdrop,
+.add-members-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(0, 0, 0, 0.18);
+  display: grid;
+  place-items: center;
+}
+
+.members-panel,
+.add-members-panel,
+.add-channel-dialog {
+  width: min(790px, 100vw - 40px);
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+  box-sizing: border-box;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.members-panel {
+  width: 420px;
+  padding: 28px 24px 24px;
+}
+
+.add-members-panel {
+  width: 430px;
+  padding: 28px 24px 24px;
+}
+
+.add-channel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.add-channel-title {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #000;
+}
+
+.add-channel-close-button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.add-channel-close-button:hover {
+  background: #eceefe;
+}
+
+.add-channel-close-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.add-channel-dialog-copy {
+  width: min(710px, 100%);
+  margin: 20px 0 0 0;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-dialog-copy span {
+  color: #535af1;
+}
+
+.add-channel-label {
+  margin-top: 24px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-input-wrapper {
+  margin-top: 10px;
+  position: relative;
+  width: 100%;
+}
+
+.add-channel-input-prefix {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #adb0d9;
+}
+
+.add-channel-input {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #adb0d9;
+  border-radius: 30px;
+  padding: 0 24px 0 45px;
+  box-sizing: border-box;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  color: #000;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.add-channel-input:focus {
+  border-color: #444df2;
+}
+
+.add-channel-input::placeholder {
+  color: #adb0d9;
+}
+
+.add-channel-textarea {
+  width: 100%;
+  height: 120px;
+  border: 1px solid #adb0d9;
+  border-radius: 30px;
+  padding: 18px 24px;
+  box-sizing: border-box;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  color: #000;
+  outline: none;
+  background: #fff;
+  resize: none;
+  margin-top: 10px;
+  transition: border-color 0.2s ease;
+}
+
+.add-channel-textarea:focus {
+  border-color: #444df2;
+}
+
+.add-channel-textarea::placeholder {
+  color: #adb0d9;
+}
+
+.add-channel-actions {
+  margin-top: 34px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-channel-submit-button {
+  height: 49px;
+  border: 0;
+  border-radius: 25px;
+  padding: 0 24px;
+  background: #444df2;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-channel-submit-button:hover {
+  background: #2733f0;
+}
+
+.add-channel-submit-button:disabled {
+  background: #adb0d9;
+  cursor: not-allowed;
+}
+
+/* Radio Optionen im Schritt 2 */
+.add-channel-member-options {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-channel-member-option {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.add-channel-member-option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 1px solid #adb0d9;
+  border-radius: 50%;
+  appearance: none;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.add-channel-member-option input::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #444df2;
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+
+.add-channel-member-option input:checked::before {
+  transform: scale(1);
+}
+
+.add-channel-member-option input:focus-visible {
+  outline: 2px solid #535af1;
+  outline-offset: 2px;
+}
+
+.add-channel-member-option-text {
+  font-family: Nunito, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+}
+
+/* Mitglieder suchen / Vorschläge */
+.add-members-panel-input-box {
+  position: relative;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.add-members-suggestions-list {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 110;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-members-suggestion-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 8px 16px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.add-members-suggestion-item:hover {
+  background: #eceefe;
+}
+
+.add-members-suggestion-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.add-members-suggestion-name {
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Ausgewählte Mitglieder Tags */
+.selected-members-tags-box {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selected-member-tag {
+  background: #eceefe;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Nunito, sans-serif;
+  font-size: 14px;
+  color: #444df2;
+  font-weight: 600;
+}
+
+.selected-member-tag-remove {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #adb0d9;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.selected-member-tag-remove:hover {
+  color: #ff5252;
+}
+/* ==========================================
+   ERWEITERTE DIALOG-FIELDS (Aus Part 4)
+   ========================================== */
+.add-channel-input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-input::placeholder {
+  color: #686868;
+}
+
+.add-channel-members-actions {
+  margin-top: 35px;
+}
+
+.add-channel-submit {
+  width: 125px;
+  height: 49px;
+  border: 0;
+  border-radius: 25px;
+  background: #444df2;
+  color: #fff;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.add-channel-submit:hover,
+.add-channel-submit:focus-visible {
+  background: #535af1;
+  outline: none;
+}
+
+.add-channel-submit:disabled {
+  background: #686868;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.channel-edition-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 115;
+  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.channel-edition-card {
+  width: min(872px, calc(100vw - 32px));
+  height: min(660px, calc(100vh - 48px));
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  position: relative;
+  padding: 36px 40px 32px;
+  box-sizing: border-box;
+}
+
+.channel-edition-top-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.channel-edition-top-title {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 33px;
+  color: #000;
+}
+
+.channel-edition-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  color: #000;
+  cursor: pointer;
+}
+
+.channel-edition-section {
+  position: absolute;
+  left: 40px;
+  width: calc(100% - 80px);
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 20px 22px 18px;
+}
+
+.channel-edition-section-name {
+  top: 104px;
+  height: 144px;
+}
+
+.channel-edition-section-description {
+  top: 270px;
+  height: 270px;
+}
+
+.channel-edition-section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.channel-edition-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.channel-edition-label-blue,
+.channel-edition-edit-button {
+  color: #535af1;
+}
+
+.channel-edition-edit-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.channel-edition-value {
+  margin-top: 18px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  color: #000;
+}
+
+.channel-edition-value-channel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.channel-edition-input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+.channel-edition-divider {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 144px;
+  height: 1px;
+  background: #e2e4ff;
+}
+
+.channel-edition-created-by {
+  margin-top: 24px;
+}
+
+.channel-edition-created-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #000;
+}
+
+.channel-edition-created-user {
+  display: block;
+  margin-top: 18px;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #000;
+}
+
+.channel-edition-leave-button {
+  position: absolute;
+  right: 40px;
+  bottom: 28px;
+  height: 49px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 25px;
+  background: #444df2;
+  color: #fff;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.channel-edition-leave-button:hover,
+.channel-edition-leave-button:focus-visible {
+  background: #2733f0;
+  outline: none;
+}

@@ -1,0 +1,157 @@
+:host {
+  display: block;
+  position: relative;
+  padding: 206px 96px 24px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.privacypolicy {
+  width: 100%;
+}
+
+.headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 0px 25px 0px;
+}
+
+.back-link {
+  background-color: transparent;
+  border: 0;
+  padding: 8px;
+  height: 37px;
+  width: 37px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-link:hover {
+  cursor: pointer;
+  background-color: #005eff0f;
+  border-radius: 50%;
+  scale: 1.1;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+.headline .back-icon {
+  display: none;
+  width: 24px;
+  height: 24px;
+}
+
+.page-title {
+  font-size: clamp(47px, 5vw, 61px);
+  font-weight: 700;
+}
+
+.section-title,
+.step-number {
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.subsection-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+p {
+  margin-block-end: 16px;
+  margin-block-start: 0;
+}
+
+.policy-copy {
+  padding-bottom: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.highlight-text {
+  color: #006a9e;
+  display: inline;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.list {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.list > .step-number {
+  flex: 0 0 32px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.list > div {
+  flex: 1;
+}
+
+.list .subsection-title {
+  margin-top: 0;
+}
+@media (max-width: 960px) {
+  :host {
+    padding: 128px 16px 96px;
+  }
+}
+@media (max-width: 760px) {
+  .headline .back-icon {
+    display: block;
+  }
+
+  .headline {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .list {
+    gap: 16px;
+  }
+}
+@media (max-width: 424px) {
+  .page-title {
+    font-size: clamp(37px, 5vw, 47px);
+    font-weight: 700;
+  }
+
+  .img {
+    height: 37px;
+    width: 37px;
+  }
+}
+h2 {
+  font-size: 64px;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 52px;
+  line-height: 1.15;
+}
+
+h4 {
+  font-size: 48px;
+  line-height: 1.15;
+}
+
+h5 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+h6 {
+  font-size: 20px;
+  line-height: 1.2;
+}

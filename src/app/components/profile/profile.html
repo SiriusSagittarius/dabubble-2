@@ -1,0 +1,37 @@
+
+     <div class="profile-area" #profileArea>
+      <button
+        type="button"
+        class="profile-container"
+        [attr.aria-label]="'Profil von ' + (database.currentUser()?.name ?? 'Benutzer')"
+        [attr.aria-expanded]="profileMenuOpen()"
+        aria-haspopup="menu"
+        (click)="toggleProfileMenu()"
+      >
+        <span class="profile-name">{{ database.currentUser()?.name ?? 'Profil' }}</span>
+        <span
+          class="profile-image"
+          aria-hidden="true"
+          [style.backgroundImage]="headerAvatarBackgroundImage()"
+          [style.backgroundPosition]="headerAvatarBackgroundPosition()"
+          [style.backgroundSize]="headerAvatarBackgroundSize()"
+        ></span>
+        <img src="/assets/keyboard-arrow-down.svg" alt="" class="profile-arrow" />
+      </button>
+
+      @if (profileMenuOpen()){
+        <div class="profile-dropdown" role="menu" aria-label="Profilmenue">
+          <button
+            type="button"
+            class="profile-dropdown-item"
+            role="menuitem"
+            (click)="openProfile()"
+          >
+            Profil
+          </button>
+          <button type="button" class="profile-dropdown-item" role="menuitem" (click)="logout()">
+            Log out
+          </button>
+        </div>
+      }
+    </div>

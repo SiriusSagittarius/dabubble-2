@@ -1,0 +1,117 @@
+<div class="sidebar-card">
+  <div class="workspace-row">
+    <img src="/assets/workspace.svg" alt="" class="workspace-logo" />
+    <div class="workspace-text">
+      <span class="workspace-name">Devspace</span>
+    </div>
+    <button
+      type="button"
+      class="workspace-edit-button"
+      aria-label="Workspace bearbeiten"
+      (click)="openMainChatIntro()"
+    >
+      <img src="/assets/edit.svg" alt="" class="workspace-edit-icon" />
+    </button>
+  </div>
+
+  <section class="sidebar-section">
+    <div class="channels-header-row" aria-label="Channels">
+      <img
+        [src]="channelsExpanded() ? '/assets/uc.svg' : '/assets/rc.svg'"
+        alt=""
+        class="channels-header-image"
+      />
+      <button
+        type="button"
+        class="channels-toggle-hit"
+        aria-label="Channels umschalten"
+        [attr.aria-expanded]="channelsExpanded()"
+        aria-controls="channel-list"
+        (click)="toggleChannels()"
+      ></button>
+      <button
+        type="button"
+        class="channels-add-hit"
+        aria-label="Channel hinzufuegen"
+        (click)="openAddChannelDialog()"
+      ></button>
+    </div>
+
+    @if (channelsExpanded()) {
+      <nav id="channel-list" class="channel-list" aria-label="Kanaele">
+        @for (channel of database.channels(); track channel.id) {
+          <a
+            href="#"
+            class="channel-item"
+            [class.active]="channelIsActive(channel.id)"
+            (click)="onSelectChannel(channel.id); $event.preventDefault()"
+          >
+            <span class="channel-item-prefix" aria-hidden="true">#</span>
+            <span class="channel-item-name">{{ channel.name }}</span>
+          </a>
+        }
+
+        <button
+          type="button"
+          class="channel-item channel-item-add"
+          aria-label="Channel hinzufügen"
+          (click)="openAddChannelDialog()"
+        >
+          <span class="channel-item-add-icon-circle" aria-hidden="true">
+            <span class="channel-item-add-plus"></span>
+          </span>
+          <span>Channel hinzufügen</span>
+        </button>
+      </nav>
+    }
+  </section>
+
+  <section class="sidebar-section dm-section">
+    <button
+      type="button"
+      class="dm-header-row"
+      aria-label="Direktnachrichten umschalten"
+      [attr.aria-expanded]="directMessagesExpanded()"
+      aria-controls="dm-list"
+      (click)="toggleDirectMessages()"
+    >
+      <span class="dm-header-caret" aria-hidden="true"></span>
+      <img src="/assets/account-circle-dm.svg" alt="" class="dm-header-icon" />
+      <span class="dm-header-title">Direktnachrichten</span>
+    </button>
+
+    <nav
+      id="dm-list"
+      class="dm-list"
+      [class.dm-list-collapsed]="!directMessagesExpanded()"
+      aria-label="Direktnachrichten"
+    >
+      @for (contact of database.directMessageUsers(); track contact.id) {
+        <button
+          type="button"
+          class="dm-item"
+          [class.dm-item-active]="
+            (selectedDirectMessageUserId() === contact.id && !showTodoList()) ||
+            (database.isCurrentUser(contact.id) && showTodoList())
+          "
+          (click)="openDirectMessage(contact.id)"
+        >
+          <span class="dm-item-avatar-wrapper" aria-hidden="true">
+            <img class="dm-item-avatar" [src]="avatarSvgPath(contact.id)" [alt]="contact.name" />
+            <span
+              class="dm-item-status-dot"
+              [class.online]="contact.isOnline"
+              [class.offline]="!contact.isOnline"
+            ></span>
+          </span>
+          <span class="dm-name">
+            {{ contact.name }}
+            @if (database.isCurrentUser(contact.id)) {
+              <span class="dm-self-tag"> (Du)</span>
+            }
+          </span>
+        </button>
+      }
+    </nav>
+  </section>
+</div>

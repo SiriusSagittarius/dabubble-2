@@ -1,0 +1,47 @@
+<div class="component-container">
+  <div class="avatar-card">
+    
+    <div class="card-header">
+      <button class="back-button" (click)="onBack()" aria-label="Zurück">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      
+      <h1 class="card-title">Wähle deinen Avatar</h1>
+    </div>
+
+    <div class="card-content">
+      
+      <div class="profile-preview" [style.backgroundColor]="selectedAvatar.color">
+        <div class="avatar-svg-container" [innerHTML]="selectedAvatar.svgMarkup"></div>
+      </div>
+
+      <div class="profile-info">
+        <h2 class="profile-name">{{ selectedAvatar.name }}</h2>
+        <p class="instruction-text">Aus der Liste wählen</p>
+      </div>
+
+      <div class="avatar-list">
+        @for (avatar of avatars; track avatar.id) {
+          <button 
+            class="avatar-item" 
+            [class.active]="selectedAvatar.id === avatar.id"
+            [style.backgroundColor]="avatar.color"
+            (click)="selectAvatar(avatar)"
+            [aria-label]="avatar.name">
+            <div class="avatar-svg-container-mini" [innerHTML]="avatar.svgMarkup"></div>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button class="btn-primary" (click)="onNext()">
+        Weiter
+      </button>
+    </div>
+
+  </div>
+</div>
