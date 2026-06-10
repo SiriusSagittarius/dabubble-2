@@ -8,7 +8,12 @@ import { MockDatabaseService } from '../../database/mock-database.service';
   standalone: true,
   imports: [FormsModule, PickerComponent],
   templateUrl: './thread-panel.component.html',
-  styleUrl: './thread-panel.component.scss',
+  styleUrls: [
+    './thread-panel.header-messages.scss',
+    './thread-panel.layout-structure.scss',
+    './thread-panel.bubbles-actions.scss',
+    './thread-panel.reactions.scss',
+  ],
 })
 export class ThreadPanel {
   protected readonly database = inject(MockDatabaseService);
@@ -19,7 +24,7 @@ export class ThreadPanel {
   protected readonly activeThreadEditMenuId = signal<string | null>(null);
   protected readonly activeThreadReactionBarId = signal<string | null>(null);
   protected readonly editingMessageId = signal<string | null>(null);
-  protected readonly activeEmojiPicker = signal<'message' | 'thread' | null>(null);
+  protected readonly activeEmojiPicker = signal<string | null>(null);
   protected readonly emojiCategories = ['recent', 'people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols'];
 
   @ViewChild('threadMessage') private threadMessageInput?: ElementRef<HTMLTextAreaElement>;
@@ -45,7 +50,7 @@ export class ThreadPanel {
     this.closeThreadReactionBar();
   }
 
-  protected toggleEmojiPicker(target: 'message' | 'thread'): void {
+  protected toggleEmojiPicker(target: string): void {
     this.activeEmojiPicker.update((current) => (current === target ? null : target));
   }
 
@@ -96,14 +101,16 @@ export class ThreadPanel {
   }
 
   protected reactionIcon(emoji: string): string {
-    const icons: Record<string, string> = {
-      'smile': '😄',
-      'open_mouth': '😮',
-      'sad': '😢',
-      'heart': '❤️',
-      'thumbs_up': '👍'
-    };
-    return icons[emoji] || emoji;
+    switch (emoji) {
+      case 'check': return '✅';
+      case 'hands': return '👏';
+      case 'thumbs_up': return '👍';
+      case 'heart': return '❤️';
+      case 'smile': return '😊';
+      case 'open_mouth': return '😮';
+      case 'sad': return '😢';
+      default: return emoji;
+    }
   }
 
   protected reactionHoverUser(reaction: any): string {
@@ -201,13 +208,21 @@ export class ThreadPanel {
     this.activeThreadReactionBarId.set(null);
   }
 
-  protected onMessageEmojiSelect(event: { emoji?: { native?: string } }, target: 'message' | 'thread'): void {
+  protected onMessageEmojiSelect(event: { emoji?: { native?: string } }, target: string): void {
     const emoji = event.emoji?.native;
     if (!emoji) {
       return;
     }
     if (target === 'thread') {
       this.insertEmojiIntoThreadReply(emoji);
+      this.activeEmojiPicker.set(null);
+    } else if (target.startsWith('reaction-row-')) {
+      const replyId = target.slice('reaction-row-'.length);
+      this.addReaction(replyId, emoji);
+      this.activeEmojiPicker.set(null);
+    } else if (target.startsWith('reaction-')) {
+      const replyId = target.slice('reaction-'.length);
+      this.addReaction(replyId, emoji);
       this.activeEmojiPicker.set(null);
     }
   }
@@ -228,6 +243,9 @@ export class ThreadPanel {
   }
 
   protected avatarSvgPath(userId: string): string {
+    const avatarImage = this.database.findUser(userId)?.avatarImage;
+    if (avatarImage) return avatarImage;
+
     const avatarId = this.userAvatarId(userId);
     return avatarId !== null ? `/assets/${avatarId}.svg` : '/assets/1.svg';
   }

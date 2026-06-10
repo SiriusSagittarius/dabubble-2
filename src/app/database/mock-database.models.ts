@@ -5,6 +5,7 @@ export interface MockUser {
   password: string;
   avatarClass: string;
   avatarId?: number;
+  avatarImage?: string;
   isGuest?: boolean;
   isOnline: boolean;
 }
@@ -15,6 +16,7 @@ export interface MockChannel {
   description: string;
   memberIds: string[];
   createdBy: string;
+  createdAt: string;
 }
 
 export interface MockReaction {
@@ -41,6 +43,7 @@ export interface MockThread {
 
 export interface MockDatabaseState {
   currentUserId: string;
+  isGuestSession: boolean;
   selectedChannelId: string;
   selectedThreadId: string;
   recentReactionEmojis: string[];

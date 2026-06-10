@@ -1,0 +1,278 @@
+/* ==========================================
+   SPEECH BUBBLES IN THREADS (Aus Part 12)
+   ========================================== */
+.thread-bubble {
+  margin: 0;
+  box-sizing: border-box;
+  padding: 15px;
+  border-radius: 0 20px 20px 20px;
+  background: #eceefe;
+  color: #000;
+  font-size: 18px;
+  line-height: 25px;
+  overflow-wrap: anywhere;
+}
+
+.thread-bubble-own {
+  width: 300px;
+  min-height: 55px;
+  border-radius: 20px 0 20px 20px;
+  background: #797ef3;
+  color: #fff;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.thread-message-edit-box {
+  width: 300px;
+  min-height: 110px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px 0 20px 20px;
+  background: #fff;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.thread-message-edit-box .message-edit-input {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 60px;
+  border: 0;
+  outline: 0;
+  resize: none;
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+  line-height: 22px;
+  color: #686868;
+}
+
+.thread-message-edit-box .message-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.thread-message-edit-box .message-edit-cancel,
+.thread-message-edit-box .message-edit-save {
+  min-width: 80px;
+  height: 38px;
+  border-radius: 19px;
+  padding: 0 1px;
+  font-family: Nunito, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.thread-message-edit-box .message-edit-cancel {
+  border: 1px solid #797ef3;
+  background: #fff;
+  color: #444df2;
+}
+
+.thread-message-edit-box .message-edit-save {
+  border: 1px solid #444df2;
+  background: #444df2;
+  color: #fff;
+}
+
+.thread-message-edit-box .message-edit-cancel:hover,
+.thread-message-edit-box .message-edit-cancel:focus-visible {
+  background: #eceefe;
+  outline: none;
+}
+
+.thread-message-edit-box .message-edit-save:hover,
+.thread-message-edit-box .message-edit-save:focus-visible {
+  background: #3133c9;
+  outline: none;
+}
+
+.thread-separator {
+  position: relative;
+  width: auto;
+  height: 25px;
+  margin: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #adb0d9;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+.thread-separator-line {
+  height: 0;
+  border-top: 1px solid #adb0d9;
+  flex: 1;
+}
+
+
+/* ==========================================
+   HOVER ACTIONS & REAKTIONEN IM THREAD (Aus Part 11 & 12)
+   ========================================== */
+.thread-edit-box {
+  position: absolute;
+  left: -3px;
+  width: 86px;
+  height: 45px;
+  flex: 0 0 auto;
+  padding: 0 8px;
+  margin-bottom: 30px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px 20px 0px 20px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0;
+  visibility: visible;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease,
+    visibility 0.12s ease;
+  box-sizing: border-box;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.thread-message-right:hover .thread-edit-box,
+.thread-message-right:focus-within .thread-edit-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.thread-message-left:hover .thread-hover-box,
+.thread-message-left:focus-within .thread-hover-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.thread-time-icon {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.12s ease;
+  cursor: pointer;
+}
+
+.thread-message-left:hover .thread-time-icon,
+.thread-message-left:focus-within .thread-time-icon {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.thread-edit-icon-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.thread-edit-icon-button:hover,
+.thread-edit-icon-button:focus-visible {
+  background: #eceefe;
+  justify-content: center;
+  outline: none;
+}
+
+.thread-edit-box-icon {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.thread-edit-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 205px;
+  padding: 12px 18px;
+  border-radius: 0 20px 20px 20px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+  z-index: 8;
+}
+
+.thread-reaction-add {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 46px;
+  border: 1px solid #adb0d9;
+  border-radius: 25px 25px 25px 0;
+  background: #fff;
+  padding: 3px 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  z-index: 20;
+}
+
+.thread-reaction-add .message-hover-action-emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.thread-reaction-add-right {
+  right: auto;
+  left: 0;
+  border-radius: 25px 25px 0 25px;
+}
+
+.thread-reaction-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 35;
+  width: 340px;
+  max-width: min(340px, calc(100vw - 32px));
+  height: 360px;
+  max-height: min(360px, calc(100vh - 120px));
+  overflow: hidden;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+.thread-reaction-popover-right {
+  right: auto;
+  left: 0;
+}
+
+.thread-edit-menu-item {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #000;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.thread-edit-menu-item:hover,
+.thread-edit-menu-item:focus-visible {
+  outline: none;
+}

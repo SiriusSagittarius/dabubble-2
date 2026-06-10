@@ -1,18 +1,24 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, ViewChild, ElementRef, signal, inject, computed } from '@angular/core';
+import { Router } from '@angular/router';
+import { MockDatabaseService } from '../../database/mock-database.service';
+import { ProfileDialogService } from '../../services/profile-dialog.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
 export class Profile {
-[x: string]: any;
-}
+  private readonly router = inject(Router);
+  private readonly database = inject(MockDatabaseService);
+  private readonly profileDialog = inject(ProfileDialogService);
 
-  protected channelName(channelId: string): string {
-    return this.database.channels().find((channel) => channel.id === channelId)?.name ?? 'Channel';
-  }
+  protected profileMenuOpen = signal(false);
+  protected readonly currentUser = computed(() => this.database.currentUser());
+  @ViewChild('profileArea') profileArea!: ElementRef;
 
   @HostListener('document:click', ['$event'])
   protected closeProfileMenuOnOutsideClick(event: MouseEvent): void {
@@ -28,44 +34,29 @@ export class Profile {
     this.profileMenuOpen.update((value) => !value);
   }
 
-  protected openProfile(): void {}
-
-  protected logout(): void {}
-
-  protected avatarSvgPath(userId: string): string {
-    const avatarId = this.userAvatarId(userId);
-    return avatarId ? `/assets/${avatarId}.svg` : '/assets/1.svg';
+  protected openProfile(): void {
+    this.profileMenuOpen.set(false);
+    const user = this.currentUser();
+    if (!user) {
+      return;
+    }
+    this.profileDialog.open(user.id);
   }
 
-  protected headerAvatarBackgroundImage() {
-    return `url('/assets/sprites.png')`;
+  protected logout(): void {
+    this.profileMenuOpen.set(false);
+    this.profileDialog.close();
+    this.database.logout();
+    void this.router.navigate(['/login']);
   }
 
-  protected headerAvatarBackgroundPosition() {
-    const user = this.database.currentUser();
-    return user ? this.profileSpriteBackgroundPosition(user.id, 1) : 'center';
-  }
+  protected profileAvatarBackgroundImage(): string {
+    const user = this.currentUser();
+    if (user?.avatarImage) {
+      return `url('${user.avatarImage}')`;
+    }
 
-  protected headerAvatarBackgroundSize() {
-    return this.profileSpriteBackgroundSize(1);
-  }
-
-  private profileSpriteBackgroundPosition(userId: string, spriteIndex: number): string {
-    const avatarId = this.userAvatarId(userId) ?? spriteIndex;
-    const offset = (avatarId - 1) * 80;
-    return `-${offset}px 0`;
-  }
-
-  private profileSpriteBackgroundSize(spriteIndex: number): string {
-    return `${spriteIndex * 100}% auto`;
-  }
-
-  private userAvatarId(userId: string): number | null {
-    const user = this.database.findUser(userId);
-    if (!user) return null;
-    if (typeof user.avatarId === 'number') return user.avatarId;
-
-    const num = parseInt(user.avatarId as unknown as string, 10);
-    return isNaN(num) ? null : num;
+    const avatarId = user?.avatarId ?? 1;
+    return `url('/assets/${avatarId}.svg')`;
   }
 }

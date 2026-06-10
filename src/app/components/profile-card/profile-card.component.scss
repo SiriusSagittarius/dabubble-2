@@ -1,0 +1,145 @@
+:host {
+  --primary-color: #535af1;
+  --primary-dark: #444df2;
+  --text-black: #000000;
+  --text-gray: #666666;
+  --green-active: #92c83e;
+  --bg-white: #ffffff;
+  --font-family: Nunito, sans-serif;
+}
+
+.profile-card-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 19920;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.profile-card {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 500px;
+  min-height: 600px;
+  box-sizing: border-box;
+  padding: 45px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+  background: var(--bg-white);
+  border-radius: 30px 0 30px 30px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.card-title {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 33px;
+  color: var(--text-black);
+}
+
+.close-button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-black);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.close-button:hover,
+.close-button:focus-visible {
+  background: #eceefe;
+  color: var(--primary-dark);
+  outline: none;
+}
+
+.avatar-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-backdrop {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-white);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-image {
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-upload-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.avatar-upload-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 550px) {
+  .profile-card-backdrop {
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profile-card {
+    width: min(500px, 100%);
+    min-height: auto;
+    padding: 32px 20px;
+    gap: 28px;
+  }
+}

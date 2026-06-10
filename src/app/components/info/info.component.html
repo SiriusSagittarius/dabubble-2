@@ -1,18 +1,20 @@
 @if (active === 'legal') {
   <div class="privacypolicy">
     <div class="headline">
-      <h2 class="page-title">Impressum</h2>
-      <br />
-      <br />
       <button class="back-link" type="button" (click)="goBack()" aria-label="Back to previous page">
         <svg class="back-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M19 12H5M12 19L5 12L12 5"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </button>
+      <h3 class="page-title">Impressum</h3>
     </div>
     <div class="content-container">
-      <br />
-      <h3 class="section-title imprint-title">Impressum</h3>
       <br />
       <div>
         <ul>
@@ -24,22 +26,22 @@
       <h3 class="subsection-title">Exploring the Board</h3>
       <p>Email: info@svenhaase.de</p>
       <br />
-      <h3 class="subsection-title">Acceptance of Terms</h3>
+      <h4 class="subsection-title">Acceptance of Terms</h4>
       <p>
-        By accessing and using <span class="highlight-text">DABubbles</span>, you acknowledge
-        and agree to the following terms and conditions, and any policies, guidelines, or amendments
+        By accessing and using <span class="highlight-text">DABubbles</span>, you acknowledge and
+        agree to the following terms and conditions, and any policies, guidelines, or amendments
         thereto that may be presented to you from time to time. We, the listed students, may update
         or change the terms and conditions from time to time without notice.
       </p>
       <br />
-      <h3 class="subsection-title">Scope and ownership of the product</h3>
+      <h4 class="subsection-title">Scope and ownership of the product</h4>
       <p>
         <span class="highlight-text">DABubbles</span> has been developed as part of a student group
         project in a web development bootcamp at the
         <span class="highlight-text">Developer Akademie GmbH</span>. It has an educational purpose
-        as a group chat and messaging application and is not intended for extensive personal & business usage. 
-        As such, we cannot guarantee consistent availability, reliability, accuracy, or any other aspect 
-        of quality regarding this Product.
+        as a group chat and messaging application and is not intended for extensive personal &
+        business usage. As such, we cannot guarantee consistent availability, reliability, accuracy,
+        or any other aspect of quality regarding this Product.
         <br />
         <br />
         The design and interface of <span class="highlight-text">DABubbles</span> is owned by the
@@ -47,28 +49,28 @@
         modification, distribution, or replication of the design is strictly prohibited.
       </p>
       <br />
-      <h3 class="subsection-title">Proprietary rights</h3>
+      <h4 class="subsection-title">Proprietary rights</h4>
       <p>
         Aside from the design owned by <span class="highlight-text">Developer Akademie GmbH</span>,
         we, the listed students, retain all proprietary rights in
-        <span class="highlight-text">DABubbles</span>, including any associated copyrighted material,
-        trademarks, and other proprietary information.
+        <span class="highlight-text">DABubbles</span>, including any associated copyrighted
+        material, trademarks, and other proprietary information.
       </p>
       <br />
-      <h3 class="subsection-title">Use of the product</h3>
+      <h4 class="subsection-title">Use of the product</h4>
       <p>
-        <span class="highlight-text">DABubbles</span> is intended to be used for lawful communication 
-        purposes only, in accordance with all applicable laws and regulations. Any use of
-        <span class="highlight-text">DABubbles</span> for illegal activities, or to harass, harm,
-        threaten, or intimidate another person through messages or chat channels, is strictly prohibited. 
-        You are solely responsible for your interactions and shared contents with other users of 
-        <span class="highlight-text">DABubbles</span>.
+        <span class="highlight-text">DABubbles</span> is intended to be used for lawful
+        communication purposes only, in accordance with all applicable laws and regulations. Any use
+        of <span class="highlight-text">DABubbles</span> for illegal activities, or to harass, harm,
+        threaten, or intimidate another person through messages or chat channels, is strictly
+        prohibited. You are solely responsible for your interactions and shared contents with other
+        users of <span class="highlight-text">DABubbles</span>.
       </p>
       <br />
-      <h3 class="subsection-title">Disclaimer of warranties and limitation of liability</h3>
+      <h4 class="subsection-title">Disclaimer of warranties and limitation of liability</h4>
       <p>
-        <span class="highlight-text">DABubbles</span> is provided "as is" without warranty of any kind,
-        whether express or implied, including but not limited to the implied warranties of
+        <span class="highlight-text">DABubbles</span> is provided "as is" without warranty of any
+        kind, whether express or implied, including but not limited to the implied warranties of
         merchantability, fitness for a particular purpose, and non-infringement. In no event will
         we, the listed students, or the <span class="highlight-text">Developer Akademie</span>, be
         liable for any direct, indirect, incidental, special, consequential or exemplary damages,
@@ -78,7 +80,7 @@
         <span class="highlight-text">DABubbles</span>.
       </p>
       <br />
-      <h3 class="subsection-title">Indemnity</h3>
+      <h4 class="subsection-title">Indemnity</h4>
       <p id="mediaquerry_margin">
         You agree to indemnify, defend and hold harmless us, the listed students, the
         <span class="highlight-text">Developer Akademie</span>, and our affiliates, partners,
@@ -96,57 +98,61 @@
       </p>
     </div>
   </div>
-
 } @else if (active === 'privacy') {
   <div class="privacypolicy">
     <div class="headline">
-      <h2 class="page-title">Privacy Policy</h2>
-      <br />
-      <br />
       <button class="back-link" type="button" (click)="goBack()" aria-label="Back to previous page">
         <svg class="back-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M19 12H5M12 19L5 12L12 5"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </button>
+      <h2 class="page-title">Privacy Policy</h2>
     </div>
     <div class="content-container">
       <div class="policy-copy">
-        <h3 class="section-title">Data protection</h3>
+        <h4 class="section-title">Data protection</h4>
         <br />
         Welcome to our website! We attach great importance to protecting your personal data. Below
-        we will inform you about what data is collected during your visit to our messaging app and how it
-        is used. <br />
+        we will inform you about what data is collected during your visit to our messaging app and
+        how it is used. <br />
 
         <br />
         <br />
-        <h3 class="section-title">Collection of personal data</h3>
+        <h4 class="section-title">Collection of personal data</h4>
         <br />
         We deliberately refrain from using cookies or other tracking technologies on our website.
-        Therefore, no personal data is automatically collected during your visit. Data provided within the 
-        chat application (such as channel names, user profiles, and messages) is processed exclusively to 
-        enable the core features of the messaging service.
+        Therefore, no personal data is automatically collected during your visit. Data provided
+        within the chat application (such as channel names, user profiles, and messages) is
+        processed exclusively to enable the core features of the messaging service.
 
         <br />
         <br />
-        <h3 class="section-title">Contact</h3>
+        <h4 class="section-title">Contact</h4>
         <br />
         If you contact us using the contact options provided on the website, the personal data you
         provide will only be used to process your request. It will not be passed on to third
-        parties. In case this application contains links to external services, please note that we have no 
-        control over the content or privacy practices of these external websites. The respective operators 
-        are solely responsible for the data protection guidelines of these sites.
+        parties. In case this application contains links to external services, please note that we
+        have no control over the content or privacy practices of these external websites. The
+        respective operators are solely responsible for the data protection guidelines of these
+        sites.
 
         <br />
         <br />
-        <h3 class="section-title">Data security</h3>
+        <h4 class="section-title">Data security</h4>
         <br />
-        We use technical and organizational measures to protect your chat communication and personal data from 
-        unauthorized access, loss or misuse. Our security measures are continuously improved in line with 
-        technological developments.
+        We use technical and organizational measures to protect your chat communication and personal
+        data from unauthorized access, loss or misuse. Our security measures are continuously
+        improved in line with technological developments.
 
         <br />
         <br />
-        <h3 class="section-title">Right of providing information</h3>
+        <h4 class="section-title">Right of providing information</h4>
         <br />
         You have the right to receive information about the personal data we store. If necessary or
         if you have any questions about the processing of your data, please contact us using the
@@ -154,7 +160,7 @@
 
         <br />
         <br />
-        <h3 class="section-title">Changes to the privacy policy</h3>
+        <h4 class="section-title">Changes to the privacy policy</h4>
         <br />
         We reserve the right to update this privacy policy if necessary to adapt it to legal
         requirements or to implement changes to our services. You can find the current version on
@@ -162,5 +168,4 @@
       </div>
     </div>
   </div>
-
 }

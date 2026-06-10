@@ -2,6 +2,7 @@ import { MockDatabaseState } from './mock-database.models';
 
 export const MOCK_DATABASE_SEED: MockDatabaseState = {
   currentUserId: 'user-frederik',
+  isGuestSession: false,
   selectedChannelId: 'channel-dev',
   selectedThreadId: 'thread-angular-version',
   recentReactionEmojis: ['👍', '❤️', '😂', '😮'],
@@ -87,6 +88,7 @@ export const MOCK_DATABASE_SEED: MockDatabaseState = {
       description: 'Alles rund um Frontend, Angular und UI-Umsetzung.',
       memberIds: ['user-frederik', 'user-noah', 'user-sofia', 'user-mia', 'user-alice'],
       createdBy: 'user-frederik',
+      createdAt: '2026-06-02T08:00:00.000Z',
     },
     {
       id: 'channel-design',
@@ -94,6 +96,7 @@ export const MOCK_DATABASE_SEED: MockDatabaseState = {
       description: 'Mockups, Assets und visuelle Entscheidungen.',
       memberIds: ['user-frederik', 'user-sofia', 'user-sarah'],
       createdBy: 'user-sofia',
+      createdAt: '2026-06-02T08:00:00.000Z',
     },
   ],
   messages: [

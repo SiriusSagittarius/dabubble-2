@@ -1,4 +1,5 @@
-@if (membersPanelOpen()) {
+<!-- Altes Members-Modal deaktiviert - nutze stattdessen ChannelDetailsComponent im Home-Layout -->
+@if (false && membersPanelOpen()) {
   <div class="members-panel-backdrop" (click)="closeMembersPanel()">
     <section class="members-panel" (click)="$event.stopPropagation()" aria-label="Mitglieder">
       <header class="members-panel-header">
@@ -140,9 +141,9 @@
   </div>
 }
 
-@if (profileDialogOpen) {
+@if (false && profileDialogOpen) {
   <div class="profile-modal-backdrop" (click)="closeProfileDialog()">
-    <section class="profile-modal" role="dialog" aria-modal="true" [attr.aria-label]="'Profil von ' + (database.currentUser()?.name ?? 'Benutzer')" (click)="$event.stopPropagation()">
+    <section class="profile-modal" role="dialog" aria-modal="true" [attr.aria-label]="'Profil von ' + (profileUser()?.name ?? 'Benutzer')" (click)="$event.stopPropagation()">
       <div class="profile-modal-content">
         <div class="profile-modal-top-row">
             <span class="profile-modal-title">{{ profileEditMode ? 'Dein Profil bearbeiten' : 'Profil' }}</span>
@@ -151,7 +152,7 @@
 
         <div class="profile-modal-avatar-stage">
           <div class="profile-modal-avatar">
-            <div class="profile-modal-avatar-image" [style.backgroundImage]="profileAvatarBackgroundImage()" [style.backgroundPosition]="profileAvatarBackgroundPosition()" [style.backgroundSize]="profileAvatarBackgroundSize()"></div>
+            <img class="profile-modal-avatar-image" [src]="profileAvatarSrc()" [alt]="profileUser()?.name ?? 'Profilbild'" />
           </div>
         </div>
 
@@ -169,8 +170,10 @@
               }
             </div>
             <div class="profile-modal-status-row">
-              <span class="profile-modal-status-dot" aria-hidden="true"></span>
-              <span class="profile-modal-status-text">{{ profileUser()?.isOnline ? 'Aktiv' : 'Deaktiviert' }}</span>
+              <span class="profile-modal-status-dot" [class.offline]="!profileUser()?.isOnline" aria-hidden="true"></span>
+              <span class="profile-modal-status-text" [class.offline]="!profileUser()?.isOnline">
+                {{ profileUser()?.isOnline ? 'Aktiv' : 'Deaktiviert' }}
+              </span>
             </div>
           </section>
 
@@ -210,12 +213,18 @@
   </div>
 }
 
+<app-profile-card />
+
 @if (addChannelDialogOpen()) {
   <div class="add-channel-backdrop" (click)="closeAddChannelDialog()">
     <section class="add-channel-dialog" [class.add-channel-members-dialog]="addChannelMembersStep" (click)="$event.stopPropagation()" [attr.aria-label]="addChannelMembersStep ? 'Leute hinzufügen' : 'Channel erstellen'">
       <header class="add-channel-dialog-header">
         <h2 class="add-channel-dialog-title">{{ addChannelMembersStep ? 'Leute hinzufügen' : 'Channel erstellen' }}</h2>
-        <button type="button" class="add-channel-dialog-close" aria-label="Channel Dialog schliessen" (click)="closeAddChannelDialog()">x</button>
+        <button type="button" class="add-channel-dialog-close" aria-label="Channel Dialog schliessen" (click)="closeAddChannelDialog()">
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 13.4L7.1 18.3C6.917 18.483 6.683 18.575 6.4 18.575C6.117 18.575 5.883 18.483 5.7 18.3C5.517 18.117 5.425 17.883 5.425 17.6C5.425 17.317 5.517 17.083 5.7 16.9L10.6 12L5.7 7.1C5.517 6.917 5.425 6.683 5.425 6.4C5.425 6.117 5.517 5.883 5.7 5.7C5.883 5.517 6.117 5.425 6.4 5.425C6.683 5.425 6.917 5.517 7.1 5.7L12 10.6L16.9 5.7C17.083 5.517 17.317 5.425 17.6 5.425C17.883 5.425 18.117 5.517 18.3 5.7C18.483 5.883 18.575 6.117 18.575 6.4C18.575 6.683 18.483 6.917 18.3 7.1L13.4 12L18.3 16.9C18.483 17.083 18.575 17.317 18.575 17.6C18.575 17.883 18.483 18.117 18.3 18.3C18.117 18.483 17.883 18.575 17.6 18.575C17.317 18.575 17.083 18.483 16.9 18.3L12 13.4Z" fill="currentColor" />
+          </svg>
+        </button>
       </header>
 
       @if (!addChannelMembersStep) {

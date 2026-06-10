@@ -1,24 +1,25 @@
-import { Component, ElementRef, HostListener, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { MockDatabaseService } from '../../database/mock-database.service';
+import { UiStateService } from '../../services/ui-state.service';
+import { Profile } from '../profile/profile';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, Profile],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class Header {
+export class HeaderComponent {
   protected readonly database = inject(MockDatabaseService);
-  private readonly router = inject(Router);
+  protected readonly uiState = inject(UiStateService);
 
-  protected readonly profileMenuOpen = signal(false);
-  protected workspaceSearchDraft = '';
+  workspaceSearchDraft = '';
 
-  @ViewChild('profileArea', { read: ElementRef })
-  private profileArea?: ElementRef<HTMLElement>;
+  @ViewChild('workspaceSearchArea')
+  private workspaceSearchArea?: ElementRef<HTMLElement>;
 
   protected showWorkspaceSearchResults(): boolean {
     return this.workspaceSearchDraft.trim().length > 0;
@@ -27,6 +28,7 @@ export class Header {
   protected workspaceSearchChannels() {
     const query = this.workspaceSearchDraft.trim().toLowerCase();
     if (!query) return [];
+
     return this.database
       .channels()
       .filter(
@@ -39,6 +41,7 @@ export class Header {
   protected workspaceSearchUsers() {
     const query = this.workspaceSearchDraft.trim().toLowerCase();
     if (!query) return [];
+
     return this.database
       .users()
       .filter(
@@ -50,6 +53,7 @@ export class Header {
   protected workspaceSearchMessages() {
     const query = this.workspaceSearchDraft.trim().toLowerCase();
     if (!query) return [];
+
     return this.database.messages().filter((message) => {
       const author = this.database.findUser(message.authorId);
       const channel = this.database.channels().find((entry) => entry.id === message.channelId);
@@ -86,5 +90,28 @@ export class Header {
     }
 
     this.workspaceSearchDraft = '';
+  }
+
+  protected channelName(channelId: string): string {
+    return this.database.channels().find((channel) => channel.id === channelId)?.name ?? 'Channel';
+  }
+
+  protected avatarSvgPath(userId: string): string {
+    const user = this.database.findUser(userId);
+    if (user?.avatarImage) return user.avatarImage;
+
+    const avatarId = this.userAvatarId(user);
+    return `/assets/${avatarId}.svg`;
+  }
+
+  private userAvatarId(user: ReturnType<MockDatabaseService['findUser']>): number {
+    if (!user) return 1;
+    if (typeof user.avatarId === 'number') return user.avatarId;
+    if (typeof user.avatarId === 'string') {
+      const num = parseInt(user.avatarId, 10);
+      if (!isNaN(num)) return num;
+    }
+    const classMatch = user.avatarClass?.match(/avatar-(\d)/);
+    return classMatch ? Number(classMatch[1]) : 1;
   }
 }

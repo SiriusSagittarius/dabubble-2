@@ -1,16 +1,28 @@
-import { Component, ElementRef, ViewChild, inject, signal, HostListener, computed } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, signal, HostListener, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MockDatabaseService } from '../../database/mock-database.service';
+import { MockUser } from '../../database/mock-database.models';
+import { ProfileDialogService } from '../../services/profile-dialog.service';
+import { UiStateService } from '../../services/ui-state.service';
+import { ProfileCardComponent } from '../profile-card/profile-card.component';
 
 @Component({
   selector: 'app-modals-container',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ProfileCardComponent],
   templateUrl: './modals-container.component.html',
-  styleUrl: './modals-container.component.scss',
+  styleUrls: [
+    './modals-container.profile.scss',
+    './modals-container.add-channel.scss',
+    './modals-container.add-channel-members.scss',
+    './modals-container.add-channel-fields.scss',
+    './modals-container.channel-edition.scss',
+  ],
 })
 export class ModalsContainer {
   protected readonly database = inject(MockDatabaseService);
+  private readonly profileDialog = inject(ProfileDialogService);
+  protected readonly uiState = inject(UiStateService);
 
   protected profileDialogOpen = false;
   protected profileEditMode = false;
@@ -31,14 +43,37 @@ export class ModalsContainer {
 
   protected readonly showAddMembersSuggestions = signal(false);
   protected readonly selectedAddMemberIds = signal<string[]>([]);
-  protected readonly membersPanelOpen = signal(false);
-  protected readonly addMembersPanelOpen = signal(false);
-  protected readonly addChannelDialogOpen = signal(false);
   protected readonly channelEditionOpen = signal(false);
-  protected readonly isEditMode = signal(false);
-  protected editProfileEditName = '';
-  protected readonly profileUser = signal<any | null>(null); // Typ 'any' oder dein User-Typ
+  protected readonly profileUser = signal<MockUser | null>(null);
+
+  protected get membersPanelOpen() { return this.uiState.membersPanelOpen; }
+  protected get addMembersPanelOpen() { return this.uiState.addMembersPanelOpen; }
+  protected get addChannelDialogOpen() { return this.uiState.addChannelDialogOpen; }
   @ViewChild('addMemberInput') private addMemberInput?: ElementRef<HTMLInputElement>;
+
+  constructor() {
+    effect(() => {
+      const userId = this.profileDialog.profileUserId();
+
+      if (!userId) {
+        this.profileDialogOpen = false;
+        this.profileEditMode = false;
+        this.profileUser.set(null);
+        this.profileEditName = '';
+        return;
+      }
+
+      const user = this.database.findUser(userId);
+      if (!user) {
+        return;
+      }
+
+      this.profileUser.set(user);
+      this.profileDialogOpen = true;
+      this.profileEditMode = false;
+      this.profileEditName = user.name;
+    });
+  }
 
   protected openAddChannelDialog(): void {
     this.addChannelNameDraft = '';
@@ -46,23 +81,23 @@ export class ModalsContainer {
     this.addChannelMembersStep = false;
     this.addChannelMemberMode = 'all';
     this.pendingAddChannelId = null;
-    this.addChannelDialogOpen.set(true);
+    this.uiState.openAddChannelDialog();
   }
 
   protected closeAddChannelDialog(): void {
-    this.addChannelDialogOpen.set(false);
+    this.uiState.closeAddChannelDialog();
   }
   protected messageProfileUser(): void {
     const user = this.profileUser();
     if (user) {
       this.selectedProfileUserId = user.id;
-      this.profileDialogOpen = false;
+      this.closeProfileDialog();
     }
   }
 
   protected cancelProfileEdit(): void {
-    this.isEditMode.set(false);
-    this.editProfileEditName = ''; // Korrigiert für Signal
+    this.profileEditMode = false;
+    this.profileEditName = '';
   }
   protected createAddChannel(): void {
     const name = this.addChannelNameDraft.trim();
@@ -110,8 +145,8 @@ export class ModalsContainer {
   protected editProfile(): void {
     const user = this.profileUser();
     if (user) {
-      this.editProfileEditName = user.name; // Initialisiere mit dem aktuellen Namen
-      this.isEditMode.set(true);
+      this.profileEditName = user.name;
+      this.profileEditMode = true;
     }
   }
   protected editChannelName(): void {
@@ -237,9 +272,7 @@ export class ModalsContainer {
 
     this.database.addMembersToChannel(channel.id, selectedIds);
 
-    console.log('Mitglieder zum Channel hinzufügen:', selectedIds);
-    // Bezieht sich auf den Modal-Schließen-Zustand aus Teil 1
-    this.addMembersPanelOpen.set(false);
+    this.uiState.closeAddMembersPanel();
   }
 
   protected closeChannelEdition(): void {
@@ -294,13 +327,15 @@ export class ModalsContainer {
   }
   protected saveProfileEdit(): void {
     const user = this.profileUser();
-    // Jetzt funktioniert .trim() wieder, weil es ein String ist
-    if (user && this.editProfileEditName.trim()) {
-      this.database.updateCurrentUserName(this.editProfileEditName);
-      this.isEditMode.set(false);
+    if (user && this.profileEditName.trim()) {
+      this.database.updateCurrentUserName(this.profileEditName);
+      this.profileEditMode = false;
     }
   }
   protected avatarSvgPath(userId: string): string {
+    const avatarImage = this.database.findUser(userId)?.avatarImage;
+    if (avatarImage) return avatarImage;
+
     const avatarId = this.userAvatarId(userId);
     if (!avatarId) {
       return '/assets/1.svg';
@@ -319,23 +354,30 @@ export class ModalsContainer {
       return user.avatarId;
     }
 
-    // Fallback-Logik aus dem Original
-    const num = parseInt(user.avatarId as unknown as string, 10);
-    return isNaN(num) ? null : num;
+    if (typeof user.avatarId === 'string') {
+      const num = parseInt(user.avatarId, 10);
+      if (!isNaN(num)) return num;
+    }
+
+    const classMatch = user.avatarClass?.match(/avatar-(\d)/);
+    if (classMatch) return Number(classMatch[1]);
+    return null;
   }
 // --- Profil & Panels Schließen ---
-  protected closeMembersPanel(): void { this.membersPanelOpen.set(false); }
-  protected closeAddMembersPanel(): void { this.addMembersPanelOpen.set(false); }
-  protected openAddMembersPanel(): void { this.addMembersPanelOpen.set(true); }
-  protected closeProfileDialog(): void { this.profileDialogOpen = false; }
+  protected closeMembersPanel(): void { this.uiState.closeMembersPanel(); }
+  protected closeAddMembersPanel(): void { this.uiState.closeAddMembersPanel(); }
+  protected openAddMembersPanel(): void { this.uiState.openAddMembersPanel(); }
+  protected closeProfileDialog(): void {
+    this.profileDialog.close();
+    this.profileDialogOpen = false;
+    this.profileEditMode = false;
+    this.profileEditName = '';
+    this.profileUser.set(null);
+  }
 
   // --- Kontakt-Profil öffnen ---
   protected openContactProfile(userId: string): void {
-    const user = this.database.findUser(userId);
-    if (user) {
-      this.profileUser.set(user);
-      this.profileDialogOpen = true;
-    }
+    this.profileDialog.open(userId);
   }
 
   // --- Avatar-Helfer für das Template ---
@@ -350,14 +392,9 @@ export class ModalsContainer {
     return this.profileSpriteBackgroundSize(1);
   }
 
-  protected profileAvatarBackgroundImage(): string {
-    return `url('/assets/sprites.png')`;
-  }
-  protected profileAvatarBackgroundPosition(): string {
+  protected profileAvatarSrc(): string {
     const user = this.profileUser();
-    return user ? this.profileSpriteBackgroundPosition(user.id, 1) : 'center';
+    return this.avatarSvgPath(user?.id ?? '');
   }
-  protected profileAvatarBackgroundSize(): string {
-    return this.profileSpriteBackgroundSize(1);
-  }}
+}
 

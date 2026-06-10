@@ -112,6 +112,47 @@
   width: 36px;
 }
 
+.channels-add-hit::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: -11.5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: none;
+  transition: background-color 0.15s ease;
+}
+
+.channels-add-hit:hover::before,
+.channels-add-hit:focus-visible::before {
+  background-color: #eceefe;
+}
+
+.channels-add-hit::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: -0.5px;
+  width: 14px;
+  height: 14px;
+  background-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000);
+  background-size: 2px 14px, 14px 2px;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.channels-add-hit:hover::after,
+.channels-add-hit:focus-visible::after {
+  background-image:
+    linear-gradient(#444df2, #444df2),
+    linear-gradient(#444df2, #444df2);
+}
+
 .channel-list,
 .dm-list {
   min-height: 0;
@@ -136,6 +177,7 @@
   gap: 10px;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   font: inherit;
   color: #1f1f1f;
 }
@@ -147,7 +189,12 @@
   background: #eceefe;
 }
 
-.channel-item.active .channel-item-name,
+.channel-item:hover:not(.active) .channel-item-name,
+.channel-item:hover:not(.active) .channel-item-prefix,
+.dm-item:hover:not(.dm-item-active) .dm-name {
+  color: #444df2;
+}
+
 .channel-item.active .channel-item-prefix,
 .dm-item.dm-item-active .dm-name {
   color: #444df2;
@@ -170,124 +217,65 @@
   white-space: nowrap;
 }
 
-
-
-.dm-header-row {
-  position: relative;
-  width: 100%;
-  border: 0;
-  border-radius: 18px;
-  background: transparent;
-  padding: 10px 12px 10px 36px;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  color: #1f1f1f;
+.channel-item-add-icon-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #686868;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.dm-header-row:hover {
+.channel-item-add:hover .channel-item-add-icon-circle {
+  border-color: #444df2;
   background: #eceefe;
 }
 
-.dm-header-caret {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 7px solid currentColor;
-  transform: translateY(-50%);
-}
-
-.dm-header-row[aria-expanded='true'] .dm-header-caret {
-  transform: translateY(-50%) rotate(90deg);
-}
-
-.dm-header-icon {
-  position: absolute;
-  left: 36px;
-  top: 50%;
-  width: 22px;
-  height: 22px;
-  transform: translateY(-50%);
-}
-
-.dm-header-title {
+.channel-item-add-plus {
   display: block;
-  padding-left: 34px;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.dm-list-collapsed {
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.dm-item {
-  padding-left: 10px;
-}
-
-.dm-item-avatar-wrapper {
+  width: 14px;
+  height: 14px;
   position: relative;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
 }
 
-.dm-item-avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-
-.dm-item-status-dot {
+.channel-item-add-plus::before,
+.channel-item-add-plus::after {
+  content: '';
   position: absolute;
-  right: -1px;
-  bottom: -1px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-  background: #adb0d9;
+  background: #686868;
+  border-radius: 1px;
+  transition: background-color 0.2s ease;
 }
 
-.dm-item-status-dot.online {
-  background: #92c83e;
+.channel-item-add-plus::before {
+  width: 2px;
+  height: 14px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
 }
 
-.dm-item-status-dot.offline {
-  background: #adb0d9;
+.channel-item-add-plus::after {
+  width: 14px;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
 }
 
-.dm-name {
-  min-width: 0;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #1f1f1f;
+.channel-item-add:hover .channel-item-add-plus::before,
+.channel-item-add:hover .channel-item-add-plus::after {
+  background: #444df2;
 }
 
-.dm-self-tag {
-  font-weight: 400;
-  color: #1f1f1f;
+.channel-item-add-label {
+  transition: color 0.2s ease;
 }
 
-
-@media (max-width: 900px) {
-  .sidebar-card {
-    padding: 18px 14px 14px;
-  }
-
-  .workspace-name {
-    font-size: 20px;
-  }
+.channel-item-add:hover .channel-item-add-label {
+  color: #444df2;
 }
+

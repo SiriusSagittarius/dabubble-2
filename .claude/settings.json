@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(NODE_PATH=__CMDSUB_OUTPUT__ node -e ' *)"
+    ]
+  }
+}

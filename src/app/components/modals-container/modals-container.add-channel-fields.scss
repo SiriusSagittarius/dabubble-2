@@ -1,0 +1,301 @@
+/* ==========================================
+   ERWEITERTE DIALOG-FIELDS (Aus Part 4)
+   ========================================== */
+.add-channel-input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-input::placeholder {
+  color: #686868;
+}
+
+.add-channel-members-actions {
+  margin-top: 35px;
+}
+
+.add-channel-submit {
+  width: 125px;
+  height: 49px;
+  border: 0;
+  border-radius: 25px;
+  background: #444df2;
+  color: #fff;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.add-channel-submit:hover,
+.add-channel-submit:focus-visible {
+  background: #535af1;
+  outline: none;
+}
+
+.add-channel-submit:disabled {
+  background: #686868;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* SVG-Match fuer den Add-Channel-Dialog */
+.add-channel-backdrop {
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 199px max(24px, calc(100vw - 1310px)) 24px 24px;
+}
+
+.add-channel-dialog {
+  width: min(872px, calc(100vw - 48px));
+  min-height: 539px;
+  max-height: calc(100vh - 48px);
+  padding: 45px 40px 40px;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.add-channel-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.add-channel-dialog-title {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #000;
+}
+
+.add-channel-dialog-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #000;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.add-channel-dialog-close:hover,
+.add-channel-dialog-close:focus-visible {
+  background: #eceefe;
+  color: #444df2;
+  outline: none;
+}
+
+.add-channel-form,
+.add-channel-members-form {
+  margin-top: 31px;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-channel-dialog-copy {
+  width: min(792px, 100%);
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-dialog-copy span {
+  color: #535af1;
+}
+
+.add-channel-label {
+  margin-top: 29px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-label span {
+  font-weight: 400;
+}
+
+.add-channel-description-label {
+  margin-top: 30px;
+}
+
+.add-channel-field {
+  width: 100%;
+  min-height: 60px;
+  margin-top: 10px;
+  border: 1px solid #adb0d9;
+  border-radius: 30px;
+  background: #fff;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  transition: border-color 0.2s ease;
+}
+
+.add-channel-field:focus-within {
+  border-color: #444df2;
+}
+
+.add-channel-name-field {
+  padding-left: 20px;
+}
+
+.add-channel-description-label + .add-channel-field {
+  min-height: 65px;
+}
+
+.add-channel-hash {
+  width: 23px;
+  height: 23px;
+  color: #686868;
+  flex: 0 0 23px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.add-channel-input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.add-channel-input::placeholder {
+  color: #686868;
+  opacity: 1;
+}
+
+.add-channel-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-channel-submit {
+  width: 125px;
+  height: 49px;
+  border: 0;
+  border-radius: 24.5px;
+  background: #444df2;
+  color: #fff;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.add-channel-submit:hover,
+.add-channel-submit:focus-visible {
+  background: #535af1;
+  outline: none;
+}
+
+.add-channel-submit:disabled {
+  background: #686868;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.add-channel-members-dialog {
+  min-height: auto;
+}
+
+.add-channel-members-form {
+  gap: 20px;
+}
+
+.add-channel-member-option {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+@media (max-width: 960px) {
+  .add-channel-backdrop {
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .add-channel-dialog {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .add-channel-backdrop {
+    padding: 16px;
+  }
+
+  .add-channel-dialog {
+    width: min(100%, 872px);
+    padding: 32px 20px 28px;
+    border-radius: 24px;
+  }
+
+  .add-channel-dialog-title {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .add-channel-form,
+  .add-channel-members-form {
+    margin-top: 24px;
+  }
+}
+

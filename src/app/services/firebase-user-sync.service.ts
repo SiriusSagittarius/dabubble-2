@@ -33,7 +33,9 @@ export class FirebaseUserSyncService {
       this.threadsSubscription = null;
 
       if (!user) {
-        this.database.logout();
+        if (!this.database.isGuestSession()) {
+          this.database.logout();
+        }
         return;
       }
 

@@ -9,15 +9,13 @@ import { MockDatabaseService } from '../../database/mock-database.service';
 interface AvatarOption {
   id: number;
   label: string;
-  thumbnailBackgroundPosition: string;
-  previewBackgroundPosition: string;
 }
 
 @Component({
   selector: 'app-signup',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss',
+  styleUrls: ['./signup.account.scss', './signup.form.scss'],
 })
 export class SignupComponent {
   private readonly router = inject(Router);
@@ -38,13 +36,14 @@ export class SignupComponent {
   protected readonly showSuccessOverlay = signal(false);
   protected readonly isAvatarStep = signal(false);
   protected readonly selectedAvatarId = signal<number | null>(null);
+  protected readonly customAvatarImage = signal<string | null>(null);
   protected readonly avatarOptions: AvatarOption[] = [
-    { id: 1, label: 'Avatar 1', thumbnailBackgroundPosition: '-4px -99px', previewBackgroundPosition: '-10.5px -259.875px' },
-    { id: 2, label: 'Avatar 2', thumbnailBackgroundPosition: '-84px -99px', previewBackgroundPosition: '-220.5px -259.875px' },
-    { id: 3, label: 'Avatar 3', thumbnailBackgroundPosition: '-164px -99px', previewBackgroundPosition: '-430.5px -259.875px' },
-    { id: 4, label: 'Avatar 4', thumbnailBackgroundPosition: '-244px -99px', previewBackgroundPosition: '-640.5px -259.875px' },
-    { id: 5, label: 'Avatar 5', thumbnailBackgroundPosition: '-324px -99px', previewBackgroundPosition: '-850.5px -259.875px' },
-    { id: 6, label: 'Avatar 6', thumbnailBackgroundPosition: '-404px -99px', previewBackgroundPosition: '-1060.5px -259.875px' },
+    { id: 1, label: 'Avatar 1' },
+    { id: 2, label: 'Avatar 2' },
+    { id: 3, label: 'Avatar 3' },
+    { id: 4, label: 'Avatar 4' },
+    { id: 5, label: 'Avatar 5' },
+    { id: 6, label: 'Avatar 6' },
   ];
 
   constructor() {
@@ -73,6 +72,7 @@ export class SignupComponent {
   }
 
   protected selectAvatar(avatarId: number): void {
+    this.customAvatarImage.set(null);
     this.selectedAvatarId.set(avatarId);
   }
 
@@ -80,16 +80,34 @@ export class SignupComponent {
     return this.avatarOptions.find((avatar) => avatar.id === this.selectedAvatarId()) ?? null;
   }
 
-  protected avatarPreviewBackgroundImage(): string {
-    return this.selectedAvatarOption() ? "url('/assets/avatar-sprite.svg')" : "url('/assets/person.svg')";
+  protected onCustomAvatarSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.customAvatarImage.set(reader.result as string);
+      this.selectedAvatarId.set(null);
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
   }
 
-  protected avatarPreviewBackgroundPosition(): string {
-    return this.selectedAvatarOption()?.previewBackgroundPosition ?? 'center';
+  protected avatarPreviewBackgroundImage(): string {
+    const customImage = this.customAvatarImage();
+    if (customImage) {
+      return `url('${customImage}')`;
+    }
+
+    const option = this.selectedAvatarOption();
+    return option ? `url('/assets/${option.id}.svg')` : "url('/assets/person.svg')";
   }
 
   protected avatarPreviewBackgroundSize(): string {
-    return this.selectedAvatarOption() ? '1239px 438.375px' : 'contain';
+    return this.customAvatarImage() || this.selectedAvatarOption() ? 'cover' : 'contain';
   }
 
   protected toggleTerms(): void {
@@ -125,7 +143,14 @@ export class SignupComponent {
     }
 
     const { name, email, password } = this.registerForm.getRawValue();
-    const result = this.database.registerUser(name, email, password, this.selectedAvatarId() ?? 3);
+    const customImage = this.customAvatarImage();
+    const result = this.database.registerUser(
+      name,
+      email,
+      password,
+      customImage ? null : this.selectedAvatarId() ?? 3,
+      customImage,
+    );
 
     if (!result.ok) {
       this.toastMessage.set(result.message);

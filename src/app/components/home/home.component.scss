@@ -9,7 +9,6 @@
   position: relative;
   min-height: 100vh;
   background: #eceefe;
-  overflow-x: hidden;
   overflow-y: auto;
   overflow-anchor: none;
   scrollbar-width: none;
@@ -21,7 +20,6 @@
 }
 
 .workspace-search-results,
-.todo-body,
 .chat-body,
 .thread-body,
 .add-channel-dialog,

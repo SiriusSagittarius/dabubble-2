@@ -10,9 +10,8 @@
       class="chat-wrapper center-panel"
       [class.center-panel-expanded]="sidebarCollapsed()"
       [class.center-panel-thread-collapsed]="threadCollapsed()"
-      [class.center-panel-main-chat]="showMainChatIntro()"
-      [class.center-panel-direct-message]="!!selectedDirectMessageUserId()"
-      [class.center-panel-todo]="showTodoList()"
+      [class.center-panel-main-chat]="uiState.showMainChatIntro()"
+      [class.center-panel-direct-message]="!!uiState.selectedDirectMessageUserId()"
       aria-label="Hauptbereich"
     >
       <app-chat-area (threadOpen)="openThread()"></app-chat-area>
@@ -21,10 +20,14 @@
     <aside
       class="thread-wrapper"
       [class.collapsed]="threadCollapsed()"
-      [class.right-panel-main-chat-hidden]="showMainChatIntro()"
-      aria-label="Thread"
+      [class.right-panel-main-chat-hidden]="uiState.showMainChatIntro()"
+      aria-label="Thread oder Informationen"
     >
-      <app-thread-panel (close)="closeThread()"></app-thread-panel>
+      @if (uiState.membersPanelOpen()) {
+        <app-channel-details (close)="onChannelDetailsClose()"></app-channel-details>
+      } @else {
+        <app-thread-panel (close)="closeThread()"></app-thread-panel>
+      }
     </aside>
   </div>
 

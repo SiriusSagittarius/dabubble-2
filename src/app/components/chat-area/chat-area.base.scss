@@ -1,0 +1,258 @@
+.center-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Nunito, sans-serif;
+}
+
+.main-chat-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  border-radius: 30px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.main-chat-intro-header {
+  height: 160px;
+  flex: 0 0 160px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 43px 45px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+
+  h2 {
+    margin: 0;
+    font-family: Nunito, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 29px;
+    color: #000;
+  }
+}
+
+.main-chat-recipient-field {
+  width: 100%;
+  height: 54px;
+  border: 1px solid #adb0d9;
+  border-radius: 27px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #686868;
+  position: relative;
+}
+
+.main-chat-recipient-label {
+  white-space: nowrap;
+}
+
+.main-chat-recipient-input-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.main-chat-recipient-input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.main-chat-recipient-input::placeholder {
+  color: #686868;
+  opacity: 1;
+}
+
+.main-chat-recipient-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  color: #000;
+}
+
+.main-chat-recipient-field input::placeholder {
+  color: #686868;
+  opacity: 1;
+}
+
+.recipient-suggestions-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #adb0d9;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.main-chat-intro-body {
+  flex: 1 1 auto;
+}
+
+.message-box {
+  z-index: 60;
+}
+
+.direct-message-summary {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  display: block;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.direct-message-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 96px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 23px 30px;
+  gap: 18px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  pointer-events: auto;
+}
+
+.direct-message-avatar-wrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex: 0 0 auto;
+}
+
+.direct-message-avatar-wrap-large { width: 50px; height: 50px; }
+.direct-message-avatar-wrap-medium {
+  width: 100px;
+  height: 100px;
+}
+
+.direct-message-avatar {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.direct-message-avatar-wrap-large .direct-message-avatar { width: 50px; height: 50px; }
+.direct-message-avatar-wrap-medium .direct-message-avatar { width: 100px; height: 100px; }
+
+.direct-message-header-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0;
+}
+
+.direct-message-name {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.direct-message-avatar-status {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #000;
+  box-sizing: border-box;
+}
+
+.direct-message-avatar-status.online { background: #92c83e; }
+.direct-message-avatar-wrap-large .direct-message-avatar-status {
+  right: -1px;
+  bottom: -1px;
+  width: 14px;
+  height: 14px;
+}
+
+.direct-message-intro {
+  position: absolute;
+  left: 40px;
+  bottom: 235px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.direct-message-info-row {
+  position: absolute;
+  bottom:-120px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.direct-message-info-name {
+  font-family: Nunito, sans-serif;
+  font-size: 28px;
+  margin: 20px 20px -40px;
+  font-weight: 700;
+  line-height: 30px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.direct-message-meta {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  bottom: 200px;
+  font-family: Nunito, sans-serif;
+  font-size: 22px;
+  line-height: 22px;
+  color: #000;
+  margin: 0;
+  max-width: none;
+  overflow-wrap: anywhere;
+  pointer-events: auto;
+}
+

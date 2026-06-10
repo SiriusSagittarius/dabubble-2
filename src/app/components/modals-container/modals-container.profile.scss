@@ -1,0 +1,388 @@
+/* Profil- und Backdrop-Animationen */
+.profile-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(0, 0, 0, 0.18);
+}
+.profile-modal {
+  position: absolute;
+  top: 25px;
+  left: 1544px;
+  width: 500px;
+  min-height: 600px;
+  border-radius: 30px 0 30px 30px;
+  background: #fff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  padding: 45px 40px 40px;
+}
+
+.profile-modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-modal-top-row {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-modal-title {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #000;
+}
+
+.profile-modal-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-modal-avatar-stage {
+  width: 100%;
+  height: 200px;
+  margin-top: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-modal-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.profile-modal-avatar-image {
+  width: 168px;
+  height: 168px;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-modal-info,
+.profile-modal-email,
+.profile-modal-message-action,
+.profile-modal-edit-panel {
+  width: 100%;
+}
+
+.profile-modal-info {
+  margin-top: 38px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-modal-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.profile-modal-name {
+  margin: 0;
+  min-width: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 44px;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-modal-self-tag {
+  font-size: 24px;
+  font-weight: 400;
+  color: #444df2;
+}
+
+.profile-modal-edit {
+  border: 0;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  color: #535af1;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    font-weight 0.2s ease;
+}
+
+.profile-modal-edit:hover,
+.profile-modal-edit:focus-visible {
+  background: #eceefe;
+  color: #444df2;
+  font-weight: 700;
+  outline: none;
+}
+
+.profile-modal-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #92c83e;
+}
+
+.profile-modal-status-text {
+  white-space: nowrap;
+  color: #92c83e;
+}
+
+.profile-modal-status-text.offline {
+  color: #adb0d9;
+}
+
+.profile-modal-status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #92c83e;
+  flex: 0 0 auto;
+}
+
+.profile-modal-status-dot.offline {
+  background: #adb0d9;
+}
+
+.profile-modal-email {
+  width: 100%;
+  margin-top: 38px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.profile-modal-email-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-modal-email-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex: 0 0 auto;
+  filter: brightness(0) saturate(100%);
+}
+
+.profile-modal-email-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #000;
+}
+
+.profile-modal-email-address {
+  margin: 0;
+  padding-left: 32px;
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #1381ff;
+  line-height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-modal-message-action {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 24px;
+}
+
+.profile-modal-message-button {
+  min-width: 138px;
+  height: 42px;
+  border: 0;
+  border-radius: 21px;
+  background: #444df2;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 18px;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.profile-modal-message-button:hover,
+.profile-modal-message-button:focus-visible {
+  background: #535af1;
+  outline: none;
+}
+
+.profile-modal-message-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.profile-modal-edit-panel {
+  width: 100%;
+  margin-top: 38px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-modal-edit-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-modal-edit-label-icon {
+  width: 30px;
+  height: 30px;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.profile-modal-edit-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.profile-modal-edit-field {
+  width: 100%;
+  height: 51px;
+  border: 1px solid #adb0d9;
+  border-radius: 26px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.profile-modal-edit-input {
+  flex: 1 1 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #000;
+}
+
+.profile-modal-edit-field:focus-within {
+  border: 2px solid #444df2;
+  padding: 0 17px;
+}
+
+.profile-modal-edit-actions {
+  width: 100%;
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-modal-cancel,
+.profile-modal-save {
+  flex: 1 1 0;
+  height: 49px;
+  border-radius: 25px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.profile-modal-cancel {
+  border: 2px solid #444df2;
+  background: #fff;
+  color: #444df2;
+}
+
+.profile-modal-cancel:hover,
+.profile-modal-cancel:focus-visible {
+  background: #eceefe;
+  outline: none;
+}
+
+.profile-modal-save {
+  border: 2px solid #444df2;
+  background: #444df2;
+  color: #fff;
+}
+
+.profile-modal-save:hover,
+.profile-modal-save:focus-visible {
+  background: #535af1;
+  border-color: #535af1;
+  outline: none;
+}
+
+.profile-modal-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+

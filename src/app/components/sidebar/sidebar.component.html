@@ -60,7 +60,7 @@
           <span class="channel-item-add-icon-circle" aria-hidden="true">
             <span class="channel-item-add-plus"></span>
           </span>
-          <span>Channel hinzufügen</span>
+          <span class="channel-item-add-label">Channel hinzufügen</span>
         </button>
       </nav>
     }
@@ -90,10 +90,7 @@
         <button
           type="button"
           class="dm-item"
-          [class.dm-item-active]="
-            (selectedDirectMessageUserId() === contact.id && !showTodoList()) ||
-            (database.isCurrentUser(contact.id) && showTodoList())
-          "
+          [class.dm-item-active]="uiState.selectedDirectMessageUserId() === contact.id"
           (click)="openDirectMessage(contact.id)"
         >
           <span class="dm-item-avatar-wrapper" aria-hidden="true">

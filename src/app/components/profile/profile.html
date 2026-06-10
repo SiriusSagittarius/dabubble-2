@@ -1,37 +1,26 @@
+<div class="profile-area" #profileArea>
+  <button
+    type="button"
+    class="profile-container"
+    [attr.aria-expanded]="profileMenuOpen()"
+    aria-haspopup="menu"
+    (click)="toggleProfileMenu()"
+  >
+    <span class="profile-name">{{ currentUser()?.name ?? 'Gast' }}</span>
+    <span class="profile-image" [style.backgroundImage]="profileAvatarBackgroundImage()"></span>
+    <svg class="profile-arrow" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 18.7187C14.8333 18.7187 14.6721 18.6875 14.5162 18.625C14.3596 18.5625 14.2292 18.4792 14.125 18.375L8.375 12.625C8.14583 12.3958 8.03125 12.1042 8.03125 11.75C8.03125 11.3958 8.14583 11.1042 8.375 10.875C8.60417 10.6458 8.89583 10.5312 9.25 10.5312C9.60417 10.5312 9.89583 10.6458 10.125 10.875L15 15.75L19.875 10.875C20.1042 10.6458 20.3958 10.5312 20.75 10.5312C21.1042 10.5312 21.3958 10.6458 21.625 10.875C21.8542 11.1042 21.9688 11.3958 21.9688 11.75C21.9688 12.1042 21.8542 12.3958 21.625 12.625L15.875 18.375C15.75 18.5 15.6146 18.5883 15.4688 18.64C15.3229 18.6925 15.1667 18.7187 15 18.7187Z" fill="currentColor"/>
+    </svg>
+  </button>
+</div>
 
-     <div class="profile-area" #profileArea>
-      <button
-        type="button"
-        class="profile-container"
-        [attr.aria-label]="'Profil von ' + (database.currentUser()?.name ?? 'Benutzer')"
-        [attr.aria-expanded]="profileMenuOpen()"
-        aria-haspopup="menu"
-        (click)="toggleProfileMenu()"
-      >
-        <span class="profile-name">{{ database.currentUser()?.name ?? 'Profil' }}</span>
-        <span
-          class="profile-image"
-          aria-hidden="true"
-          [style.backgroundImage]="headerAvatarBackgroundImage()"
-          [style.backgroundPosition]="headerAvatarBackgroundPosition()"
-          [style.backgroundSize]="headerAvatarBackgroundSize()"
-        ></span>
-        <img src="/assets/keyboard-arrow-down.svg" alt="" class="profile-arrow" />
-      </button>
-
-      @if (profileMenuOpen()){
-        <div class="profile-dropdown" role="menu" aria-label="Profilmenue">
-          <button
-            type="button"
-            class="profile-dropdown-item"
-            role="menuitem"
-            (click)="openProfile()"
-          >
-            Profil
-          </button>
-          <button type="button" class="profile-dropdown-item" role="menuitem" (click)="logout()">
-            Log out
-          </button>
-        </div>
-      }
-    </div>
+@if (profileMenuOpen()) {
+  <div class="profile-dropdown" role="menu" aria-label="Profilmenue">
+    <button type="button" class="profile-dropdown-item" role="menuitem" (click)="openProfile()">
+      Profil
+    </button>
+    <button type="button" class="profile-dropdown-item" role="menuitem" (click)="logout()">
+      Log out
+    </button>
+  </div>
+}

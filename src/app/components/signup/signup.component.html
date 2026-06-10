@@ -43,9 +43,8 @@
               <div
                 class="avatar-preview-image"
                 role="img"
-                [class.avatar-preview-placeholder]="!selectedAvatarOption()"
+                [class.avatar-preview-placeholder]="!selectedAvatarOption() && !customAvatarImage()"
                 [style.backgroundImage]="avatarPreviewBackgroundImage()"
-                [style.backgroundPosition]="avatarPreviewBackgroundPosition()"
                 [style.backgroundSize]="avatarPreviewBackgroundSize()"
                 [attr.aria-label]="selectedAvatarOption()?.label || 'Vor und Nachname'">
               </div>
@@ -64,11 +63,26 @@
                     type="button"
                     class="avatar-option"
                     [class.active]="selectedAvatarId() === avatar.id"
-                    [style.backgroundPosition]="avatar.thumbnailBackgroundPosition"
+                    [style.backgroundImage]="'url(/assets/' + avatar.id + '.svg)'"
                     (click)="selectAvatar(avatar.id)"
                     [attr.aria-label]="avatar.label">
                   </button>
                 }
+
+                <label
+                  class="avatar-option avatar-option-upload"
+                  [class.active]="!!customAvatarImage()"
+                  [style.backgroundImage]="customAvatarImage() ? 'url(' + customAvatarImage() + ')' : null"
+                  title="Eigenes Bild hochladen"
+                >
+                  <input type="file" accept="image/*" class="avatar-upload-input" (change)="onCustomAvatarSelected($event)" />
+                  @if (!customAvatarImage()) {
+                    <svg class="avatar-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                  }
+                  <span class="visually-hidden">Eigenes Bild hochladen</span>
+                </label>
               </div>
             </div>
           </div>

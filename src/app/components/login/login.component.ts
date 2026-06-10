@@ -13,7 +13,7 @@ import { FirebaseUserService } from '../../services/firebase-user.service';
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule, RouterLink, GoogleLoginComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.intro.scss', './login.form.scss'],
 })
 export class LoginComponent {
   private readonly router = inject(Router);
@@ -104,6 +104,7 @@ export class LoginComponent {
   }
 
   protected loginAsGuest(): void {
+    this.database.loginAsGuest();
     this.router.navigate(['/home']);
   }
 

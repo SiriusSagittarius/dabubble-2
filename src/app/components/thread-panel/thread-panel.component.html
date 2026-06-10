@@ -121,6 +121,41 @@
             } @else {
               <p class="thread-bubble thread-bubble-own">{{ reply.body }}</p>
             }
+            @if (reply.reactions.length > 0) {
+              <div class="message-reaction-actions message-reaction-actions-own" aria-label="Reaktionen">
+                @for (reaction of reply.reactions; track reaction.emoji) {
+                  <div class="reaction-chip-wrap">
+                    <button type="button" class="reaction-chip" aria-label="Reaktion" (click)="addReaction(reply.id, reaction.emoji)">
+                      <span class="reaction-icon reaction-icon-text">{{ reactionIcon(reaction.emoji) }}</span>
+                      <span>{{ reaction.count }}</span>
+                    </button>
+                    <span class="reaction-hover-bubble thread-reaction-hover-bubble">
+                      <span class="thread-reaction-hover-icon">{{ reactionIcon(reaction.emoji) }}</span>
+                      <span class="thread-reaction-hover-user">{{ reactionHoverUser(reaction) }}</span>
+                      <span class="thread-reaction-hover-text">hat {{ reaction.count }} mal reagiert</span>
+                    </span>
+                  </div>
+                }
+                <button type="button" class="reaction-add-button" aria-label="Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-row-' + reply.id)">
+                  <img src="/assets/emot.svg" alt="" class="reaction-add-icon" />
+                </button>
+                @if (activeEmojiPicker() === 'reaction-row-' + reply.id) {
+                  <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
+                  <div class="emoji-picker-popover emoji-picker-popover-reaction-row emoji-picker-popover-reaction-row-own">
+                    <emoji-mart
+                      (emojiSelect)="onMessageEmojiSelect($event, 'reaction-row-' + reply.id)"
+                      [enableSearch]="false"
+                      [emojiSize]="36"
+                      [include]="emojiCategories"
+                      [showPreview]="false"
+                      [showSingleCategory]="true"
+                      [perLine]="9"
+                      [totalFrequentLines]="1"
+                    ></emoji-mart>
+                  </div>
+                }
+              </div>
+            }
             @if (activeThreadReactionBarId() === reply.id) {
               <div
                 class="thread-reaction-overlay"
@@ -129,77 +164,47 @@
                 (touchstart)="closeThreadReactionBar(); $event.stopPropagation()"
                 (click)="closeThreadReactionBar(); $event.stopPropagation()"
               ></div>
-            }
-            <div (click)="$event.stopPropagation()">
-              <div aria-label="Reaktionen">
+              <div class="thread-reaction-add thread-reaction-add-right" (click)="$event.stopPropagation()">
                 <button
                   type="button"
-                  class="message-reaction-action"
-                  aria-label="Reaktion Klatschen"
-                  (click)="
-                    addReaction(reply.id, 'hands');
-                    closeThreadReactionBar();
-                    $event.stopPropagation()
-                  "
+                  class="message-hover-action-btn"
+                  aria-label="Mit Haken reagieren"
+                  (click)="addReaction(reply.id, 'check')"
                 >
-                  <span class="thread-reaction-emoji">&#128079;</span>
+                  <span class="message-hover-action-emoji">✅</span>
                 </button>
                 <button
                   type="button"
-                  class="message-reaction-action"
-                  aria-label="Reaktion Herz"
-                  (click)="
-                    addReaction(reply.id, 'heart');
-                    closeThreadReactionBar();
-                    $event.stopPropagation()
-                  "
+                  class="message-hover-action-btn"
+                  aria-label="Mit Daumen hoch reagieren"
+                  (click)="addReaction(reply.id, 'thumbs_up')"
                 >
-                  <span class="thread-reaction-emoji">&#10084;&#65039;</span>
+                  <span class="message-hover-action-emoji">👍</span>
                 </button>
                 <button
                   type="button"
-                  class="message-reaction-action"
-                  aria-label="Reaktion Lachen"
-                  (click)="
-                    addReaction(reply.id, 'smile');
-                    closeThreadReactionBar();
-                    $event.stopPropagation()
-                  "
+                  class="message-hover-action-btn action-button-emoji"
+                  aria-label="Weitere Reaktion hinzufuegen"
+                  (click)="toggleEmojiPicker('reaction-' + reply.id)"
                 >
-                  <span class="thread-reaction-emoji">&#128514;</span>
+                  <img src="/assets/add-reaction.png" alt="" class="message-hover-action-icon" />
                 </button>
-                <button
-                  type="button"
-                  class="message-reaction-action"
-                  aria-label="Reaktion Erstaunt"
-                  (click)="
-                    addReaction(reply.id, 'open_mouth');
-                    closeThreadReactionBar();
-                    $event.stopPropagation()
-                  "
-                >
-                  <span class="thread-reaction-emoji">&#128558;</span>
-                </button>
-                <button
-                  type="button"
-                  class="message-reaction-action"
-                  aria-label="Reaktion Weinen"
-                  (click)="
-                    addReaction(reply.id, 'sad'); closeThreadReactionBar(); $event.stopPropagation()
-                  "
-                >
-                  <span class="thread-reaction-emoji">&#128546;</span>
-                </button>
-                <button
-                  type="button"
-                  class="message-reaction-action"
-                  aria-label="Weitere Reaktionen"
-                  (click)="toggleEmojiPicker('thread'); $event.stopPropagation()"
-                >
-                  <span class="thread-reaction-plus">+</span>
-                </button>
+                @if (activeEmojiPicker() === 'reaction-' + reply.id) {
+                  <div class="emoji-picker-popover thread-reaction-popover thread-reaction-popover-right" (click)="$event.stopPropagation()">
+                    <emoji-mart
+                      (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + reply.id)"
+                      [enableSearch]="false"
+                      [emojiSize]="36"
+                      [include]="emojiCategories"
+                      [showPreview]="false"
+                      [showSingleCategory]="true"
+                      [perLine]="9"
+                      [totalFrequentLines]="1"
+                    ></emoji-mart>
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
           <img
             class="thread-avatar"
@@ -230,6 +235,41 @@
               </span>
             </div>
             <p class="thread-bubble thread-bubble-large">{{ reply.body }}</p>
+            @if (reply.reactions.length > 0) {
+              <div class="message-reaction-actions" aria-label="Reaktionen">
+                @for (reaction of reply.reactions; track reaction.emoji) {
+                  <div class="reaction-chip-wrap">
+                    <button type="button" class="reaction-chip" aria-label="Reaktion" (click)="addReaction(reply.id, reaction.emoji)">
+                      <span class="reaction-icon reaction-icon-text">{{ reactionIcon(reaction.emoji) }}</span>
+                      <span>{{ reaction.count }}</span>
+                    </button>
+                    <span class="reaction-hover-bubble thread-reaction-hover-bubble">
+                      <span class="thread-reaction-hover-icon">{{ reactionIcon(reaction.emoji) }}</span>
+                      <span class="thread-reaction-hover-user">{{ reactionHoverUser(reaction) }}</span>
+                      <span class="thread-reaction-hover-text">hat {{ reaction.count }} mal reagiert</span>
+                    </span>
+                  </div>
+                }
+                <button type="button" class="reaction-add-button" aria-label="Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-row-' + reply.id)">
+                  <img src="/assets/emot.svg" alt="" class="reaction-add-icon" />
+                </button>
+                @if (activeEmojiPicker() === 'reaction-row-' + reply.id) {
+                  <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
+                  <div class="emoji-picker-popover emoji-picker-popover-reaction-row">
+                    <emoji-mart
+                      (emojiSelect)="onMessageEmojiSelect($event, 'reaction-row-' + reply.id)"
+                      [enableSearch]="false"
+                      [emojiSize]="36"
+                      [include]="emojiCategories"
+                      [showPreview]="false"
+                      [showSingleCategory]="true"
+                      [perLine]="9"
+                      [totalFrequentLines]="1"
+                    ></emoji-mart>
+                  </div>
+                }
+              </div>
+            }
             @if (activeThreadReactionBarId() === reply.id) {
               <div
                 class="thread-reaction-overlay"
@@ -238,9 +278,47 @@
                 (touchstart)="closeThreadReactionBar(); $event.stopPropagation()"
                 (click)="closeThreadReactionBar(); $event.stopPropagation()"
               ></div>
+              <div class="thread-reaction-add" (click)="$event.stopPropagation()">
+                <button
+                  type="button"
+                  class="message-hover-action-btn"
+                  aria-label="Mit Haken reagieren"
+                  (click)="addReaction(reply.id, 'check')"
+                >
+                  <span class="message-hover-action-emoji">✅</span>
+                </button>
+                <button
+                  type="button"
+                  class="message-hover-action-btn"
+                  aria-label="Mit Daumen hoch reagieren"
+                  (click)="addReaction(reply.id, 'thumbs_up')"
+                >
+                  <span class="message-hover-action-emoji">👍</span>
+                </button>
+                <button
+                  type="button"
+                  class="message-hover-action-btn action-button-emoji"
+                  aria-label="Weitere Reaktion hinzufuegen"
+                  (click)="toggleEmojiPicker('reaction-' + reply.id)"
+                >
+                  <img src="/assets/add-reaction.png" alt="" class="message-hover-action-icon" />
+                </button>
+                @if (activeEmojiPicker() === 'reaction-' + reply.id) {
+                  <div class="emoji-picker-popover thread-reaction-popover" (click)="$event.stopPropagation()">
+                    <emoji-mart
+                      (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + reply.id)"
+                      [enableSearch]="false"
+                      [emojiSize]="36"
+                      [include]="emojiCategories"
+                      [showPreview]="false"
+                      [showSingleCategory]="true"
+                      [perLine]="9"
+                      [totalFrequentLines]="1"
+                    ></emoji-mart>
+                  </div>
+                }
+              </div>
             }
-            
-         
           </div>
         </article>
       }
@@ -296,7 +374,7 @@
           aria-label="Emoji hinzufuegen"
           (click)="toggleEmojiPicker('thread')"
         >
-          <img src="/assets/add-reaction.png" alt="" class="action-icon action-icon-small" />
+          <img src="/assets/emot.svg" alt="" class="action-icon action-icon-small" />
         </button>
         <button
           type="button"
