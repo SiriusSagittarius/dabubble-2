@@ -12,6 +12,7 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angula
 import { MockDatabaseService } from '../../database/mock-database.service';
 import { MockUser } from '../../database/mock-database.models';
 import { ProfileDialogService } from '../../services/profile-dialog.service';
+import { UiStateService } from '../../services/ui-state.service';
 
 @Component({
   selector: 'app-profile-card',
@@ -24,6 +25,7 @@ import { ProfileDialogService } from '../../services/profile-dialog.service';
 export class ProfileCardComponent {
   private readonly database = inject(MockDatabaseService);
   private readonly profileDialog = inject(ProfileDialogService);
+  private readonly uiState = inject(UiStateService);
 
   protected readonly isEditing = signal(false);
   protected readonly editAvatarImage = signal<string | null>(null);
@@ -161,6 +163,10 @@ export class ProfileCardComponent {
   }
 
   protected messageProfileUser(): void {
+    const user = this.profileUser();
+    if (user) {
+      this.uiState.openDirectMessage(user.id);
+    }
     this.closeCard();
   }
 

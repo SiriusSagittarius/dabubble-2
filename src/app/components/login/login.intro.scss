@@ -136,6 +136,10 @@
       }
     }
 
+    .auth-create-account-text {
+      display: none;
+    }
+
 .login-container {
       position: relative;
       width: 100%;
@@ -327,5 +331,49 @@
         @media (max-width: 640px) {
           font-size: 16px;
         }
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-wrapper {
+        padding: 16px;
+      }
+
+      .login-container {
+        padding: 24px 16px;
+        border-radius: 30px;
+      }
+
+      .auth-account-group {
+        display: none;
+      }
+
+      .auth-create-account-link {
+        position: absolute;
+        left: 50%;
+        top: auto;
+        bottom: 70px;
+        width: auto;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 20px;
+        border: 2px solid $purple-2;
+        border-radius: 19px;
+        transform: translateX(-50%);
+
+        &:hover,
+        &:focus-visible {
+          background: rgba($light-purple-bg, 0.3);
+        }
+      }
+
+      .auth-create-account-text {
+        display: inline;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        color: $purple-1;
       }
     }

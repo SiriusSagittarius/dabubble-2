@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(NODE_PATH=__CMDSUB_OUTPUT__ node -e ' *)"
+      "Bash(NODE_PATH=__CMDSUB_OUTPUT__ node -e ' *)",
+      "Bash(node tmp-dm-screenshot.js)",
+      "PowerShell(node tmp-emoji-pickers3.js)",
+      "PowerShell(node tmp-header-search.js)"
     ]
   }
 }

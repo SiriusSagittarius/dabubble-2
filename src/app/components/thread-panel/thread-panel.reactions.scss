@@ -86,10 +86,9 @@
   top: auto;
   left: 0;
   z-index: 35;
-  width: 300px;
-  height: 340px;
-  max-width: min(300px, calc(100vw - 32px));
-  max-height: min(340px, calc(100vh - 120px));
+  width: 340px;
+  height: min(360px, calc(100vh - 180px));
+  max-width: min(340px, calc(100vw - 32px));
   overflow: hidden;
   border: 1px solid #adb0d9;
   border-radius: 20px;

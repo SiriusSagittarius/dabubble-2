@@ -244,13 +244,18 @@
   z-index: 35;
   width: 340px;
   max-width: min(340px, calc(100vw - 32px));
-  height: 360px;
-  max-height: min(360px, calc(100vh - 120px));
+  height: min(360px, calc(100vh - 180px));
   overflow: hidden;
   border: 1px solid #adb0d9;
   border-radius: 20px;
   background: #fff;
+  box-sizing: border-box;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+.thread-reaction-popover emoji-mart {
+  display: block;
+  height: 100%;
 }
 
 .thread-reaction-popover-right {

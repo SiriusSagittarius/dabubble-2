@@ -1,6 +1,7 @@
 @if (active === 'legal') {
   <div class="privacypolicy">
     <div class="headline">
+      <h3 class="page-title">Impressum</h3>
       <button class="back-link" type="button" (click)="goBack()" aria-label="Back to previous page">
         <svg class="back-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
@@ -12,7 +13,6 @@
           />
         </svg>
       </button>
-      <h3 class="page-title">Impressum</h3>
     </div>
     <div class="content-container">
       <br />
@@ -101,6 +101,7 @@
 } @else if (active === 'privacy') {
   <div class="privacypolicy">
     <div class="headline">
+      <h2 class="page-title">Privacy Policy</h2>
       <button class="back-link" type="button" (click)="goBack()" aria-label="Back to previous page">
         <svg class="back-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
@@ -112,7 +113,6 @@
           />
         </svg>
       </button>
-      <h2 class="page-title">Privacy Policy</h2>
     </div>
     <div class="content-container">
       <div class="policy-copy">

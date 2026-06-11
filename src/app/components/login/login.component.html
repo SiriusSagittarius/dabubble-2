@@ -3,7 +3,9 @@
         <img src="assets/auth-account-group.svg" alt="" />
       </div>
 
-      <a class="auth-create-account-link" routerLink="/signup" aria-label="Konto erstellen"></a>
+      <a class="auth-create-account-link" routerLink="/signup" aria-label="Konto erstellen">
+        <span class="auth-create-account-text">Konto erstellen</span>
+      </a>
 
       @if (showIntro()) {
         <div class="login-intro" [class.login-intro--leave]="introLeaving()" aria-hidden="true">

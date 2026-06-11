@@ -86,6 +86,13 @@
               </div>
             </div>
           </div>
+
+          <!-- Aktionsknopf -->
+          <div class="action-footer">
+            <button type="button" class="btn-primary" (click)="onSubmit()">
+              Weiter
+            </button>
+          </div>
         }
 
         @if (!isAvatarStep()) {
@@ -159,29 +166,31 @@
             </div>
           </form>
 
-          <!-- 4. Datenschutzerklärung Checkbox (Frame 79 / Frame 201) -->
-          <div class="policy-container">
-            <label class="checkbox-label" (click)="toggleTerms()">
-              <span class="custom-checkbox" [class.checked]="registerForm.get('acceptTerms')?.value" [class.has-error]="isFieldInvalid('acceptTerms')">
-                @if (registerForm.get('acceptTerms')?.value) {
-                  <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                }
-              </span>
-              <span class="label-text">
-                Ich stimme der <span class="link" (click)="openPrivacyPolicy($event)">Datenschutzerklärung</span> zu.
-              </span>
-            </label>
+          <div class="bottom-row">
+            <!-- 4. Datenschutzerklärung Checkbox (Frame 79 / Frame 201) -->
+            <div class="policy-container">
+              <label class="checkbox-label" (click)="toggleTerms()">
+                <span class="custom-checkbox" [class.checked]="registerForm.get('acceptTerms')?.value" [class.has-error]="isFieldInvalid('acceptTerms')">
+                  @if (registerForm.get('acceptTerms')?.value) {
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  }
+                </span>
+                <span class="label-text">
+                  Ich stimme der <span class="link" (click)="openPrivacyPolicy($event)">Datenschutzerklärung</span> zu.
+                </span>
+              </label>
+            </div>
+
+            <!-- Aktionsknopf -->
+            <div class="action-footer">
+              <button type="button" class="btn-primary" (click)="onSubmit()">
+                Weiter
+              </button>
+            </div>
           </div>
         }
-
-        <!-- Aktionsknopf -->
-        <div class="action-footer">
-          <button type="button" class="btn-primary" (click)="onSubmit()">
-            Weiter
-          </button>
-        </div>
 
       </div>
     </div>

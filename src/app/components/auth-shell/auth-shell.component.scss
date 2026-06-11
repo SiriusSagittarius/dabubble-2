@@ -104,7 +104,7 @@ $light-purple-bg: #ECEEFE;
 .auth-footer-links {
   position: absolute;
   left: 825px;
-  top: 990px;
+  top: 980px;
   width: 270px;
   height: 42px;
   display: flex;
@@ -139,6 +139,31 @@ $light-purple-bg: #ECEEFE;
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+@media (max-width: 480px) {
+  :host {
+    width: 100%;
+    height: 100dvh;
+  }
+
+  .auth-logo {
+    left: 50%;
+    top: 24px;
+    width: 180px;
+    height: auto;
+    transform: translateX(-50%);
+  }
+
+  .auth-footer-links {
+    left: 50%;
+    top: auto;
+    bottom: 16px;
+    width: auto;
+    gap: 24px;
+    justify-content: center;
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes introBrandTravel {

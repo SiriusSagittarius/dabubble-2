@@ -27,7 +27,6 @@ export class ModalsContainer {
   protected profileDialogOpen = false;
   protected profileEditMode = false;
   protected profileEditName = '';
-  protected selectedProfileUserId: string | null = null;
 
   protected channelNameEditMode = false;
   protected channelDescriptionEditMode = false;
@@ -90,7 +89,7 @@ export class ModalsContainer {
   protected messageProfileUser(): void {
     const user = this.profileUser();
     if (user) {
-      this.selectedProfileUserId = user.id;
+      this.uiState.openDirectMessage(user.id);
       this.closeProfileDialog();
     }
   }

@@ -40,6 +40,7 @@
       @media (max-width: 640px) {
         position: relative;
         width: 100%;
+        height: 50px;
         top: auto !important;
       }
     }
@@ -59,6 +60,8 @@
 
       @media (max-width: 640px) {
         width: 100%;
+        height: 50px;
+        padding: 14px 28px;
       }
 
       &:hover {
@@ -131,6 +134,20 @@
       white-space: nowrap;
     }
 
+    // Wrapper für Checkbox-Reihe + Weiter-Button (mobile nebeneinander)
+    .bottom-row {
+      display: contents;
+
+      @media (max-width: 640px) {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 8px;
+      }
+    }
+
     // Checkbox für Datenschutzerklärung (Frame 79 / 201)
     .policy-container {
       position: absolute;
@@ -143,10 +160,12 @@
 
       @media (max-width: 640px) {
         position: relative;
-        width: 100%;
+        width: auto;
+        flex: 1 1 auto;
         left: 0;
-        top: 20px;
-        margin-bottom: 30px;
+        top: 0;
+        height: auto;
+        margin-bottom: 0;
       }
     }
 
@@ -156,6 +175,10 @@
       gap: 12px;
       cursor: pointer;
       user-select: none;
+
+      @media (max-width: 640px) {
+        align-items: flex-start;
+      }
 
       &:has(.link:hover),
       &:has(.link:focus-visible) {
@@ -235,11 +258,10 @@
 
       @media (max-width: 640px) {
         position: relative;
-        width: 100%;
+        width: auto;
+        flex: 0 0 auto;
         left: 0;
-        top: 20px;
-        display: flex;
-        justify-content: center;
+        top: 0;
       }
 
       .btn-primary {
@@ -267,10 +289,6 @@
 
         &:active {
           transform: scale(0.97);
-        }
-
-        @media (max-width: 640px) {
-          width: 100%;
         }
       }
     }
