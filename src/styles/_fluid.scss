@@ -1,0 +1,10 @@
+@use 'sass:math';
+
+// Fluid (clamp-basierte) Werte: skaliert linear zwischen $min-vw und $max-vw,
+// darunter/darüber bleibt der Wert auf $min-val bzw. $max-val fixiert.
+@function fluid($min-vw, $max-vw, $min-val, $max-val) {
+  $slope: math.div($max-val - $min-val, $max-vw - $min-vw);
+  $intersection: $min-val - $min-vw * $slope;
+
+  @return clamp(#{$min-val}px, #{$intersection}px + #{$slope * 100}vw, #{$max-val}px);
+}

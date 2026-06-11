@@ -1,3 +1,5 @@
+@use '../../../styles/fluid' as *;
+
 $purple-1: #444DF2;
 $purple-2: #797EF3;
 $light-purple-bg: #ECEEFE;
@@ -89,10 +91,10 @@ $light-purple-bg: #ECEEFE;
 
 .auth-logo {
   position: absolute;
-  left: 75px;
-  top: 75px;
-  width: 242.11px;
-  height: 70px;
+  left: fluid(320, 1920, 62.37, 75);
+  top: fluid(320, 1920, 58.95, 75);
+  width: fluid(320, 1920, 201.32, 242.11);
+  height: fluid(320, 1920, 55.02, 70);
   object-fit: contain;
   z-index: 3;
 }
@@ -145,14 +147,6 @@ $light-purple-bg: #ECEEFE;
   :host {
     width: 100%;
     height: 100dvh;
-  }
-
-  .auth-logo {
-    left: 50%;
-    top: 24px;
-    width: 180px;
-    height: auto;
-    transform: translateX(-50%);
   }
 
   .auth-footer-links {
