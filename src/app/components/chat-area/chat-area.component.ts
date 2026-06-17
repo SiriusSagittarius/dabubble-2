@@ -39,6 +39,7 @@ export class ChatArea {
   protected editMessageDraft = '';
 
   @Output() threadOpen = new EventEmitter<void>();
+  @Output() backToSidebar = new EventEmitter<void>();
 
   protected readonly activeMessageMenuId = signal<string | null>(null);
   protected readonly editingMessageId = signal<string | null>(null);
@@ -90,6 +91,9 @@ export class ChatArea {
   }
 
   protected editChannelName(): void {
+    if (!this.isActiveChannelCreator()) {
+      return;
+    }
     this.channelNameDraft = this.database.activeChannel()?.name ?? '';
     this.channelNameEditMode.set(true);
     this.channelDescriptionEditMode.set(false);
@@ -99,7 +103,7 @@ export class ChatArea {
     const channel = this.database.activeChannel();
     const trimmedName = this.channelNameDraft.trim();
 
-    if (!channel || !trimmedName) {
+    if (!channel || !trimmedName || !this.isActiveChannelCreator()) {
       return;
     }
 
@@ -108,6 +112,9 @@ export class ChatArea {
   }
 
   protected editChannelDescription(): void {
+    if (!this.isActiveChannelCreator()) {
+      return;
+    }
     this.channelDescriptionDraft = this.database.activeChannel()?.description ?? '';
     this.channelDescriptionEditMode.set(true);
     this.channelNameEditMode.set(false);
@@ -116,7 +123,7 @@ export class ChatArea {
   protected saveChannelDescription(): void {
     const channel = this.database.activeChannel();
 
-    if (!channel) {
+    if (!channel || !this.isActiveChannelCreator()) {
       return;
     }
 
@@ -222,9 +229,11 @@ export class ChatArea {
 
   protected channelIntroDateLabel(): string {
     const channel = this.database.activeChannel();
-    if (!channel) return '';
+    if (!channel?.createdAt) return '';
 
     const created = new Date(channel.createdAt);
+    if (isNaN(created.getTime())) return '';
+
     const now = new Date();
     const isToday =
       created.getFullYear() === now.getFullYear() &&

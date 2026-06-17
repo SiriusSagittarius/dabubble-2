@@ -24,16 +24,38 @@ export class Home {
   protected readonly sidebarCollapsed = signal(false);
   protected readonly threadCollapsed = signal(true);
 
+  protected openSidebar(): void {
+    this.sidebarCollapsed.set(false);
+    this.threadCollapsed.set(true);
+  }
+
+  protected onSidebarItemSelected(): void {
+    if (window.innerWidth <= 960) {
+      this.sidebarCollapsed.set(true);
+    }
+  }
+
   protected toggleSidebar(): void {
-    this.sidebarCollapsed.update((value) => !value);
+    const isNarrow = window.innerWidth <= 1350;
+    const opening = this.sidebarCollapsed();
+    this.sidebarCollapsed.set(!opening);
+    if (isNarrow && opening) {
+      // Sidebar wird geöffnet: Thread schließen
+      this.threadCollapsed.set(true);
+    }
   }
 
   protected closeThread(): void {
     this.threadCollapsed.set(true);
+    // Sidebar bleibt zu
   }
 
   protected openThread(): void {
     this.threadCollapsed.set(false);
+    // Bei ≤1350px: Sidebar zuklappen
+    if (window.innerWidth <= 1350) {
+      this.sidebarCollapsed.set(true);
+    }
   }
 
   protected onChannelDetailsClose(): void {

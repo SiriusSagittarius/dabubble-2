@@ -1,19 +1,4 @@
-/* ==========================================
-   MAIN CHANNEL VIEW
-   ========================================== */
-.chat-header {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 96px;
-  padding: 22px 40px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  z-index: 0;
-}
+/* Channel-Header: nur in header-extra.scss definiert — hier nur channel-spezifische Elemente */
 
 .channel-title {
   display: inline-flex;
@@ -133,10 +118,19 @@
 }
 
 .members-button {
+  width: 40px;
+  height: 40px;
   border: 0;
   padding: 0;
-  background: transparent;
+  border-radius: 50%;
+  background: #eceefe;
+  display: grid;
+  place-items: center;
   cursor: pointer;
+}
+
+.members-button:hover {
+  background: #dcdffd;
 }
 
 .members-count {
@@ -150,34 +144,9 @@
   cursor: pointer;
 }
 
-.members-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #eceefe;
-  display: grid;
-  place-items: center;
-}
-
-.members-button:hover {
-  background: #dcdffd;
-}
-
 .members-icon {
   width: 24px;
   height: 24px;
-}
-
-.chat-body {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  padding: 22px 40px 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
 }
 
 .time-separator {
@@ -217,18 +186,10 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 18px;
-  padding: 10px 0;
 }
 
 .message-left {
   padding-right: 12px;
-}
-
-.message-right {
-  flex-direction: row;
-  padding-left: 12px;
-  justify-content: flex-end;
 }
 
 .message-avatar {
@@ -249,9 +210,9 @@
 
 .message-right-content {
   display: flex;
-  margin-left: 160px;
+  flex: 1 1 auto;
   flex-direction: column;
-  align-items: self-end;
+  align-items: flex-end;
   gap: 8px;
   min-width: 0;
 }
@@ -280,10 +241,150 @@
   max-width: 660px;
   margin: 0;
   padding: 15px 18px;
-  border-radius:  24px 0 24px 24px;
-  background: #797EF3;
+  border-radius: 24px 0 24px 24px;
+  background: #797ef3;
   color: #fff;
   font-size: 18px;
   line-height: 25px;
   word-break: break-word;
+}
+
+/* ==========================================
+   RESPONSIVE ≤1480px
+   ========================================== */
+@media (max-width: 1480px) {
+  .members-preview-wrap {
+    display: none;
+  }
+
+  .message-name {
+    margin-top: -4px;
+  }
+
+  .message-avatar {
+    margin-top: -8px;
+  }
+
+  .speech-bubble-left {
+    text-align: left;
+  }
+
+  .message-right .speech-bubble {
+    text-align: right;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE ≤430px
+   ========================================== */
+@media (max-width: 430px) {
+  .center-card {
+    border-radius: 0;
+  }
+
+  .channel-title {
+    gap: 6px;
+    margin-left: 0;
+    padding: 4px 6px;
+  }
+
+  .channel-hash,
+  .channel-name {
+    font-size: 20px;
+  }
+
+  .channel-arrow-down {
+    width: 10px;
+    height: 10px;
+  }
+
+  .members-area {
+    gap: 0;
+  }
+
+  .members-preview-wrap {
+    display: none;
+  }
+
+  .members-button {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+  }
+
+  .members-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .message-right {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+
+  .message-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .message-avatar {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+  }
+
+  .message-avatar-own {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+  }
+
+  .message-name {
+    font-size: 14px;
+    margin-top: 0;
+  }
+
+  .message-time {
+    font-size: 11px;
+  }
+
+  .speech-bubble {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 10px 14px;
+  }
+
+  .message-right-content {
+    margin-left: 0;
+  }
+
+  .message-thread-link {
+    font-size: 13px;
+  }
+
+  .time-pill {
+    font-size: 12px;
+    height: 28px;
+    padding: 0 12px;
+  }
+
+  .direct-message-header {
+    height: 60px;
+    padding: 0 20px;
+    gap: 12px;
+  }
+
+  .direct-message-avatar-wrap-large {
+    width: 38px;
+    height: 38px;
+  }
+
+  .direct-message-avatar-wrap-large .direct-message-avatar {
+    width: 38px;
+    height: 38px;
+  }
+
+  .direct-message-name {
+    font-size: 16px;
+  }
 }

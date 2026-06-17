@@ -59,7 +59,7 @@
             ],
             "styles": [
               "node_modules/@ctrl/ngx-emoji-mart/picker.css",
-              "src/styles.scss"
+              "src/app/styles/styles.scss"
             ]
           },
           "configurations": {

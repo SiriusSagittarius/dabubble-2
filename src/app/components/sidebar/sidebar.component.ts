@@ -1,21 +1,50 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MockDatabaseService } from '../../database/mock-database.service';
 import { UiStateService } from '../../services/ui-state.service';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.channels.scss', './sidebar.dm.scss'],
 })
 export class Sidebar {
+  @Output() itemSelected = new EventEmitter<void>();
+
   protected readonly database = inject(MockDatabaseService);
   protected readonly uiState = inject(UiStateService);
 
   protected readonly channelsExpanded = signal(true);
   protected readonly directMessagesExpanded = signal(false);
+  protected readonly devspaceSearchOpen = signal(false);
+  protected readonly devspaceSearchQuery = signal('');
+
+  protected readonly searchShowChannels = computed(() =>
+    this.devspaceSearchQuery().startsWith('#')
+  );
+  protected readonly searchShowUsers = computed(() =>
+    this.devspaceSearchQuery().startsWith('@')
+  );
+  protected readonly searchShowDefault = computed(() =>
+    !this.searchShowChannels() && !this.searchShowUsers()
+  );
+
+  protected readonly filteredChannels = computed(() => {
+    const q = this.devspaceSearchQuery().slice(1).toLowerCase();
+    return this.database.channels().filter(c =>
+      !q || c.name.toLowerCase().includes(q)
+    );
+  });
+
+  protected readonly filteredUsers = computed(() => {
+    const q = this.devspaceSearchQuery().slice(1).toLowerCase();
+    return this.database.users().filter(u =>
+      !q || u.name.toLowerCase().includes(q)
+    );
+  });
 
   protected channelIsActive(channelId: string): boolean {
     return this.database.selectedChannelId() === channelId;
@@ -48,6 +77,15 @@ export class Sidebar {
     return `/assets/${avatarId}.svg`;
   }
 
+  protected openDevspaceSearch(): void {
+    this.devspaceSearchOpen.set(true);
+  }
+
+  protected closeDevspaceSearch(): void {
+    this.devspaceSearchOpen.set(false);
+    this.devspaceSearchQuery.set('');
+  }
+
   protected openMainChatIntro(): void {
     this.uiState.openMainChatIntro();
   }
@@ -62,11 +100,13 @@ export class Sidebar {
 
   protected openDirectMessage(userId: string): void {
     this.uiState.openDirectMessage(userId);
+    this.itemSelected.emit();
   }
 
   protected onSelectChannel(channelId: string): void {
     this.database.selectChannel(channelId);
     this.uiState.openChannel();
+    this.itemSelected.emit();
   }
 
   private userAvatarId(userId: string): number | null {

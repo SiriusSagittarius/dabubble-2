@@ -1,42 +1,28 @@
-/* Globale Stile für alle HTML-Elemente */
+
 html{
   background-color: #ECEEFE;
 }
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Nunito', sans-serif;
-
+  font-family: "Nunito", sans-serif;
   width: 100%;
   max-width: 1920px;
-  max-height:1080px;
+  max-height: 1080px;
   height: 100dvh;
   margin: 0 auto;
-
-  overflow: hidden;
+  overflow: hidden; 
 }
-
 * {
   box-sizing: border-box;
 }
-/* Scrollbars in allen Listen und Textbereichen global ausblenden */
-.workspace-search-results,
-.todo-body,
-.chat-body,
-.thread-body,
-.add-channel-dialog,
-.dm-list,
-.channel-list,
-.add-members-panel-body,
-.members-panel-list,
-.add-members-suggestions-list,
-.contact-suggestions-list {
+
+* {
   scrollbar-width: none;
   -ms-overflow-style: none;
-  
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-  }
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }

@@ -281,3 +281,16 @@
 .thread-edit-menu-item:focus-visible {
   outline: none;
 }
+
+/* ==========================================
+   RESPONSIVE: SPEECH BUBBLES AB 1480px
+   ========================================== */
+@media (max-width: 1480px) {
+  .thread-bubble {
+    text-align: left;
+  }
+
+  .thread-bubble-own {
+    text-align: right;
+  }
+}

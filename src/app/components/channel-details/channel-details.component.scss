@@ -60,19 +60,27 @@
 .details-body {
   flex: 1;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
 }
 
+.details-body::-webkit-scrollbar { display: none; }
+
 .members-list-wrapper {
   flex: 1;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding: 0;
   margin: 0 40px;
   width: auto;
   max-height: 100%;
 }
+
+.members-list-wrapper::-webkit-scrollbar { display: none; }
 
 .members-list {
   display: flex;

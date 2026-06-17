@@ -34,6 +34,10 @@ export class Profile {
     this.profileMenuOpen.update((value) => !value);
   }
 
+  protected closeProfileMenu(): void {
+    this.profileMenuOpen.set(false);
+  }
+
   protected openProfile(): void {
     this.profileMenuOpen.set(false);
     const user = this.currentUser();

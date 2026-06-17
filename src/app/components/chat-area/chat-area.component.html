@@ -148,10 +148,16 @@
           <section class="channel-edition-section channel-edition-section-name">
             <div class="channel-edition-section-row">
               <span class="channel-edition-label">Channel-Name</span>
-              @if (channelNameEditMode()) {
-                <button type="button" class="channel-edition-edit-button" (click)="saveChannelName()">Speichern</button>
-              } @else {
-                <button type="button" class="channel-edition-edit-button" (click)="editChannelName()">Bearbeiten</button>
+              @if (isActiveChannelCreator()) {
+                @if (channelNameEditMode()) {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name speichern" (click)="saveChannelName()">
+                    <span class="channel-edition-action-icon channel-edition-action-icon-save"></span>
+                  </button>
+                } @else {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name bearbeiten" (click)="editChannelName()">
+                    <span class="channel-edition-action-icon channel-edition-action-icon-edit"></span>
+                  </button>
+                }
               }
             </div>
             @if (channelNameEditMode()) {
@@ -169,11 +175,17 @@
 
           <section class="channel-edition-section channel-edition-section-description">
             <div class="channel-edition-section-row">
-              <span class="channel-edition-label channel-edition-label-blue">Beschreibung</span>
-              @if (channelDescriptionEditMode()) {
-                <button type="button" class="channel-edition-edit-button" (click)="saveChannelDescription()">Speichern</button>
-              } @else {
-                <button type="button" class="channel-edition-edit-button" (click)="editChannelDescription()">Bearbeiten</button>
+              <span class="channel-edition-label">Beschreibung</span>
+              @if (isActiveChannelCreator()) {
+                @if (channelDescriptionEditMode()) {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung speichern" (click)="saveChannelDescription()">
+                    <span class="channel-edition-action-icon channel-edition-action-icon-save"></span>
+                  </button>
+                } @else {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung bearbeiten" (click)="editChannelDescription()">
+                    <span class="channel-edition-action-icon channel-edition-action-icon-edit"></span>
+                  </button>
+                }
               }
             </div>
             @if (channelDescriptionEditMode()) {
@@ -193,6 +205,25 @@
                 database.userName(database.activeChannel().createdBy)
               }}</span>
             </section>
+          </section>
+
+          <section class="channel-edition-section channel-edition-section-members">
+            <h3 class="channel-edition-members-title">Mitglieder</h3>
+            @for (member of database.activeChannelMembers(); track member.id) {
+              <button type="button" class="channel-edition-member-row" (click)="openMemberProfile(member.id)">
+                <div class="channel-edition-member-avatar-wrap">
+                  <img [src]="avatarSvgPath(member.id)" [alt]="member.name" class="channel-edition-member-avatar" />
+                  <span class="channel-edition-member-status" [class.online]="member.isOnline"></span>
+                </div>
+                <span class="channel-edition-member-name">
+                  {{ member.name }}@if (database.isCurrentUser(member.id)) { (Du) }
+                </span>
+              </button>
+            }
+            <button type="button" class="channel-edition-member-add-btn" (click)="toggleChannelEdition(); openAddMembersPanel()">
+              <img src="/assets/person_add.svg" alt="" />
+              <span>Mitglieder hinzufügen</span>
+            </button>
           </section>
 
           <button type="button" class="channel-edition-leave-button" (click)="handleChannelEditionAction()">{{ channelEditionActionLabel() }}</button>

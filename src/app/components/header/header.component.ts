@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MockDatabaseService } from '../../database/mock-database.service';
@@ -13,6 +13,9 @@ import { Profile } from '../profile/profile';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+  @Input() showDevspace = false;
+  @Output() backToSidebar = new EventEmitter<void>();
+
   protected readonly database = inject(MockDatabaseService);
   protected readonly uiState = inject(UiStateService);
 

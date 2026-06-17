@@ -93,7 +93,7 @@
   left: auto;
   right: auto;
   bottom: auto;
-  width: calc(100% - 70px);
+  margin: 0 auto;
   height: 145px;
   border: 1px solid #adb0d9;
   border-radius: 20px;
@@ -217,4 +217,48 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+/* ==========================================
+   RESPONSIVE: COMPOSER MOBILE ≤430px
+   ========================================== */
+@media (max-width: 430px) {
+  .composer-box {
+    height: 165px;
+    padding: 12px 14px 10px;
+    border-radius: 16px;
+  }
+
+  .message-input {
+    font-size: 14px;
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 28px;
+  }
+
+  .message-actions {
+    padding: 0;
+    margin-top: 8px;
+  }
+
+  .action-icon,
+  .action-icon-small {
+    width: 28px;
+    height: 28px;
+  }
+
+  .action-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .send-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .send-icon {
+    width: 22px;
+    height: 22px;
+  }
 }

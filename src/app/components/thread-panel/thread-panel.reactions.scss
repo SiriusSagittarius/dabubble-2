@@ -177,8 +177,7 @@
   left: 10px;
   right: 10px;
   bottom: 30px;
-  max-width: 485px;
-  height: 145px;
+  height: 165px;
   border: 1px solid #adb0d9;
   border-radius: 20px;
   background: #fff;
@@ -196,28 +195,31 @@
 
 .thread-input {
   width: 100%;
-  height: 40px;
+  flex: 1 1 auto;
+  min-height: 76px;
   border: 0;
   outline: none;
   resize: none;
   padding: 0;
   font: inherit;
   font-size: 18px;
+  line-height: 25px;
   color: #000;
   background: #fff;
+  overflow-y: auto;
 }
 
 .thread-input-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 8px;
 }
 
 .thread-input-left-actions {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 4px;
 }
 
 .thread-input-left-actions .action-button {
@@ -226,12 +228,17 @@
   border: none;
   border-radius: 50%;
   background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .thread-input-left-actions .action-icon,
 .thread-input-left-actions .action-icon-small {
   width: 40px;
   height: 40px;
+  display: block;
 }
 
 .thread-input-left-actions .action-button:hover,

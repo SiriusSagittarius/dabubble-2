@@ -1,7 +1,6 @@
 :host {
   display: block;
   min-height: 100vh;
-  --main-left: 406px;
   --panel-gap: 20px;
 }
 
@@ -42,38 +41,143 @@
   left: 20px;
   right: 20px;
   bottom: 30px;
-  display: flex;
-  gap: var(--panel-gap);
+  display: grid;
+  gap: 20px;
+  /* Sidebar(366) + Chat(min460, ≥Thread) + Thread(max485, min320) */
+  grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) minmax(320px, 485px);
   box-sizing: border-box;
+  transition: grid-template-columns 0.3s ease-in-out;
+
+  &.sidebar-collapsed {
+    grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
+  }
+
+  &.thread-collapsed {
+    grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) 0px;
+  }
+
+  &.sidebar-collapsed.thread-collapsed {
+    grid-template-columns: 0px minmax(0px, 1fr) 0px;
+  }
+}
+
+/* 961px–1350px: max 2 Spalten — Sidebar fällt weg wenn Thread offen */
+@media (min-width: 961px) and (max-width: 1350px) {
+  /* Thread offen: Sidebar weg, Chat + Thread */
+  .main-layout:not(.thread-collapsed) {
+    grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
+  }
+
+  /* Thread zu: Sidebar + Chat */
+  .main-layout.thread-collapsed {
+    grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) 0px;
+  }
+
+  /* Sidebar manuell collapsed + Thread zu: nur Chat */
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    grid-template-columns: 0px minmax(0px, 1fr) 0px;
+  }
+
+  /* Sidebar manuell collapsed + Thread offen: Chat + Thread */
+  .main-layout.sidebar-collapsed:not(.thread-collapsed) {
+    grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
+  }
+}
+
+@media (max-width: 1425px) {
+  .main-layout {
+    top: 115px;
+  }
+}
+
+@media (max-width: 960px) {
+  /* Basis: top setzen, Rand wie Header (20px) */
+  .main-layout,
+  .main-layout.thread-collapsed,
+  .main-layout.sidebar-collapsed,
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    top: 138px;
+    left: 20px;
+    right: 20px;
+    gap: 0;
+  }
+
+  /* Sidebar offen, Thread zu: nur Sidebar */
+  .main-layout.thread-collapsed:not(.sidebar-collapsed) {
+    grid-template-columns: minmax(0px, 1fr) 0px 0px;
+  }
+
+  /* Sidebar zu, Thread zu: nur Chat */
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    grid-template-columns: 0px minmax(0px, 1fr) 0px;
+  }
+
+  /* Thread offen + Sidebar zu: nur Thread */
+  .main-layout.sidebar-collapsed:not(.thread-collapsed) {
+    grid-template-columns: 0px 0px minmax(0px, 1fr);
+  }
+
+  /* Thread offen + Sidebar offen: nur Thread */
+  .main-layout:not(.thread-collapsed):not(.sidebar-collapsed) {
+    grid-template-columns: 0px 0px minmax(0px, 1fr);
+  }
+
+  .sidebar-wrapper,
+  .chat-wrapper,
+  .thread-wrapper {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 490px) {
+  .main-layout,
+  .main-layout.thread-collapsed,
+  .main-layout.sidebar-collapsed,
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    left: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 430px) {
+  .main-layout,
+  .main-layout.thread-collapsed,
+  .main-layout.sidebar-collapsed,
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .chat-wrapper {
+    overflow: hidden;
+  }
 }
 
 .sidebar-wrapper {
-  width: 366px;
   height: 100%;
-  flex-shrink: 0;
-  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+
   &.collapsed {
-    width: 0;
-    margin-right: calc(var(--panel-gap) * -1);
     opacity: 0;
     pointer-events: none;
   }
 }
 
 .chat-wrapper {
-  flex: 1;
   height: 100%;
   min-width: 0;
 }
 
 .thread-wrapper {
-  width: 485px;
   height: 100%;
-  flex-shrink: 0;
   min-width: 0;
   overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+
   &.collapsed {
-    width: 0;
     opacity: 0;
     pointer-events: none;
   }
@@ -89,8 +193,9 @@
   position: absolute;
   left: 0px;
   top: 581px;
+  bottom: 0;
   width: 55px;
-  height: 347px;
+  height: auto;
   border-radius: 0px 30px 30px 0px;
   background: #FFFFFF;
   cursor: pointer;
@@ -150,50 +255,8 @@
   }
 }
 
-/* Center Panel Logik */
-.center-panel {
-  --active-main-left: var(--main-left);
-  left: var(--main-left);
-  transition: left 0.25s ease, width 0.25s ease;
-}
-
-.center-panel-expanded {
-  --active-main-left: 20px;
-  left: 20px;
-  width: calc(100vw - 20px - 20px - 485px - 20px);
-}
-
-.center-panel-thread-collapsed {
-  width: calc(var(--thread-right) - var(--active-main-left));
-}
-
-.center-panel-main-chat {
-  width: calc(100vw - 406px - 20px);
-}
-
-.center-panel-expanded.center-panel-main-chat {
-  width: calc(100vw - 20px - 20px);
-}
-
-.center-panel-direct-message {
-  .channel-edition-backdrop,
-  .members-panel-backdrop,
-  .add-members-panel-backdrop {
-    display: none;
-  }
-}
-
-.center-panel-direct-message {
-  .channel-edition-backdrop,
-  .members-panel-backdrop,
-  .add-members-panel-backdrop {
-    display: none;
-  }
-}
-.center-panel-direct-message {
-  .channel-edition-backdrop,
-  .members-panel-backdrop,
-  .add-members-panel-backdrop {
+@media (max-width: 430px) {
+  .workspace-menu-close-button.collapsed {
     display: none;
   }
 }
