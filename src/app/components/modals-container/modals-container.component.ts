@@ -36,6 +36,7 @@ export class ModalsContainer {
   protected addMembersName = '';
   protected addChannelNameDraft = '';
   protected addChannelDescriptionDraft = '';
+  protected addChannelIsPrivate = false;
   protected addChannelMembersStep = false;
   protected addChannelMemberMode: 'all' | 'selected' = 'all';
   protected pendingAddChannelId: string | null = null;
@@ -77,6 +78,7 @@ export class ModalsContainer {
   protected openAddChannelDialog(): void {
     this.addChannelNameDraft = '';
     this.addChannelDescriptionDraft = '';
+    this.addChannelIsPrivate = false;
     this.addChannelMembersStep = false;
     this.addChannelMemberMode = 'all';
     this.pendingAddChannelId = null;
@@ -102,7 +104,7 @@ export class ModalsContainer {
     const name = this.addChannelNameDraft.trim();
     if (!name) return;
 
-    const channel = this.database.createChannel(name);
+    const channel = this.database.createChannel(name, [], this.addChannelIsPrivate);
     if (channel && this.addChannelDescriptionDraft.trim()) {
       this.database.updateChannel(channel.id, {
         description: this.addChannelDescriptionDraft.trim(),

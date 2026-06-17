@@ -5,20 +5,6 @@
   border-radius: 0 24px 24px 24px;
 }
 
-.own-message-bubble-wrap {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  justify-content: end;
-  width: 100%;
-}
-
-.message-avatar-own {
-  width: 70px;
-  height: 70px;
-  margin-left: 16px;
-}
-
 .message-thread-link {
   border: 0;
   background: transparent;
@@ -29,11 +15,6 @@
   font-size: 16px;
   color: #444df2;
   cursor: pointer;
-}
-
-.message-thread-link-right {
-  align-self: flex-end;
-  text-align: right;
 }
 
 .message-thread-last-reply {
@@ -48,30 +29,6 @@
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 2px;
-}
-
-.message-right-content .message-thread-link-right,
-.message-right-content .message-reaction-actions {
-  align-self: flex-end;
-  justify-content: flex-end;
-}
-
-.message-right-content .message-thread-link-right,
-.message-right-content .message-reaction-actions {
-  text-align: right;
-}
-
-.message-right-content .emoji-picker-popover-reaction-row {
-  left: auto;
-  right: 0;
-}
-
-.message-right-content .message-meta {
-  flex-direction: row;
-}
-
-.message-right-content .speech-bubble {
-  max-width: 920px;
 }
 
 .message-input {

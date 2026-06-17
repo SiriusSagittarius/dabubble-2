@@ -123,36 +123,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  width: 282px;
-  height: 56px;
-  margin: 0 auto;
-  margin-top: auto;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
+  gap: 10px;
+  padding: 10px 22px;
+  margin: 16px auto 20px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #eceefe;
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
   font-size: 16px;
-  color: #000;
-  transition: all 0.2s;
+  font-weight: 700;
+  color: #444df2;
+  transition: background 0.15s, border-color 0.15s;
+}
 
-  &:hover {
-    background-color: #f5f5f5;
-    border-color: #ccc;
-  }
-
-  &:active {
-    background-color: #efefef;
-  }
+.add-members-button:hover {
+  background: #fff;
+  border-color: #c7cbfa;
 }
 
 .add-members-icon {
   width: 20px;
   height: 20px;
+  display: block;
+  filter: brightness(0) saturate(100%) invert(37%) sepia(85%) saturate(2442%) hue-rotate(225deg) brightness(96%) contrast(96%);
 }
 
 .add-members-text {
-  font-weight: 500;
+  font-weight: 700;
 }

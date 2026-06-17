@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { collection, onSnapshot, DocumentData } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Subscription } from 'rxjs';
 
 import { MockDatabaseService } from '../database/mock-database.service';
 
@@ -11,10 +11,10 @@ export class FirebaseUserSyncService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
   private readonly database = inject(MockDatabaseService);
-  private usersSubscription: Subscription | null = null;
-  private channelsSubscription: Subscription | null = null;
-  private messagesSubscription: Subscription | null = null;
-  private threadsSubscription: Subscription | null = null;
+  private unsubUsers: (() => void) | null = null;
+  private unsubChannels: (() => void) | null = null;
+  private unsubMessages: (() => void) | null = null;
+  private unsubThreads: (() => void) | null = null;
   private authUnsubscribe: (() => void) | null = null;
 
   start(): void {
@@ -23,14 +23,14 @@ export class FirebaseUserSyncService {
     }
 
     this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
-      this.usersSubscription?.unsubscribe();
-      this.usersSubscription = null;
-      this.channelsSubscription?.unsubscribe();
-      this.channelsSubscription = null;
-      this.messagesSubscription?.unsubscribe();
-      this.messagesSubscription = null;
-      this.threadsSubscription?.unsubscribe();
-      this.threadsSubscription = null;
+      this.unsubUsers?.();
+      this.unsubUsers = null;
+      this.unsubChannels?.();
+      this.unsubChannels = null;
+      this.unsubMessages?.();
+      this.unsubMessages = null;
+      this.unsubThreads?.();
+      this.unsubThreads = null;
 
       if (!user) {
         if (!this.database.isGuestSession()) {
@@ -39,95 +39,63 @@ export class FirebaseUserSyncService {
         return;
       }
 
-      const usersRef = collection(this.firestore, 'users');
-      this.usersSubscription = collectionData(usersRef, { idField: 'uid' }).subscribe((users) => {
-        const profiles = users
-          .map((entry) => {
-            const profile = entry as {
-              uid?: string;
-              email?: string;
-              name?: string;
-              picture?: string | null;
-            };
-
-            if (!profile.uid || !profile.email) {
-              return null;
-            }
-
+      this.unsubUsers = onSnapshot(collection(this.firestore, 'users'), (snap) => {
+        const profiles = snap.docs
+          .map((doc) => {
+            const d = doc.data() as DocumentData;
+            const uid = doc.id;
+            const email = d['email'];
+            if (!uid || !email) return null;
             return {
-              uid: profile.uid,
-              email: profile.email,
-              name: profile.name ?? profile.email,
-              picture: profile.picture ?? null,
+              uid,
+              email: email as string,
+              name: (d['name'] as string | undefined) ?? email as string,
+              picture: (d['picture'] as string | null | undefined) ?? null,
             };
           })
-          .filter((entry): entry is { uid: string; email: string; name: string; picture: string | null } => !!entry);
-
+          .filter((e): e is { uid: string; email: string; name: string; picture: string | null } => !!e);
         this.database.syncUsersFromFirestore(profiles, user.uid);
       });
 
-      const channelsRef = collection(this.firestore, 'channels');
-      this.channelsSubscription = collectionData(channelsRef, { idField: 'id' }).subscribe((channels) => {
-        const profiles = channels
-          .map((entry) => {
-            const channel = entry as {
-              id?: string;
-              name?: string;
-              description?: string;
-              memberIds?: string[];
-              createdBy?: string;
-            };
-
-            if (!channel.id || !channel.name) {
-              return null;
-            }
-
+      this.unsubChannels = onSnapshot(collection(this.firestore, 'channels'), (snap) => {
+        const profiles = snap.docs
+          .map((doc) => {
+            const d = doc.data() as DocumentData;
+            const id = doc.id;
+            const name = d['name'];
+            if (!id || !name) return null;
             return {
-              id: channel.id,
-              name: channel.name,
-              description: channel.description ?? '',
-              memberIds: channel.memberIds ?? [],
-              createdBy: channel.createdBy ?? user.uid,
+              id,
+              name: name as string,
+              description: (d['description'] as string | undefined) ?? '',
+              memberIds: (d['memberIds'] as string[] | undefined) ?? [],
+              createdBy: (d['createdBy'] as string | undefined) ?? user.uid,
             };
           })
           .filter(
-            (entry): entry is { id: string; name: string; description: string; memberIds: string[]; createdBy: string } =>
-              !!entry,
+            (e): e is { id: string; name: string; description: string; memberIds: string[]; createdBy: string } => !!e,
           );
-
         this.database.syncChannelsFromFirestore(profiles);
       });
 
-      const messagesRef = collection(this.firestore, 'messages');
-      this.messagesSubscription = collectionData(messagesRef, { idField: 'id' }).subscribe((messages) => {
-        const profiles = messages
-          .map((entry) => {
-            const message = entry as {
-              id?: string;
-              channelId?: string;
-              authorId?: string;
-              body?: string;
-              createdAt?: string;
-              threadId?: string;
-              reactions?: Array<{ emoji: string; count: number; userIds: string[] }>;
-            };
-
-            if (!message.id || !message.channelId || !message.authorId || !message.body || !message.createdAt) {
-              return null;
-            }
-
+      this.unsubMessages = onSnapshot(collection(this.firestore, 'messages'), (snap) => {
+        const profiles = snap.docs
+          .map((doc) => {
+            const d = doc.data() as DocumentData;
+            const id = doc.id;
+            if (!id || !d['channelId'] || !d['authorId'] || !d['body'] || !d['createdAt']) return null;
             return {
-              id: message.id,
-              channelId: message.channelId,
-              authorId: message.authorId,
-              body: message.body,
-              createdAt: message.createdAt,
-              threadId: message.threadId,
-              reactions: message.reactions ?? [],
+              id,
+              channelId: d['channelId'] as string,
+              authorId: d['authorId'] as string,
+              body: d['body'] as string,
+              createdAt: d['createdAt'] as string,
+              threadId: d['threadId'] as string | undefined,
+              reactions: (d['reactions'] as Array<{ emoji: string; count: number; userIds: string[] }> | undefined) ?? [],
             };
           })
           .filter(
-            (entry): entry is {
+            (e): e is {
               id: string;
               channelId: string;
               authorId: string;
@@ -135,36 +103,24 @@ export class FirebaseUserSyncService {
               createdAt: string;
               threadId: string | undefined;
               reactions: Array<{ emoji: string; count: number; userIds: string[] }>;
-            } => !!entry,
+            } => !!e,
           );
-
         this.database.syncMessagesFromFirestore(profiles);
       });
 
-      const threadsRef = collection(this.firestore, 'threads');
-      this.threadsSubscription = collectionData(threadsRef, { idField: 'id' }).subscribe((threads) => {
-        const profiles = threads
-          .map((entry) => {
-            const thread = entry as {
-              id?: string;
-              channelId?: string;
-              originMessageId?: string;
-            };
-
-            if (!thread.id || !thread.channelId || !thread.originMessageId) {
-              return null;
-            }
-
+      this.unsubThreads = onSnapshot(collection(this.firestore, 'threads'), (snap) => {
+        const profiles = snap.docs
+          .map((doc) => {
+            const d = doc.data() as DocumentData;
+            const id = doc.id;
+            if (!id || !d['channelId'] || !d['originMessageId']) return null;
             return {
-              id: thread.id,
-              channelId: thread.channelId,
-              originMessageId: thread.originMessageId,
+              id,
+              channelId: d['channelId'] as string,
+              originMessageId: d['originMessageId'] as string,
             };
           })
-          .filter(
-            (entry): entry is { id: string; channelId: string; originMessageId: string } => !!entry,
-          );
-
+          .filter((e): e is { id: string; channelId: string; originMessageId: string } => !!e);
         this.database.syncThreadsFromFirestore(profiles);
       });
     });

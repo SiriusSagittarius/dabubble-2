@@ -363,6 +363,54 @@
   color: #adb0d9;
 }
 
+.add-channel-privacy-row {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-channel-privacy-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.add-channel-privacy-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid #adb0d9;
+  border-radius: 30px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.add-channel-privacy-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border: none;
+  background: transparent;
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #686868;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &.active {
+    background: #444df2;
+    color: #fff;
+  }
+
+  &:not(.active):hover {
+    background: #eceefe;
+    color: #444df2;
+  }
+}
+
 .add-channel-actions {
   margin-top: 34px;
   display: flex;

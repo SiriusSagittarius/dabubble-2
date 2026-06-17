@@ -144,6 +144,12 @@
   display: flex;
   flex-direction: column;
   gap: 26px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-body::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-date-separator {
@@ -299,12 +305,6 @@
   transition: opacity 0.15s ease;
 }
 
-.message-right .message-hover-actions-menu {
-  right: auto;
-  left: 45px;
-  border-radius: 25px 25px 25px 0;
-}
-
 .message:hover .message-hover-actions-menu {
   opacity: 1;
   pointer-events: auto;
@@ -329,6 +329,11 @@
 .message-hover-action-icon {
   width: 24px;
   height: 24px;
+}
+
+.message-hover-action-icon-lg {
+  width: 32px;
+  height: 32px;
 }
 
 .message-hover-action-emoji {

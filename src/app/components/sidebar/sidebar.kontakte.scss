@@ -1,0 +1,349 @@
+.kontakte-header-outer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+}
+
+.kontakte-header-row {
+  flex: 1;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 10px;
+  min-width: 0;
+}
+
+.kontakte-header-row:hover { background: #eceefe; }
+
+.kontakte-header-action {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #1f1f1f;
+  transition: background-color 0.15s, color 0.15s;
+  padding: 0;
+}
+
+.kontakte-header-action:hover { background: #eceefe; color: #444df2; }
+
+.kontakte-header-add {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+.kontakte-caret-icon,
+.kontakte-person-icon {
+  fill: #1f1f1f;
+  flex-shrink: 0;
+  transition: fill 0.15s;
+}
+
+.kontakte-caret-icon { transition: fill 0.15s, transform 0.2s ease; }
+
+.kontakte-header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f1f1f;
+  line-height: 1.2;
+  transition: color 0.15s;
+}
+
+.kontakte-header-row:hover .kontakte-caret-icon,
+.kontakte-header-row:hover .kontakte-person-icon { fill: #535af1; }
+.kontakte-header-row:hover .kontakte-header-title { color: #535af1; }
+
+.kontakte-header-row.kontakte-expanded .kontakte-caret-icon,
+.kontakte-header-row.kontakte-expanded .kontakte-person-icon { fill: #535af1; }
+.kontakte-header-row.kontakte-expanded .kontakte-caret-icon { transform: rotate(90deg); }
+
+.kontakte-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 35px;
+}
+
+.kontakte-item {
+  width: 100%;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-size: 16px;
+  color: #1f1f1f;
+  transition: background-color 0.15s;
+}
+
+.kontakte-item:hover,
+.kontakte-item.kontakte-item-active {
+  background: #eceefe;
+  color: #444df2;
+}
+
+.kontakte-item:hover .kontakte-item-icon,
+.kontakte-item.kontakte-item-active .kontakte-item-icon { filter: brightness(0) saturate(100%) invert(37%) sepia(85%) saturate(2442%) hue-rotate(225deg) brightness(96%) contrast(96%); }
+
+.kontakte-alle-caret {
+  fill: currentColor;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.kontakte-alle-caret-open {
+  transform: rotate(90deg);
+}
+
+.kontakte-item-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: block;
+}
+
+.kontakte-item-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Kontakte-Liste */
+.kontakte-contacts-list {
+  list-style: none;
+  margin: 0 35px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c7cbfa transparent;
+}
+
+.kontakte-contacts-list::-webkit-scrollbar { width: 4px; }
+.kontakte-contacts-list::-webkit-scrollbar-track { background: transparent; }
+.kontakte-contacts-list::-webkit-scrollbar-thumb { background: #c7cbfa; border-radius: 2px; }
+
+.kontakte-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  transition: background-color 0.15s;
+
+  &:hover {
+    background: #eceefe;
+  }
+}
+
+.kontakte-contact-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.kontakte-contact-info-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.kontakte-contact-name {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1f1f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kontakte-contact-info-btn:hover .kontakte-contact-name {
+  color: #444df2;
+}
+
+.kontakte-action-btn {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #686868;
+  transition: background-color 0.15s, color 0.15s;
+  padding: 0;
+
+  &:hover {
+    background: #d4d6fa;
+  }
+}
+
+.kontakte-edit-btn:hover { color: #444df2; }
+.kontakte-delete-btn:hover { color: #e53935; background: #fde8e8; }
+.kontakte-save-btn:hover { color: #2e7d32; background: #e8f5e9; }
+.kontakte-cancel-btn:hover { color: #e53935; background: #fde8e8; }
+
+.kontakte-edit-input {
+  flex: 1;
+  border: 1px solid #c7cbfa;
+  border-radius: 10px;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+
+  &:focus {
+    border-color: #444df2;
+  }
+}
+
+/* Verfügbare Channels */
+.channel-sublist-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: #686868;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 6px 12px 2px;
+}
+
+.channel-item-available {
+  justify-content: flex-start;
+}
+
+.channel-join-btn {
+  margin-left: auto;
+  border: 1px solid #444df2;
+  border-radius: 999px;
+  background: transparent;
+  color: #444df2;
+  font-family: Nunito, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.channel-join-btn:hover {
+  background: #444df2;
+  color: #fff;
+}
+
+.channel-private-icon {
+  font-size: 14px;
+  width: 18px;
+  flex: 0 0 18px;
+  text-align: center;
+}
+
+.kontakte-add-form {
+  margin: 8px 35px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f7f7ff;
+  border: 1px solid #c7cbfa;
+  border-radius: 18px;
+  padding: 14px 16px;
+}
+
+.kontakte-add-form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.kontakte-add-input {
+  flex: 1;
+  border: 1px solid #c7cbfa;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  &:focus { border-color: #444df2; }
+  &::placeholder { color: #adb0d9; }
+}
+
+.kontakte-add-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.kontakte-add-cancel {
+  border: 1px solid #c7cbfa;
+  border-radius: 999px;
+  background: transparent;
+  color: #686868;
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  &:hover { background: #eceefe; color: #444df2; }
+}
+
+.kontakte-add-submit {
+  border: none;
+  border-radius: 999px;
+  background: #444df2;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  &:hover { background: #2733f0; }
+  &:disabled { background: #adb0d9; cursor: not-allowed; }
+}
+
+@media (max-width: 430px) {
+  .kontakte-header-row { margin-left: 0; }
+  .kontakte-list { margin: 0 10px; }
+  .kontakte-add-form { margin: 8px 10px 4px; }
+}

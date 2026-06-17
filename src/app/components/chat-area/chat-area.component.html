@@ -16,15 +16,16 @@
             @if (showRecipientSuggestions()) {
               <div class="recipient-suggestions-list">
                 @for (channel of recipientChannelSuggestions(); track channel.id) {
-                  <button type="button" class="suggestion-item" (click)="selectRecipientChannel(channel.name)">
+                  <button type="button" class="suggestion-item" (click)="selectRecipientChannel(channel.id)">
                     <span class="suggestion-hash">#</span>
                     <span class="suggestion-name">{{ channel.name }}</span>
                   </button>
                 }
                 @for (user of recipientUserSuggestions(); track user.id) {
-                  <button type="button" class="contact-suggestion-item" (click)="selectRecipientUser(user.name)">
+                  <button type="button" class="contact-suggestion-item" (click)="selectRecipientUser(user.id)">
                     <span class="contact-suggestion-avatar-wrap">
                       <img class="contact-suggestion-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+                      <span class="contact-suggestion-status" [class.online]="user.isOnline" [class.offline]="!user.isOnline"></span>
                     </span>
                     <span class="contact-suggestion-name">{{ user.name }}</span>
                   </button>
@@ -279,11 +280,11 @@
               <button type="button" class="message-hover-action-btn" aria-label="Mit Daumen hoch reagieren" (click)="addReaction(message.id, 'thumbs_up')">
                 <span class="message-hover-action-emoji">👍</span>
               </button>
+              <button type="button" class="message-hover-action-btn" aria-label="Thread oeffnen" (click)="openMessageThread(message.id)">
+                <img src="/assets/mode_comment.svg" alt="" class="message-hover-action-icon message-hover-action-icon-lg" />
+              </button>
               <button type="button" class="message-hover-action-btn action-button-emoji" aria-label="Weitere Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-' + message.id)">
                 <img src="/assets/add-reaction.png" alt="" class="message-hover-action-icon" />
-              </button>
-              <button type="button" class="message-hover-action-btn" aria-label="Thread oeffnen" (click)="openMessageThread(message.id)">
-                <img src="/assets/mode_comment.svg" alt="" class="message-hover-action-icon" />
               </button>
               <button type="button" class="message-hover-action-btn message-menu-toggle" aria-label="Weitere Optionen" (click)="toggleMessageMenu(message.id)">
                 <span class="message-hover-action-dots">⋮</span>
@@ -318,15 +319,18 @@
                 </div>
               </form>
             } @else {
-              <div class="message-right-content">
+              <button type="button" class="message-avatar-btn" (click)="openMemberProfile(message.authorId)" aria-label="Profil anzeigen">
+                <img class="avatar message-avatar" [src]="avatarSvgPath(message.authorId)" [alt]="database.userName(message.authorId)" />
+              </button>
+              <div class="message-content">
                 <div class="message-meta">
+                  <button type="button" class="message-name-btn" (click)="openMemberProfile(message.authorId)">
+                    <span class="message-name">{{ database.userName(message.authorId) }}</span>
+                  </button>
                   <span class="message-time">{{ formatMessageTimestamp(message.createdAt) }}</span>
-                  <span class="message-name">{{ database.userName(message.authorId) }}</span>
                 </div>
-                <div class="own-message-bubble-wrap">
-                  <div class="speech-bubble">{{ message.body }}</div>
-                </div>
-                <button type="button" class="message-thread-link message-thread-link-right" (click)="openMessageThread(message.id)">
+                <div class="speech-bubble speech-bubble-left">{{ message.body }}</div>
+                <button type="button" class="message-thread-link" (click)="openMessageThread(message.id)">
                   <span>{{ database.threadReplyCount(message.id) }} Antworten</span>
                   @if (database.threadLastReplyTime(message.id); as lastReplyTime) {
                     <span class="message-thread-last-reply">Letzte Antwort {{ lastReplyTime }}</span>
@@ -348,7 +352,7 @@
                       </div>
                     }
                     <button type="button" class="reaction-add-button" aria-label="Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-row-' + message.id)">
-                      <img src="/assets/emot.svg" alt="" class="reaction-add-icon" />
+                      <img src="/assets/add-re.svg" alt="" class="reaction-add-icon" />
                     </button>
                     @if (activeEmojiPicker() === 'reaction-row-' + message.id) {
                       <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
@@ -368,7 +372,6 @@
                   </div>
                 }
               </div>
-              <img class="avatar message-avatar message-avatar-own" [src]="avatarSvgPath(message.authorId)" [alt]="database.userName(message.authorId)" />
             }
           </article>
         } @else {
@@ -380,11 +383,11 @@
               <button type="button" class="message-hover-action-btn" aria-label="Mit Daumen hoch reagieren" (click)="addReaction(message.id, 'thumbs_up')">
                 <span class="message-hover-action-emoji">👍</span>
               </button>
+              <button type="button" class="message-hover-action-btn" aria-label="Thread oeffnen" (click)="openMessageThread(message.id)">
+                <img src="/assets/mode_comment.svg" alt="" class="message-hover-action-icon message-hover-action-icon-lg" />
+              </button>
               <button type="button" class="message-hover-action-btn action-button-emoji" aria-label="Weitere Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-' + message.id)">
                 <img src="/assets/add-reaction.png" alt="" class="message-hover-action-icon" />
-              </button>
-              <button type="button" class="message-hover-action-btn" aria-label="Thread oeffnen" (click)="openMessageThread(message.id)">
-                <img src="/assets/mode_comment.svg" alt="" class="message-hover-action-icon" />
               </button>
               @if (activeEmojiPicker() === 'reaction-' + message.id) {
                 <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
@@ -435,7 +438,7 @@
                     </div>
                   }
                   <button type="button" class="reaction-add-button" aria-label="Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-row-' + message.id)">
-                    <img src="/assets/emot.svg" alt="" class="reaction-add-icon" />
+                    <img src="/assets/add-re.svg" alt="" class="reaction-add-icon" />
                   </button>
                   @if (activeEmojiPicker() === 'reaction-row-' + message.id) {
                     <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
@@ -507,7 +510,7 @@
       <div class="message-actions">
         <div class="add-elements">
           <button type="button" class="action-button action-button-emoji" aria-label="Emoji hinzufuegen" (click)="toggleEmojiPicker('message')">
-            <img src="/assets/emoti.svg" alt="" class="action-icon action-icon-small" />
+            <img src="/assets/emot.svg" alt="" class="action-icon action-icon-small" />
           </button>
           @if (activeEmojiPicker() === 'message') {
             <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>

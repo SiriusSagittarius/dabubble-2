@@ -113,6 +113,10 @@
       }
     }
 
+    .auth-new-here-label {
+      display: none;
+    }
+
     .auth-create-account-link {
       position: absolute;
       left: 1702px;
@@ -126,6 +130,7 @@
       border-radius: 25px;
       cursor: pointer;
       z-index: 4;
+      text-decoration: none;
       transition: background-color 0.2s ease, border-color 0.2s ease;
 
       &:hover,
@@ -348,6 +353,22 @@
         display: none;
       }
 
+      .auth-new-here-label {
+        display: block;
+        position: absolute;
+        left: 50%;
+        bottom: 120px;
+        top: auto;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        margin: 0;
+        font-family: 'Nunito', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        color: #000;
+        z-index: 4;
+      }
+
       .auth-create-account-link {
         position: absolute;
         left: 50%;
@@ -362,6 +383,7 @@
         border: 2px solid $purple-2;
         border-radius: 19px;
         transform: translateX(-50%);
+        text-decoration: none;
 
         &:hover,
         &:focus-visible {

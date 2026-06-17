@@ -302,7 +302,7 @@ export class MockDatabaseAuthService {
     return { ok: true, user: newUser };
   }
 
-  addContact(name: string, email: string): MockUser | null {
+  addContact(name: string, email: string, phone?: string): MockUser | null {
     const trimmedName = name.trim();
     const normalizedEmail = email.trim().toLowerCase();
 
@@ -322,9 +322,30 @@ export class MockDatabaseAuthService {
       password: 'dabubble123',
       avatarClass: 'avatar-4',
       isOnline: false,
+      ...(phone?.trim() ? { phone: phone.trim() } : {}),
     };
 
-    this.store.patchState((state) => ({ ...state, users: [...state.users, contact] }));
+    this.store.patchState((state) => ({
+      ...state,
+      users: [...state.users, contact],
+      contactUserIds: [...(state.contactUserIds ?? []), contact.id],
+    }));
     return contact;
+  }
+
+  removeContact(userId: string): void {
+    this.store.patchState((state) => ({
+      ...state,
+      contactUserIds: (state.contactUserIds ?? []).filter(id => id !== userId),
+    }));
+  }
+
+  updateContactName(userId: string, name: string): void {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    this.store.patchState((state) => ({
+      ...state,
+      users: state.users.map(u => u.id === userId ? { ...u, name: trimmed } : u),
+    }));
   }
 }

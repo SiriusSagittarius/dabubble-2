@@ -291,14 +291,15 @@ export class ChatArea {
     return this.recipientChannelSuggestions().length > 0 || this.recipientUserSuggestions().length > 0;
   }
 
-  protected selectRecipientChannel(name: string): void {
-    this.uiState.newMessageRecipient.set(`#${name} `);
-    this.recipientSuggestionsVisible.set(false);
+  protected selectRecipientChannel(channelId: string): void {
+    this.database.selectChannel(channelId);
+    this.uiState.openChannel();
+    this.uiState.newMessageRecipient.set('');
   }
 
-  protected selectRecipientUser(name: string): void {
-    this.uiState.newMessageRecipient.set(`@${name} `);
-    this.recipientSuggestionsVisible.set(false);
+  protected selectRecipientUser(userId: string): void {
+    this.uiState.openDirectMessage(userId);
+    this.uiState.newMessageRecipient.set('');
   }
 
   protected contactSuggestions() {

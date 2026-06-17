@@ -8,6 +8,7 @@ export interface MockUser {
   avatarImage?: string;
   isGuest?: boolean;
   isOnline: boolean;
+  phone?: string;
 }
 
 export interface MockChannel {
@@ -17,6 +18,7 @@ export interface MockChannel {
   memberIds: string[];
   createdBy: string;
   createdAt: string;
+  isPrivate?: boolean;
 }
 
 export interface MockReaction {
@@ -51,6 +53,7 @@ export interface MockDatabaseState {
   channels: MockChannel[];
   messages: MockMessage[];
   threads: MockThread[];
+  contactUserIds: string[];
 }
 
 export type MockLoginResult =

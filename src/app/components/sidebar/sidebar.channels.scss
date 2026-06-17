@@ -153,6 +153,7 @@
   font: inherit;
   text-align: left;
   min-width: 0;
+  margin-left: 10px;
 }
 
 .channels-caret-icon,
@@ -210,16 +211,28 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow-y: auto;
+  max-height: 200px;
   padding-right: 4px;
   margin: 0 35px;
+  scrollbar-width: thin;
+  scrollbar-color: #c7cbfa transparent;
 }
 
 .channel-list::-webkit-scrollbar,
 .dm-list::-webkit-scrollbar {
-  display: none;
+  width: 4px;
+}
+
+.channel-list::-webkit-scrollbar-track,
+.dm-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.channel-list::-webkit-scrollbar-thumb,
+.dm-list::-webkit-scrollbar-thumb {
+  background: #c7cbfa;
+  border-radius: 2px;
 }
 
 .channel-item,
@@ -336,6 +349,37 @@
 .channel-item-add:hover .channel-item-add-label {
   color: #444df2;
 }
+
+.channel-sublist-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 12px 2px;
+  font: inherit;
+  text-align: left;
+}
+
+.channel-sublist-caret {
+  fill: #686868;
+  flex-shrink: 0;
+  transition: fill 0.15s, transform 0.2s ease;
+}
+
+.channel-sublist-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #686868;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.channel-sublist-toggle:hover .channel-sublist-caret { fill: #444df2; }
+.channel-sublist-toggle:hover .channel-sublist-label { color: #444df2; }
+.channel-sublist-toggle.sublist-expanded .channel-sublist-caret { transform: rotate(90deg); }
 
 @media (max-width: 960px) {
   .sidebar-card {

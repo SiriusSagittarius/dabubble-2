@@ -103,15 +103,32 @@
 
 .recipient-suggestions-list {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  top: calc(100% + 6px);
+  left: -12px;
+  right: -12px;
   background: #fff;
-  border: 1px solid #adb0d9;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border: 1px solid #c7cbfa;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(68, 77, 242, 0.12);
   z-index: 200;
-  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.recipient-suggestions-list .contact-suggestion-item {
+  padding: 10px 12px;
+  border-radius: 16px;
+  gap: 14px;
+}
+
+.recipient-suggestions-list .contact-suggestion-avatar-wrap {
+  width: 40px;
+  height: 40px;
+}
+
+.recipient-suggestions-list .contact-suggestion-name {
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .main-chat-intro-body {

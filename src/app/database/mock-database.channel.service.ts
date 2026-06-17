@@ -56,7 +56,7 @@ export class MockDatabaseChannelService {
     this.store.patchState((state) => ({ ...state, selectedChannelId: channelId, selectedThreadId: threadId }));
   }
 
-  createChannel(name: string, memberIds: string[] = []): MockChannel | null {
+  createChannel(name: string, memberIds: string[] = [], isPrivate = false): MockChannel | null {
     const trimmedName = name.trim();
     const currentUser = this.store.currentUser();
 
@@ -71,6 +71,7 @@ export class MockDatabaseChannelService {
       memberIds: Array.from(new Set([currentUser.id, ...memberIds])),
       createdBy: currentUser.id,
       createdAt: new Date().toISOString(),
+      isPrivate,
     };
 
     this.store.patchState((state) => ({

@@ -89,6 +89,7 @@ export const MOCK_DATABASE_SEED: MockDatabaseState = {
       memberIds: ['user-frederik', 'user-noah', 'user-sofia', 'user-mia', 'user-alice'],
       createdBy: 'user-frederik',
       createdAt: '2026-06-02T08:00:00.000Z',
+      isPrivate: false,
     },
     {
       id: 'channel-design',
@@ -97,6 +98,25 @@ export const MOCK_DATABASE_SEED: MockDatabaseState = {
       memberIds: ['user-frederik', 'user-sofia', 'user-sarah'],
       createdBy: 'user-sofia',
       createdAt: '2026-06-02T08:00:00.000Z',
+      isPrivate: true,
+    },
+    {
+      id: 'channel-general',
+      name: 'Allgemein',
+      description: 'Allgemeine Ankündigungen und Neuigkeiten für alle.',
+      memberIds: ['user-noah', 'user-sofia', 'user-mia', 'user-alice', 'user-max', 'user-sarah'],
+      createdBy: 'user-noah',
+      createdAt: '2026-06-01T08:00:00.000Z',
+      isPrivate: false,
+    },
+    {
+      id: 'channel-marketing',
+      name: 'Marketing',
+      description: 'Kampagnen, Social Media und Außendarstellung.',
+      memberIds: ['user-alice', 'user-max', 'user-sarah', 'user-jonathan'],
+      createdBy: 'user-alice',
+      createdAt: '2026-06-01T09:00:00.000Z',
+      isPrivate: false,
     },
   ],
   messages: [
@@ -150,4 +170,5 @@ export const MOCK_DATABASE_SEED: MockDatabaseState = {
       originMessageId: 'message-thread-origin',
     },
   ],
+  contactUserIds: ['user-noah', 'user-sofia', 'user-mia'],
 };

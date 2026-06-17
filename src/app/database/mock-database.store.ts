@@ -36,6 +36,25 @@ export class MockDatabaseStore {
     return [currentUser, ...users.filter((user) => user.id !== currentUser.id)];
   });
 
+  readonly contactUsers = computed(() => {
+    const ids = this.state().contactUserIds ?? [];
+    return this.state().users.filter(u => ids.includes(u.id));
+  });
+
+  readonly joinedChannels = computed(() => {
+    const userId = this.state().currentUserId;
+    return this.state().channels.filter(c => c.memberIds.includes(userId));
+  });
+
+  readonly availablePublicChannels = computed(() => {
+    const userId = this.state().currentUserId;
+    return this.state().channels.filter(c => !c.isPrivate && !c.memberIds.includes(userId));
+  });
+
+  readonly allPublicChannels = computed(() =>
+    this.state().channels.filter(c => !c.isPrivate)
+  );
+
   readonly activeChannel = computed(() => {
     const state = this.state();
     return state.channels.find((channel) => channel.id === state.selectedChannelId) ?? state.channels[0] ?? null;

@@ -22,7 +22,7 @@
 .channel-hash,
 .channel-name {
   font-family: Nunito, sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1;
   color: #000;
@@ -65,8 +65,8 @@
 }
 
 .channel-arrow-down {
-  width: 16px;
-  height: 16px;
+  width: 10px;
+  height: 10px;
   border-right: 2px solid #000;
   border-bottom: 2px solid #000;
   transform: rotate(45deg) translateY(-2px);
@@ -186,10 +186,19 @@
   position: relative;
   display: flex;
   align-items: flex-start;
+  padding: 10px 40px;
+  margin: 0 -40px;
+  transition: background-color 0.12s ease;
 }
 
-.message-left {
-  padding-right: 12px;
+.message:hover {
+  background: #eceefe;
+}
+
+.message:hover .speech-bubble,
+.message:hover .speech-bubble-left {
+  background: #fff;
+  color: #000;
 }
 
 .message-avatar {
@@ -206,15 +215,6 @@
   gap: 8px;
   min-width: 0;
   flex: 1 1 auto;
-}
-
-.message-right-content {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  min-width: 0;
 }
 
 .message-meta {
@@ -249,9 +249,6 @@
   word-break: break-word;
 }
 
-/* ==========================================
-   RESPONSIVE ≤1480px
-   ========================================== */
 @media (max-width: 1480px) {
   .members-preview-wrap {
     display: none;
@@ -269,9 +266,7 @@
     text-align: left;
   }
 
-  .message-right .speech-bubble {
-    text-align: right;
-  }
+
 }
 
 /* ==========================================
@@ -317,23 +312,18 @@
     height: 24px;
   }
 
-  .message-right {
-    flex-direction: column-reverse;
-    align-items: flex-end;
+  .message {
+    margin: 0 -16px;
+    padding: 8px 16px;
   }
 
+  .message-right,
   .message-left {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .message-avatar {
-    width: 40px;
-    height: 40px;
-    margin: 0;
-  }
-
-  .message-avatar-own {
     width: 40px;
     height: 40px;
     margin: 0;
@@ -352,10 +342,6 @@
     font-size: 14px;
     line-height: 1.5;
     padding: 10px 14px;
-  }
-
-  .message-right-content {
-    margin-left: 0;
   }
 
   .message-thread-link {

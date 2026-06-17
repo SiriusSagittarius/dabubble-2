@@ -239,6 +239,29 @@
           <div class="add-channel-field">
             <input id="add-channel-description" name="addChannelDescription" type="text" class="add-channel-input" placeholder="Dein Text hier" [(ngModel)]="addChannelDescriptionDraft" />
           </div>
+          <div class="add-channel-privacy-row">
+            <span class="add-channel-privacy-label">Sichtbarkeit</span>
+            <div class="add-channel-privacy-toggle">
+              <button
+                type="button"
+                class="add-channel-privacy-btn"
+                [class.active]="!addChannelIsPrivate"
+                (click)="addChannelIsPrivate = false"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                Öffentlich
+              </button>
+              <button
+                type="button"
+                class="add-channel-privacy-btn"
+                [class.active]="addChannelIsPrivate"
+                (click)="addChannelIsPrivate = true"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+                Privat
+              </button>
+            </div>
+          </div>
           <div class="add-channel-actions">
             <button type="submit" class="add-channel-submit" [disabled]="!addChannelNameDraft.trim()">Erstellen</button>
           </div>

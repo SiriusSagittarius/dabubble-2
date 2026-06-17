@@ -124,7 +124,7 @@ $light-purple-bg: #ECEEFE;
     font-family: 'Figtree', sans-serif;
     font-size: 18px;
     line-height: 120%;
-    text-decoration: none;
+    text-decoration: none !important;
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 
     &:hover,

@@ -27,7 +27,11 @@ export class MockDatabaseService {
   readonly recentReactionEmojis = this.store.recentReactionEmojis;
   readonly currentUser = this.store.currentUser;
   readonly contacts = this.store.contacts;
+  readonly contactUsers = this.store.contactUsers;
   readonly directMessageUsers = this.store.directMessageUsers;
+  readonly joinedChannels = this.store.joinedChannels;
+  readonly availablePublicChannels = this.store.availablePublicChannels;
+  readonly allPublicChannels = this.store.allPublicChannels;
   readonly activeChannel = this.store.activeChannel;
   readonly activeChannelMembers = this.store.activeChannelMembers;
   readonly activeDirectMessageChannelId = this.store.activeDirectMessageChannelId;
@@ -123,16 +127,24 @@ export class MockDatabaseService {
     return this.authService.registerUser(name, email, password, avatarId, avatarImage);
   }
 
-  addContact(name: string, email: string): MockUser | null {
-    return this.authService.addContact(name, email);
+  addContact(name: string, email: string, phone?: string): MockUser | null {
+    return this.authService.addContact(name, email, phone);
+  }
+
+  removeContact(userId: string): void {
+    this.authService.removeContact(userId);
+  }
+
+  updateContactName(userId: string, name: string): void {
+    this.authService.updateContactName(userId, name);
   }
 
   selectChannel(channelId: string): void {
     this.channelService.selectChannel(channelId);
   }
 
-  createChannel(name: string, memberIds: string[] = []): MockChannel | null {
-    return this.channelService.createChannel(name, memberIds);
+  createChannel(name: string, memberIds: string[] = [], isPrivate = false): MockChannel | null {
+    return this.channelService.createChannel(name, memberIds, isPrivate);
   }
 
   addMembersToChannel(channelId: string, memberIds: string[]): MockChannel | null {
