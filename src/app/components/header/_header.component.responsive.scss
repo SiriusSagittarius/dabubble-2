@@ -127,9 +127,7 @@
     line-height: 1;
     flex-shrink: 0;
   }
-}
 
-@media (max-width: 430px) {
   .header.header {
     grid-template-columns: 130px minmax(0, 1fr) auto;
     gap: 8px;

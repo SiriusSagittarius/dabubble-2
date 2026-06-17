@@ -213,46 +213,81 @@
 }
 
 .direct-message-intro {
-  position: absolute;
-  left: 40px;
-  bottom: 235px;
-  z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  padding-bottom: 24px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #ededed;
 }
 
 .direct-message-info-row {
-  position: absolute;
-  bottom:-120px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+}
+
+.direct-message-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 
 .direct-message-info-name {
   font-family: Nunito, sans-serif;
-  font-size: 28px;
-  margin: 20px 20px -40px;
+  font-size: 24px;
   font-weight: 700;
-  line-height: 30px;
-  color: #000;
-  white-space: nowrap;
+  color: #444df2;
+  line-height: 1.2;
 }
 
-.direct-message-meta {
-  position: absolute;
-  left: 40px;
-  right: 40px;
-  bottom: 200px;
+.dm-du-tag {
+  color: #1f1f1f;
+  font-weight: 400;
+}
+
+.direct-message-intro-meta {
   font-family: Nunito, sans-serif;
-  font-size: 22px;
-  line-height: 22px;
+  font-size: 18px;
+  line-height: 1.4;
   color: #000;
   margin: 0;
-  max-width: none;
-  overflow-wrap: anywhere;
-  pointer-events: auto;
+  max-width: 500px;
+}
+
+.dm-at-mention {
+  color: #444df2;
+  font-weight: 700;
+}
+
+.direct-message-name-btn,
+.dm-intro-name-btn,
+.dm-intro-avatar-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.message-avatar-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.message-name-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
 }
 

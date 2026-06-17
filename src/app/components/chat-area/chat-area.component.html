@@ -46,22 +46,14 @@
           <span class="direct-message-avatar-status" [class.online]="directUser.isOnline" aria-hidden="true"></span>
         </span>
         <div class="direct-message-header-text">
-          <span class="direct-message-name">
-            {{ directUser.name }}
-            @if (database.isCurrentUser(directUser.id)) { (Du) }
-          </span>
+          <button type="button" class="direct-message-name-btn" (click)="openMemberProfile(directUser.id)">
+            <span class="direct-message-name">
+              {{ directUser.name }}
+              @if (database.isCurrentUser(directUser.id)) { (Du) }
+            </span>
+          </button>
         </div>
       </header>
-
-      @if (database.isCurrentUser(directUser.id)) {
-        <p class="direct-message-meta">
-          <strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.
-        </p>
-      } @else {
-        <p class="direct-message-meta">
-          Diese Unterhaltung findet nur zwischen @{{ directUser.name }} und dir statt.
-        </p>
-      }
     </div>
   } @else if (!uiState.showMainChatIntro()) {
     <header class="chat-header">
@@ -236,13 +228,26 @@
     @if (directMessageUser(); as directUser) {
         <div class="direct-message-intro" aria-label="Unterhaltungsinfo">
           <div class="direct-message-info-row">
-            <span class="direct-message-avatar-wrap direct-message-avatar-wrap-medium">
-              <img class="direct-message-avatar" [src]="avatarSvgPath(directUser.id)" [alt]="directUser.name" />
-            </span>
-            <span class="direct-message-info-name">
-              {{ directUser.name }}
-              @if (database.isCurrentUser(directUser.id)) { (Du) }
-            </span>
+            <button type="button" class="dm-intro-avatar-btn" (click)="openMemberProfile(directUser.id)" aria-label="Profil anzeigen">
+              <span class="direct-message-avatar-wrap direct-message-avatar-wrap-medium">
+                <img class="direct-message-avatar" [src]="avatarSvgPath(directUser.id)" [alt]="directUser.name" />
+              </span>
+            </button>
+            <div class="direct-message-info-text">
+              <button type="button" class="dm-intro-name-btn" (click)="openMemberProfile(directUser.id)">
+                <span class="direct-message-info-name">
+                  @{{ directUser.name }}
+                  @if (database.isCurrentUser(directUser.id)) { <span class="dm-du-tag"> (Du)</span> }
+                </span>
+              </button>
+              <p class="direct-message-intro-meta">
+                @if (database.isCurrentUser(directUser.id)) {
+                  <strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf.
+                } @else {
+                  Diese Unterhaltung findet nur zwischen <span class="dm-at-mention">@{{ directUser.name }}</span> und dir statt.
+                }
+              </p>
+            </div>
           </div>
         </div>
       } @else {
@@ -397,10 +402,14 @@
                 </div>
               }
             </div>
-            <img class="avatar message-avatar" [src]="avatarSvgPath(message.authorId)" [alt]="database.userName(message.authorId)" />
+            <button type="button" class="message-avatar-btn" (click)="openMemberProfile(message.authorId)" aria-label="Profil anzeigen">
+              <img class="avatar message-avatar" [src]="avatarSvgPath(message.authorId)" [alt]="database.userName(message.authorId)" />
+            </button>
             <div class="message-content">
               <div class="message-meta">
-                <span class="message-name">{{ database.userName(message.authorId) }}</span>
+                <button type="button" class="message-name-btn" (click)="openMemberProfile(message.authorId)">
+                  <span class="message-name">{{ database.userName(message.authorId) }}</span>
+                </button>
                 <span class="message-time">{{ formatMessageTimestamp(message.createdAt) }}</span>
               </div>
               <div class="speech-bubble speech-bubble-left">{{ message.body }}</div>
