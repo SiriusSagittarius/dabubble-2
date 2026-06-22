@@ -7,7 +7,7 @@ $light-purple-bg: #ECEEFE;
 :host {
   display: block;
   width: 100%;
-  height: min(100dvh, 1080px);
+  height: 100dvh;
 }
 
 .auth-shell {
