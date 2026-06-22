@@ -1,5 +1,6 @@
 
 @use 'sass:color';
+@use '../../../styles/fluid' as *;
 
     $purple-1: #444DF2;
     $purple-2: #797EF3;
@@ -11,7 +12,7 @@
     .login-form {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: fluid(320, 1920, 20, 20);
       width: 100%;
     }
 
@@ -28,7 +29,7 @@
       align-items: center;
       padding: 18px 32px;
       width: 100%;
-      height: 60px;
+      height: fluid(320, 1920, 50, 60);
       background: $light-purple-bg;
       border-radius: 100px;
       border: 2px solid transparent;
@@ -139,7 +140,7 @@
     .separator-container {
       position: relative;
       width: 100%;
-      height: 30px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -179,7 +180,7 @@
       padding: 11px 32px;
       gap: 15px;
       width: 100%;
-      height: 60px;
+      height: 50px;
       background: $light-purple-bg;
       border-radius: 100px;
       border: 2px solid transparent;
@@ -216,22 +217,27 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 30px;
+      gap: 16px;
       width: 100%;
-      padding-top: 20px;
+      padding-top: 10px;
       border-top: 1px solid #f3f4f6;
 
-      @media (max-width: 640px) {
-        gap: 16px;
+      @media (min-width: 431px) {
+        gap: fluid(431, 1920, 16, 30);
+        padding-top: fluid(431, 1920, 10, 20);
       }
 
       .btn-primary {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 12px ;
-        width: 137px;
-        height: 49px;
+        padding: 12px;
+        width: 140px;
+        height: 50px;
+
+        @media (min-width: 431px) {
+          width: fluid(431, 1920, 140, 137);
+        }
         background: $purple-1;
         border-radius: 25px;
         border: none;
@@ -259,9 +265,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 12px ;
-        width: 153px;
-        height: 49px;
+        padding: 12px;
+        width: 155px;
+        height: 50px;
+
+        @media (min-width: 431px) {
+          width: fluid(431, 1920, 155, 153);
+        }
         border: 2px solid $purple-2;
         background: transparent;
         border-radius: 25px;

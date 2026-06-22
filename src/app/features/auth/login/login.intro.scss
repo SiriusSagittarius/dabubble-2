@@ -1,5 +1,6 @@
 
 @use 'sass:color';
+@use '../../../styles/fluid' as *;
 
     $purple-1: #444DF2;
     $purple-2: #797EF3;
@@ -96,31 +97,27 @@
       }
     }
 
-    .auth-account-group {
+    .auth-new {
       position: absolute;
-      left: 1686px;
       top: 75px;
+      right: 75px;
       width: 169px;
       height: 77px;
       z-index: 3;
-      pointer-events: none;
-
-      img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
-    .auth-new-here-label {
-      display: none;
+    .auth-account-group-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
     }
 
     .auth-create-account-link {
       position: absolute;
-      left: 1702px;
-      top: 110px;
+      left: 16px;
+      top: 35px;
       width: 152px;
       height: 42px;
       display: block;
@@ -145,22 +142,29 @@
       display: none;
     }
 
+    .auth-new-mobile {
+      display: none;
+    }
+
 .login-container {
       position: relative;
-      width: 96%;
-      max-width: 606px;
-      min-height: 720px;
+      width: fluid(320, 430, 300, 398);
+      height: fluid(320, 430, 460, 552);
       background: #FFFFFF;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
       border-radius: 30px;
-      padding: 50px 60px;
+      padding: fluid(320, 430, 16, 24) fluid(320, 430, 14, 20);
+
+      @media (min-width: 431px) {
+        width: fluid(431, 1920, 398, 610);
+        height: fluid(431, 1920, 552, 670);
+        padding: fluid(431, 1920, 24, 50) fluid(431, 1920, 20, 60);
+      }
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
       overflow: hidden;
-
-
     }
 
     .login-success-overlay {
@@ -289,10 +293,20 @@
 
     .login-content {
       width: 100%;
-      max-width: 500px;
+      max-width: 385px;
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 14px;
+
+      @media (max-width: 430px) {
+        max-width: fluid(320, 430, 280, 385);
+        gap: fluid(320, 430, 8, 14);
+      }
+
+      @media (min-width: 431px) {
+        max-width: fluid(431, 1920, 385, 500);
+        gap: fluid(431, 1920, 14, 30);
+      }
     }
 
     .login-header {
@@ -300,20 +314,24 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 15px;
+      gap: 8px;
 
       .title {
         margin: 0;
         font-family: 'Nunito', sans-serif;
         font-style: normal;
         font-weight: 700;
-        font-size: 46px;
+        font-size: 32px;
+
+        @media (max-width: 430px) {
+          font-size: fluid(320, 430, 24, 32);
+        }
+
+        @media (min-width: 431px) {
+          font-size: fluid(431, 1920, 32, 46);
+        }
         line-height: 120%;
         color: $purple-1;
-
-        @media (max-width: 640px) {
-          font-size: 36px;
-        }
       }
 
       .subtitle {
@@ -322,65 +340,23 @@
         font-family: 'Nunito', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
+        font-size: 14px;
+
+        @media (max-width: 430px) {
+          font-size: fluid(320, 430, 11, 14);
+        }
+
+        @media (min-width: 431px) {
+          font-size: fluid(431, 1920, 14, 20);
+        }
         line-height: 120%;
         color: #000000;
-
-        @media (max-width: 640px) {
-          font-size: 16px;
-        }
       }
     }
 
-    @media (max-width: 1440px) {
-      .auth-account-group {
+    @media (max-width: 530px) {
+      .auth-new {
         display: none;
-      }
-
-      .auth-new-here-label {
-        display: block;
-        position: absolute;
-        left: 50%;
-        bottom: 110px;
-        top: auto;
-        transform: translateX(-50%);
-        white-space: nowrap;
-        margin: 0;
-        font-family: 'Nunito', sans-serif;
-        font-size: 18px;
-        font-weight: 400;
-        color: #000;
-        z-index: 4;
-      }
-
-      .auth-create-account-link {
-        position: absolute;
-        left: 50%;
-        top: auto;
-        bottom: 60px;
-        width: auto;
-        height: auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 20px;
-        border: 2px solid $purple-2;
-        border-radius: 19px;
-        transform: translateX(-50%);
-        text-decoration: none;
-
-        &:hover,
-        &:focus-visible {
-          background: rgba($light-purple-bg, 0.3);
-        }
-      }
-
-      .auth-create-account-text {
-        display: inline;
-        font-family: 'Nunito', sans-serif;
-        font-weight: 600;
-        font-size: 18px;
-        color: $purple-1;
       }
     }
 
@@ -392,18 +368,5 @@
       .login-container {
         padding: 24px 16px;
         border-radius: 30px;
-      }
-
-      .auth-new-here-label {
-        bottom: 120px;
-        font-size: 16px;
-      }
-
-      .auth-create-account-link {
-        bottom: 70px;
-      }
-
-      .auth-create-account-text {
-        font-size: 14px;
       }
     }

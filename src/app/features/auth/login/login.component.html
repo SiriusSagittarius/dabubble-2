@@ -1,12 +1,11 @@
     <div class="login-wrapper">
-      <div class="auth-account-group" aria-hidden="true">
-        <img src="assets/icons/auth-account-group.svg" alt="" />
+      <div class="auth-new">
+        <img class="auth-account-group-img" src="assets/icons/auth-account-group.svg" alt="" aria-hidden="true" />
+        <a class="auth-create-account-link" routerLink="/signup" aria-label="Konto erstellen">
+          <span class="auth-create-account-text">Konto erstellen</span>
+        </a>
       </div>
 
-      <p class="auth-new-here-label">Neu bei DABubble?</p>
-      <a class="auth-create-account-link" routerLink="/signup" aria-label="Konto erstellen">
-        <span class="auth-create-account-text">Konto erstellen</span>
-      </a>
 
       @if (showIntro()) {
         <div class="login-intro" [class.login-intro--leave]="introLeaving()" aria-hidden="true">
@@ -49,7 +48,7 @@
           <div class="login-header">
             <h1 class="title">Anmeldung</h1>
             <p class="subtitle">
-              Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.
+              Wir empfehlen dir, die E-Mail-Adresse zu<br>nutzen, die du bei der Arbeit verwendest.
             </p>
           </div>
 
