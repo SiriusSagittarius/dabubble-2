@@ -1,0 +1,139 @@
+    // Responsive Styles für den Signup-/Avatar-Screen
+    // Ausgelagert aus signup.account.scss
+
+    @media (max-width: 640px) {
+      .page-background {
+        padding: 16px;
+      }
+
+      .login-container {
+        width: 96%;
+        border-radius: 30px;
+        padding: 24px 20px;
+      }
+
+      .btn-back {
+        left: 10px;
+        top: 70px;
+      }
+
+      .login-header {
+        position: relative;
+        width: 100%;
+        left: 0;
+        top: 0;
+        height: auto;
+        gap: 15px;
+        margin-top: 16px;
+        margin-bottom: 24px;
+        // Platz für den absolut positionierten Zurück-Pfeil freihalten,
+        // damit Titel und Pfeil sich nie überlappen
+        padding: 30px;
+        box-sizing: border-box;
+      }
+
+      .login-header .subtitle {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      .avatar-step {
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
+        margin-top: 24px;
+      }
+
+      .avatar-step + .action-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
+
+      .avatar-preview-box {
+        height: auto;
+      }
+
+      .avatar-preview-image {
+        width: 120px;
+        height: 120px;
+      }
+
+      .avatar-preview-upload-badge {
+        width: 22px;
+        height: 22px;
+        right: 4px;
+        bottom: 4px;
+
+        svg {
+          width: 13px;
+          height: 13px;
+        }
+      }
+
+      .avatar-selection-box {
+        height: auto;
+        padding-bottom: 0;
+      }
+
+      .avatar-options {
+        gap: 4px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .avatar-option {
+        width: 48px;
+        height: 48px;
+      }
+
+      .visibility-row {
+        gap: 12px;
+        padding: 10px 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      // Exakte Mobile-Maße: Logo 87px vom Rand, 64px bis Card (Logo-Höhe 56px -> Card-Top 207px)
+      .page-background {
+        align-items: flex-start;
+        padding: 207px 16px 16px;
+      }
+
+      .login-container {
+        height: 669px;
+      }
+
+      .signup-success-overlay {
+        right: auto;
+        left: 50%;
+        bottom: 32px;
+        transform: translateX(-50%);
+      }
+
+      .signup-success-overlay-card {
+        width: min(531px, calc(100vw - 32px));
+        height: auto;
+        padding: 24px;
+        justify-content: center;
+      }
+
+      .signup-success-overlay-text {
+        width: auto;
+        height: auto;
+        font-size: 22px;
+        line-height: 1.3;
+        white-space: normal;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .login-header .title {
+        font-size: 32px;
+      }
+    }
+
+

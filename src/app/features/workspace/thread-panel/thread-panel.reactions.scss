@@ -1,0 +1,263 @@
+/* ==========================================
+   REAKTIONEN & REACTION CHIPS (Thread)
+   ========================================== */
+.message-reaction-actions {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.message-reaction-actions-own {
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.reaction-chip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.reaction-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  height: 34px;
+  padding: 5px 10px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+.reaction-icon-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.reaction-add-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 1px solid #adb0d9;
+  border-radius: 50%;
+  background: #fff;
+  padding: 0;
+  cursor: pointer;
+}
+
+.reaction-add-button:hover,
+.reaction-add-button:focus-visible {
+  background: #eceefe;
+  border-color: #444df2;
+  outline: none;
+}
+
+.reaction-add-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.reaction-add-button:hover .reaction-add-icon,
+.reaction-add-button:focus-visible .reaction-add-icon {
+  filter: brightness(0) saturate(100%) invert(37%) sepia(85%) saturate(2442%) hue-rotate(225deg)
+    brightness(96%) contrast(96%);
+}
+
+.emoji-picker-popover.emoji-picker-popover-reaction-row {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  top: auto;
+  left: 0;
+  z-index: 35;
+  width: 340px;
+  height: min(360px, calc(100vh - 180px));
+  max-width: min(340px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+.emoji-picker-popover.emoji-picker-popover-reaction-row emoji-mart {
+  display: block;
+  height: 100%;
+}
+
+.emoji-picker-popover.emoji-picker-popover-reaction-row-own {
+  left: auto;
+  right: 0;
+}
+
+/* Ursprungsnachricht sitzt ganz oben im Thread: Picker nach unten oeffnen,
+   sonst landet er ueber dem sichtbaren Bereich und ist nicht erreichbar. */
+.emoji-picker-popover.emoji-picker-popover-reaction-row-origin {
+  top: calc(100% + 12px);
+  bottom: auto;
+}
+
+.reaction-hover-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: 158px;
+  height: 110px;
+  min-width: 158px;
+  min-height: 110px;
+  padding: 12px 14px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  border-radius: 18px 18px 18px 0px;
+  background: #444df2;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 18;
+}
+
+.reaction-chip-wrap:hover .reaction-hover-bubble,
+.reaction-chip-wrap:focus-within .reaction-hover-bubble {
+  opacity: 1;
+}
+
+
+/* ==========================================
+   ZUSÄTZLICHE UTILITIES & HOVERS (Aus Part 10)
+   ========================================== */
+.members-area:hover .members-icon {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(86%) saturate(2413%) hue-rotate(223deg)
+    brightness(99%) contrast(97%);
+}
+
+.action-button:hover,
+.action-button:focus-visible {
+  background: #fff;
+  outline: none;
+}
+
+.action-button:hover .action-icon,
+.action-button:focus-visible .action-icon {
+  filter: brightness(0) saturate(100%) invert(37%) sepia(85%) saturate(2442%) hue-rotate(225deg)
+    brightness(96%) contrast(96%);
+}
+
+.send-button {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.send-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.thread-input-box {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 30px;
+  height: 145px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  background: #fff;
+  padding: 20px 20px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.thread-input-box:hover,
+.thread-input-box:focus-within {
+  border-color: #444df2;
+}
+
+.thread-input {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 76px;
+  border: 0;
+  outline: none;
+  resize: none;
+  padding: 0;
+  font: inherit;
+  font-size: 18px;
+  line-height: 25px;
+  color: #000;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.thread-input-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.thread-input-left-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.thread-input-left-actions .action-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.thread-input-left-actions .action-icon,
+.thread-input-left-actions .action-icon-small {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.thread-input-left-actions .action-button:hover,
+.thread-input-left-actions .action-button:focus-visible {
+  background: #eceefe;
+  outline: none;
+}
+
+.thread-input-left-actions .action-button:hover .action-icon,
+.thread-input-left-actions .action-button:hover .action-icon-small,
+.thread-input-left-actions .action-button:focus-visible .action-icon,
+.thread-input-left-actions .action-button:focus-visible .action-icon-small {
+  filter: brightness(0) saturate(100%) invert(37%) sepia(85%) saturate(2442%) hue-rotate(225deg)
+    brightness(96%) contrast(96%);
+}

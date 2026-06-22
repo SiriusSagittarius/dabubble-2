@@ -1,0 +1,343 @@
+
+@use 'sass:color';
+
+    $purple-1: #444DF2;
+    $purple-2: #797EF3;
+    $light-purple-bg: #ECEEFE;
+    $lines-color: #ADB0D9;
+    $error-pink: #ED1E79;
+    $text-gray: #686868;
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 18px 32px;
+      width: 100%;
+      height: 60px;
+      background: $light-purple-bg;
+      border-radius: 100px;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        border-color: #000000;
+      }
+
+      &:focus-within {
+        border-color: $purple-1;
+        background-color: color.adjust($light-purple-bg, $lightness: 2%);
+      }
+
+      &:focus-within .input-icon {
+        filter: brightness(0);
+      }
+
+      .input-icon {
+        width: 24px;
+        height: 24px;
+        color: $text-gray;
+        margin-right: 20px;
+        flex-shrink: 0;
+        transition: filter 0.2s ease;
+      }
+
+      .form-control {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 120%;
+        color: $text-gray;
+        outline: none;
+
+        &::placeholder {
+          color: rgba($text-gray, 0.6);
+        }
+      }
+
+      .btn-toggle-password {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 10px;
+        color: $text-gray;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: $purple-1;
+        }
+
+        svg {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+
+    .error-text {
+      margin: 0;
+      padding-left: 32px;
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 19px;
+      color: $error-pink;
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+
+    .forgot-password-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-forgot-password {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Figtree', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 120%;
+      color: $purple-2;
+      padding: 5px 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      &:hover,
+      &:focus-visible {
+        background-color: $light-purple-bg;
+        color: $purple-1;
+        outline: none;
+      }
+    }
+
+    .separator-container {
+      position: relative;
+      width: 100%;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .separator-line {
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background-color: $lines-color;
+        top: 50%;
+        z-index: 1;
+      }
+
+      .separator-text {
+        position: relative;
+        z-index: 2;
+        background: #FFFFFF;
+        padding: 5px 15px;
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 25px;
+        color: #000000;
+      }
+    }
+
+    .google-container {
+      width: 100%;
+    }
+
+    .btn-google {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 11px 32px;
+      gap: 15px;
+      width: 100%;
+      height: 60px;
+      background: $light-purple-bg;
+      border-radius: 100px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 120%;
+      color: $purple-1;
+
+      &:hover,
+      &:focus-visible {
+        background: $light-purple-bg;
+        border-color: $purple-1;
+        outline: none;
+      }
+
+      &:active {
+        transform: scale(0.99);
+      }
+
+      .google-icon {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+    }
+
+    .action-footer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      width: 100%;
+      padding-top: 20px;
+      border-top: 1px solid #f3f4f6;
+
+      @media (max-width: 640px) {
+        gap: 16px;
+      }
+
+      .btn-primary {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px ;
+        width: 137px;
+        height: 49px;
+        background: $purple-1;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 25px;
+        color: #FFFFFF;
+        box-shadow: 0 4px 10px rgba($purple-1, 0.2);
+
+        &:hover {
+          background: $purple-2;
+        }
+
+        &:active {
+          transform: scale(0.97);
+        }
+      }
+
+      .btn-secondary {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px ;
+        width: 153px;
+        height: 49px;
+        border: 2px solid $purple-2;
+        background: transparent;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 25px;
+        color: $purple-1;
+        white-space: nowrap;
+
+        &:hover {
+          background: $purple-1;
+          border-color: $purple-1;
+          color: #FFFFFF;
+        }
+
+        &:active {
+          transform: scale(0.97);
+        }
+      }
+
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==========================================
+       MOBILE-INTRO (<=490px): Bubbles wandern nach links,
+       dann erscheint DABubble in Weiss rechts daneben
+       ========================================== */
+    @media (max-width: 490px) {
+      .login-intro-brand {
+        width: 70px;
+        height: 69px;
+        animation: loginIntroBrandTravelMobile 3.05s cubic-bezier(0.2, 0.86, 0.18, 1) both;
+      }
+
+      .login-intro-mark {
+        width: 70px;
+        height: 69px;
+
+        img {
+          width: 260px;
+          height: 69px;
+          transform: translateX(-78px);
+        }
+      }
+
+      .login-intro-word {
+        left: 84px;
+        font-size: 32px;
+        letter-spacing: -0.8px;
+      }
+
+      @keyframes loginIntroBrandTravelMobile {
+        0%, 22% {
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+        48%, 100% {
+          left: 50%;
+          top: 50%;
+          transform: translate(calc(-50% - 82px), -50%);
+        }
+      }
+    }

@@ -1,0 +1,255 @@
+$purple-1: #444DF2;
+$purple-2: #797EF3;
+$light-purple-bg: #ECEEFE;
+$text-gray: #686868;
+$error-pink: #ED1E79;
+
+.login-form {
+  position: absolute;
+  width: 500px;
+  left: 53px;
+  top: 150px;
+
+  @media (max-width: 640px) {
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.password-form {
+  position: absolute;
+  width: 500px;
+  left: 53px;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  @media (max-width: 640px) {
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.instruction-text {
+  margin: 0 0 14px 0;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 120%;
+  color: #000000;
+}
+
+.input-group {
+  position: relative;
+  width: 500px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media (max-width: 640px) {
+    width: 100%;
+  }
+}
+
+.password-group {
+  position: relative;
+  min-height: 112px;
+  padding-bottom: 26px;
+  gap: 8px;
+
+  @media (max-width: 640px) {
+    min-height: 106px;
+  }
+}
+
+.field-label {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 120%;
+  color: #000000;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 18px 32px;
+  width: 500px;
+  height: 60px;
+  background: $light-purple-bg;
+  border-radius: 100px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  box-sizing: border-box;
+
+  @media (max-width: 640px) {
+    width: 100%;
+    height: 50px;
+    padding: 14px 28px;
+  }
+
+  &:hover {
+    border-color: #000000;
+  }
+
+  &:focus-within {
+    border-color: gray;
+    background-color: #fff;
+  }
+
+  .input-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .form-control {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 120%;
+    color: $text-gray;
+    outline: none;
+
+    &::placeholder {
+      color: rgba($text-gray, 0.6);
+    }
+  }
+
+  .btn-toggle-password {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+    color: $text-gray;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: $purple-1;
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.error-text {
+  position: absolute;
+  bottom: -22px;
+  left: 32px;
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: $error-pink;
+  white-space: nowrap;
+}
+
+.password-error {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.reset-info {
+  margin: 22px 0 0 0;
+  width: 500px;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 140%;
+  color: #000000;
+  text-align: center;
+
+   @media (max-width: 640px) {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  @media (max-width: 640px) {
+    width: 100%;
+  }
+}
+
+.action-footer {
+  position: absolute;
+  right: 53px;
+  bottom: 48px;
+
+  @media (max-width: 640px) {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .btn-primary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 192px;
+    height: 49px;
+    padding: 0 24px;
+    background: $purple-1;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    color: #FFFFFF;
+
+    &:hover:not(:disabled) {
+      background:#000;
+    }
+
+    &:disabled {
+      background: #B4B7C9;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+  }
+}

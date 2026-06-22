@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { FirebaseUserSyncService } from './services/firebase-user-sync.service';
+import { FirebaseUserSyncService } from './core/services/firebase-user-sync.service';
 
 @Component({
   selector: 'app-root',

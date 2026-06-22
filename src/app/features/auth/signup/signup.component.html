@@ -1,0 +1,213 @@
+    <div class="page-background">
+      @if (showSuccessOverlay()) {
+        <div class="signup-success-overlay" role="status" aria-live="polite">
+          <div class="signup-success-overlay-card">
+            <span class="signup-success-overlay-text">Konto erfolgreich erstellt!</span>
+          </div>
+        </div>
+      }
+
+      <!-- Hauptcontainer: Frame 79 (Registrierung) -->
+      <div class="login-container">
+
+        <!-- Zurück-Button (Frame 13 / arrow_back) -->
+        <button type="button" class="btn-back" (click)="goBack()" title="Zurück">
+          <svg class="icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
+
+        <!-- Erfolgs-Toast Notification -->
+        <div class="success-toast" [class.show]="showToast()">
+          <svg class="icon-toast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ toastMessage() }}</span>
+        </div>
+
+        <!-- Header-Bereich (Frame 199) -->
+        <div class="login-header">
+          @if (isAvatarStep()) {
+            <h1 class="title">Wähle deinen Avatar</h1>
+          } @else {
+            <h1 class="title">Konto erstellen</h1>
+            <p class="subtitle">
+              Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.
+            </p>
+          }
+        </div>
+
+        @if (isAvatarStep()) {
+          <div class="avatar-step">
+            <div class="avatar-preview-box">
+              <label class="avatar-preview-upload" title="Eigenes Bild hochladen">
+                <input type="file" accept="image/*" class="avatar-upload-input" (change)="onCustomAvatarSelected($event)" />
+                <div
+                  class="avatar-preview-image"
+                  role="img"
+                  [class.avatar-preview-placeholder]="!selectedAvatarOption() && !customAvatarImage()"
+                  [style.backgroundImage]="avatarPreviewBackgroundImage()"
+                  [style.backgroundSize]="avatarPreviewBackgroundSize()"
+                  [attr.aria-label]="selectedAvatarOption()?.label || 'Vor und Nachname'">
+                </div>
+                <span class="avatar-preview-upload-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </span>
+                <span class="visually-hidden">Eigenes Bild hochladen</span>
+              </label>
+            </div>
+
+            <div class="avatar-selection-box">
+              <p class="avatar-name">
+                {{ registerForm.controls.name.value || 'Vor und Nachname' }}
+              </p>
+
+              <p class="avatar-list-label">Aus der Liste wählen</p>
+
+              <div class="avatar-options">
+                @for (avatar of avatarOptions; track avatar.id) {
+                  <button
+                    type="button"
+                    class="avatar-option"
+                    [class.active]="selectedAvatarId() === avatar.id"
+                    [style.backgroundImage]="'url(/assets/icons/' + avatar.id + '.svg)'"
+                    (click)="selectAvatar(avatar.id)"
+                    [attr.aria-label]="avatar.label">
+                  </button>
+                }
+              </div>
+
+              <!-- Profil-Sichtbarkeit: öffentlich (im Devspace auffindbar) oder privat -->
+              <div class="visibility-row">
+                <button
+                  type="button"
+                  class="visibility-switch"
+                  role="switch"
+                  [class.is-public]="isProfilePublic()"
+                  [attr.aria-checked]="isProfilePublic()"
+                  (click)="toggleProfileVisibility()">
+                  <span class="visibility-switch-knob"></span>
+                </button>
+                <span class="visibility-text">
+                  <span class="visibility-title">
+                    {{ isProfilePublic() ? 'Öffentliches Profil' : 'Privates Profil' }}
+                  </span>
+                  <span class="visibility-hint">
+                    {{ isProfilePublic()
+                      ? 'Jeder findet dich im Devspace.'
+                      : 'Du bist nicht gelistet.' }}
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aktionsknopf -->
+          <div class="action-footer">
+            <button type="button" class="btn-primary" (click)="onSubmit()">
+              Weiter
+            </button>
+          </div>
+        }
+
+        @if (!isAvatarStep()) {
+          <!-- Formular-Bereich (Frame 192) -->
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+
+            <!-- 1. Name Input Container -->
+            <div class="input-group" style="top: 0px;">
+              <div class="input-wrapper" [class.has-error]="isFieldInvalid('name')">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <input
+                  type="text"
+                  formControlName="name"
+                  placeholder="Name und Nachname"
+                  class="form-control"
+                />
+              </div>
+              @if (isFieldInvalid('name')) {
+                <p class="error-text">*Bitte schreiben Sie einen Namen.</p>
+              }
+            </div>
+
+            <!-- 2. E-Mail Input Container -->
+            <div class="input-group" style="top: 100px;">
+              <div class="input-wrapper" [class.has-error]="isFieldInvalid('email')">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <input
+                  type="email"
+                  formControlName="email"
+                  placeholder="beispielname@email.com"
+                  class="form-control"
+                />
+              </div>
+              @if (isFieldInvalid('email')) {
+                <p class="error-text">*Diese E-Mail-Adresse ist leider ungültig.</p>
+              }
+            </div>
+
+            <!-- 3. Passwort Input Container -->
+            <div class="input-group" style="top: 200px;">
+              <div class="input-wrapper" [class.has-error]="isFieldInvalid('password')">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <input
+                  [type]="showPassword() ? 'text' : 'password'"
+                  formControlName="password"
+                  placeholder="Passwort"
+                  class="form-control"
+                />
+                <button type="button" class="btn-toggle-password" (click)="togglePassword()">
+                  @if (showPassword()) {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                    </svg>
+                  } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  }
+                </button>
+              </div>
+              @if (isFieldInvalid('password')) {
+                <p class="error-text">*Bitte geben Sie ein Passwort ein.</p>
+              }
+            </div>
+          </form>
+
+          <div class="bottom-row">
+            <!-- 4. Datenschutzerklärung Checkbox (Frame 79 / Frame 201) -->
+            <div class="policy-container">
+              <label class="checkbox-label" (click)="toggleTerms()">
+                <span class="custom-checkbox" [class.checked]="registerForm.get('acceptTerms')?.value" [class.has-error]="isFieldInvalid('acceptTerms')">
+                  @if (registerForm.get('acceptTerms')?.value) {
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  }
+                </span>
+                <span class="label-text">
+                  Ich stimme der <span class="link" (click)="openPrivacyPolicy($event)">Datenschutzerklärung</span> zu.
+                </span>
+              </label>
+            </div>
+
+            <!-- Aktionsknopf -->
+            <div class="action-footer">
+              <button type="button" class="btn-primary" (click)="onSubmit()">
+                Weiter
+              </button>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>

@@ -1,0 +1,343 @@
+@use 'sass:color';
+
+    $purple-1: #444DF2;
+    $purple-2: #797EF3;
+    $light-purple-bg: #ECEEFE;
+    $lines-color: #ADB0D9;
+    $error-pink: #ED1E79;
+    $text-gray: #686868;
+    $menu-color: #42526E;
+    // Formular-Bereich (Frame 192)
+    .login-form {
+      position: absolute;
+      width: 500px;
+      height: 260px;
+      left: 53px; // Zentriert (606 - 500) / 2
+      top: 216px;
+
+      @media (max-width: 640px) {
+        position: relative;
+        width: 100%;
+        left: 0;
+        top: 0;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+
+    // Input-Reihen mit exaktem Top-Abstand (0px, 100px, 200px)
+    .input-group {
+      position: absolute;
+      width: 500px;
+      height: 60px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      @media (max-width: 640px) {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        top: auto !important;
+      }
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 18px 32px;
+      width: 500px;
+      height: 60px;
+      background: $light-purple-bg;
+      border-radius: 100px;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      box-sizing: border-box;
+
+      @media (max-width: 640px) {
+        width: 100%;
+        height: 50px;
+        padding: 14px 28px;
+      }
+
+      &:hover {
+        border-color: #000000;
+      }
+
+      &:focus-within {
+        border-color: $purple-1;
+        background-color: color.adjust($light-purple-bg, $lightness: 2%);
+      }
+
+      &:focus-within .input-icon {
+        color: #000000;
+      }
+
+      .input-icon {
+        width: 24px;
+        height: 24px;
+        color: $text-gray;
+        margin-right: 20px;
+        flex-shrink: 0;
+      }
+
+      .form-control {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 120%;
+        color: $text-gray;
+        outline: none;
+
+        &::placeholder {
+          color: rgba($text-gray, 0.6);
+        }
+      }
+
+      .btn-toggle-password {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 10px;
+        color: $text-gray;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: $purple-1;
+        }
+
+        svg {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+
+    // Fehlermeldung unterhalb der Eingabefelder (verhindert Layout-Shifts)
+    .error-text {
+      position: absolute;
+      bottom: -22px;
+      left: 32px;
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 19px;
+      color: $error-pink;
+      white-space: nowrap;
+    }
+
+    // Wrapper für Checkbox-Reihe + Weiter-Button (mobile nebeneinander)
+    .bottom-row {
+      display: contents;
+
+      @media (max-width: 640px) {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        margin-top: 40px;
+      }
+    }
+
+    // Checkbox für Datenschutzerklärung (Frame 79 / 201)
+    .policy-container {
+      position: absolute;
+      width: 368px;
+      height: 32px;
+      left: 53px;
+      top: 508px;
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 640px) {
+        position: relative;
+        width: auto;
+        flex: 1 1 auto;
+        left: 0;
+        top: 0;
+        height: auto;
+        margin-bottom: 0;
+      }
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+
+      @media (max-width: 640px) {
+        align-items: flex-start;
+      }
+
+      &:has(.link:hover),
+      &:has(.link:focus-visible) {
+        .custom-checkbox:not(.checked) {
+          background-color: $light-purple-bg;
+          border-color: $purple-1;
+        }
+
+        .custom-checkbox.checked {
+          border-color: $purple-1;
+        }
+      }
+    }
+
+    .hidden-checkbox {
+      display: none;
+    }
+
+    .custom-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid $purple-2;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+
+      &.checked {
+        background-color: $purple-2;
+        border-color: $purple-2;
+      }
+
+      .check-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .label-text {
+      font-family: 'Open Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 120%;
+      color: $menu-color;
+
+      .link {
+        font-family: 'Figtree', sans-serif;
+        color: $purple-2;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 18px;
+        padding: 2px 6px;
+        margin: -2px -6px;
+        border-radius: 30px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+          background-color: $light-purple-bg;
+          color: $purple-1;
+          outline: none;
+        }
+      }
+    }
+
+    // Button-Bereich (Weiter Button unten rechts - Frame 191)
+    .action-footer {
+      position: absolute;
+      width: 107px;
+      height: 49px;
+      right:0px;
+      top: 580px;
+      transform: translateX(-50%);
+
+      @media (max-width: 640px) {
+        position: relative;
+        width: auto;
+        flex: 0 0 auto;
+        align-self: flex-end;
+        left: 0;
+        top: 0;
+        transform: none;
+      }
+
+      .btn-primary {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 107px;
+        height: 49px;
+        background: $purple-1;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 25px;
+        color: #FFFFFF;
+
+        &:hover {
+          background: color.adjust($purple-1, $lightness: -8%);
+        }
+
+        &:active {
+          transform: scale(0.97);
+        }
+      }
+    }
+
+    // Erfolgs-Toast
+    .success-toast {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #10b981;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+      z-index: 100;
+      transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+
+      &.show {
+        top: 20px;
+      }
+
+      .icon-toast {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    @keyframes signupSuccessIn {
+      from {
+        opacity: 0;
+        transform: translate3d(120px, 90px, 0);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
