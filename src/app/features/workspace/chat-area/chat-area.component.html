@@ -145,9 +145,9 @@
               <span class="channel-edition-label">Channel-Name</span>
               @if (isActiveChannelCreator()) {
                 @if (channelNameEditMode()) {
-                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name speichern" (click)="saveChannelName()"><span class="channel-edition-action-icon channel-edition-action-icon-save"></span></button>
+                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name speichern" (click)="saveChannelName()"><span class="channel-edition-action-icon channel-edition-action-icon-save"></span><span class="channel-edition-action-text">Speichern</span></button>
                 } @else {
-                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name bearbeiten" (click)="editChannelName()"><span class="channel-edition-action-icon channel-edition-action-icon-edit"></span></button>
+                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name bearbeiten" (click)="editChannelName()"><span class="channel-edition-action-icon channel-edition-action-icon-edit"></span><span class="channel-edition-action-text">Bearbeiten</span></button>
                 }
               }
             </div>
@@ -169,9 +169,9 @@
               <span class="channel-edition-label">Beschreibung</span>
               @if (isActiveChannelCreator()) {
                 @if (channelDescriptionEditMode()) {
-                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung speichern" (click)="saveChannelDescription()"><span class="channel-edition-action-icon channel-edition-action-icon-save"></span></button>
+                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung speichern" (click)="saveChannelDescription()"><span class="channel-edition-action-icon channel-edition-action-icon-save"></span><span class="channel-edition-action-text">Speichern</span></button>
                 } @else {
-                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung bearbeiten" (click)="editChannelDescription()"><span class="channel-edition-action-icon channel-edition-action-icon-edit"></span></button>
+                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung bearbeiten" (click)="editChannelDescription()"><span class="channel-edition-action-icon channel-edition-action-icon-edit"></span><span class="channel-edition-action-text">Bearbeiten</span></button>
                 }
               }
             </div>

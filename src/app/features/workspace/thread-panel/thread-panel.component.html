@@ -92,7 +92,7 @@
                     type="button"
                     class="thread-edit-icon-button"
                     aria-label="Reaktion hinzufügen"
-                    (click)="toggleThreadReactionBar(reply.id); $event.stopPropagation()"
+                    (click)="toggleEmojiPicker('reaction-' + reply.id); $event.stopPropagation()"
                   >
                     <img
                       src="/assets/icons/add-re-flat.svg"
@@ -126,6 +126,16 @@
                 </div>
               }
             </div>
+            @if (activeEmojiPicker() === 'reaction-' + reply.id) {
+              <div class="emoji-picker-overlay" (click)="closeEmojiPicker(); $event.stopPropagation()"></div>
+              <div class="emoji-picker-popover emoji-picker-popover-reaction-row emoji-picker-popover-reaction-row-own" (click)="$event.stopPropagation()">
+                <emoji-mart
+                  (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + reply.id)"
+                  [enableSearch]="false" [emojiSize]="emojiSize()" [include]="emojiCategories"
+                  [showPreview]="false" [showSingleCategory]="true" [perLine]="emojiPerLine()" [totalFrequentLines]="1"
+                ></emoji-mart>
+              </div>
+            }
             @if (editingMessageId() === reply.id) {
               <form
                 class="message-edit-box thread-message-edit-box"
@@ -182,31 +192,6 @@
                 }
               </div>
             }
-            @if (activeThreadReactionBarId() === reply.id) {
-              <div
-                class="thread-reaction-overlay"
-                (pointerdown)="closeThreadReactionBar(); $event.stopPropagation()"
-                (mousedown)="closeThreadReactionBar(); $event.stopPropagation()"
-                (touchstart)="closeThreadReactionBar(); $event.stopPropagation()"
-                (click)="closeThreadReactionBar(); $event.stopPropagation()"
-              ></div>
-              <div class="thread-reaction-add thread-reaction-add-right" (click)="$event.stopPropagation()">
-                <app-thread-reaction-buttons
-                  [messageId]="reply.id"
-                  (onReaction)="addReaction($event.messageId, $event.emoji)"
-                  (onPickerToggle)="toggleEmojiPicker('reaction-' + $event)"
-                />
-                @if (activeEmojiPicker() === 'reaction-' + reply.id) {
-                  <div class="emoji-picker-popover thread-reaction-popover thread-reaction-popover-right" (click)="$event.stopPropagation()">
-                    <emoji-mart
-                      (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + reply.id)"
-                      [enableSearch]="false" [emojiSize]="emojiSize()" [include]="emojiCategories"
-                      [showPreview]="false" [showSingleCategory]="true" [perLine]="emojiPerLine()" [totalFrequentLines]="1"
-                    ></emoji-mart>
-                  </div>
-                }
-              </div>
-            }
           </div>
           <img
             class="thread-avatar"
@@ -229,13 +214,23 @@
               <span class="thread-message-name">{{ threadUserName(reply.authorId) }}</span>
               <span
                 class="thread-message-time thread-message-time-with-icon"
-                [class.thread-time-icon-hidden]="activeThreadReactionBarId() === reply.id"
-                (click)="toggleThreadReactionBar(reply.id); $event.stopPropagation()"
+                [class.thread-time-icon-hidden]="activeEmojiPicker() === 'reaction-' + reply.id"
+                (click)="toggleEmojiPicker('reaction-' + reply.id); $event.stopPropagation()"
               >
                 <span>{{ formatThreadMetaTimestamp(reply.createdAt) }}</span>
                 <img src="/assets/icons/singleicon.svg" alt="" class="thread-time-icon" />
               </span>
             </div>
+            @if (activeEmojiPicker() === 'reaction-' + reply.id) {
+              <div class="emoji-picker-overlay" (click)="closeEmojiPicker(); $event.stopPropagation()"></div>
+              <div class="emoji-picker-popover emoji-picker-popover-reaction-row" (click)="$event.stopPropagation()">
+                <emoji-mart
+                  (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + reply.id)"
+                  [enableSearch]="false" [emojiSize]="emojiSize()" [include]="emojiCategories"
+                  [showPreview]="false" [showSingleCategory]="true" [perLine]="emojiPerLine()" [totalFrequentLines]="1"
+                ></emoji-mart>
+              </div>
+            }
             <p class="thread-bubble thread-bubble-large">{{ reply.body }}</p>
             @if (reply.reactions.length > 0) {
               <div class="message-reaction-actions" aria-label="Reaktionen">
@@ -260,31 +255,6 @@
                   <div class="emoji-picker-popover emoji-picker-popover-reaction-row">
                     <emoji-mart
                       (emojiSelect)="onMessageEmojiSelect($event, 'reaction-row-' + reply.id)"
-                      [enableSearch]="false" [emojiSize]="emojiSize()" [include]="emojiCategories"
-                      [showPreview]="false" [showSingleCategory]="true" [perLine]="emojiPerLine()" [totalFrequentLines]="1"
-                    ></emoji-mart>
-                  </div>
-                }
-              </div>
-            }
-            @if (activeThreadReactionBarId() === reply.id) {
-              <div
-                class="thread-reaction-overlay"
-                (pointerdown)="closeThreadReactionBar(); $event.stopPropagation()"
-                (mousedown)="closeThreadReactionBar(); $event.stopPropagation()"
-                (touchstart)="closeThreadReactionBar(); $event.stopPropagation()"
-                (click)="closeThreadReactionBar(); $event.stopPropagation()"
-              ></div>
-              <div class="thread-reaction-add" (click)="$event.stopPropagation()">
-                <app-thread-reaction-buttons
-                  [messageId]="reply.id"
-                  (onReaction)="addReaction($event.messageId, $event.emoji)"
-                  (onPickerToggle)="toggleEmojiPicker('reaction-' + $event)"
-                />
-                @if (activeEmojiPicker() === 'reaction-' + reply.id) {
-                  <div class="emoji-picker-popover thread-reaction-popover" (click)="$event.stopPropagation()">
-                    <emoji-mart
-                      (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + reply.id)"
                       [enableSearch]="false" [emojiSize]="emojiSize()" [include]="emojiCategories"
                       [showPreview]="false" [showSingleCategory]="true" [perLine]="emojiPerLine()" [totalFrequentLines]="1"
                     ></emoji-mart>

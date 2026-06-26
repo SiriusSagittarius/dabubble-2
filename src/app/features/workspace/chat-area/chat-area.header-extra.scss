@@ -305,11 +305,29 @@
   transition: opacity 0.15s ease;
 }
 
-/* Fremde Nachrichten: Toolbar links ausrichten */
 .message-left .message-hover-actions-menu {
   right: auto;
   left: 45px;
   border-radius: 25px 25px 25px 0;
+}
+
+.message-right .message-hover-actions-menu {
+  right: auto;
+  left: 45px;
+  border-radius: 25px 25px 0px 25px;
+  border-color: #444df2;
+}
+
+.message-right .message-hover-action-btn {
+  color: #fff;
+}
+
+.message-right .message-hover-action-btn:hover {
+  background: #adb0d9;
+}
+
+.message-right .message-hover-action-emoji {
+  color: #fff;
 }
 
 .message:hover .message-hover-actions-menu {

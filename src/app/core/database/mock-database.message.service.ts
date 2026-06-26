@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { MockDatabaseStore } from './mock-database.store';
 import { FirebaseChatService } from '../services/firebase-chat.service';
 import { MockMessage, MockThread } from './mock-database.models';
-import { createId } from './mock-database.utils';
+import { createId, dmChannelId } from './mock-database.utils';
 
 @Injectable({ providedIn: 'root' })
 export class MockDatabaseMessageService {
@@ -303,5 +303,42 @@ export class MockDatabaseMessageService {
     void this.chatStore.toggleReaction(messageId, emoji);
 
     return updatedMessage;
+  }
+
+  // Loescht nur die Direktnachricht-Unterhaltung mit einem Nutzer (alle
+  // Nachrichten im gemeinsamen DM-Channel), nicht den Nutzer/Kontakt selbst.
+  deleteDirectConversation(otherUserId: string): boolean {
+    const currentUser = this.store.currentUser();
+
+    if (!currentUser || !otherUserId) {
+      return false;
+    }
+
+    const channelId = dmChannelId(currentUser.id, otherUserId);
+    const removedIds = this.store
+      .state()
+      .messages.filter((message) => message.channelId === channelId)
+      .map((message) => message.id);
+
+    if (removedIds.length === 0) {
+      return false;
+    }
+
+    this.store.patchState((state) => {
+      const selectedThreadRemoved = state.threads.some(
+        (thread) => thread.channelId === channelId && thread.id === state.selectedThreadId,
+      );
+
+      return {
+        ...state,
+        messages: state.messages.filter((message) => message.channelId !== channelId),
+        threads: state.threads.filter((thread) => thread.channelId !== channelId),
+        selectedThreadId: selectedThreadRemoved ? '' : state.selectedThreadId,
+      };
+    });
+
+    void this.chatStore.deleteMessages(removedIds);
+
+    return true;
   }
 }

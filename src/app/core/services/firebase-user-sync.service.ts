@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
-import { Firestore, collection, onSnapshot, DocumentData } from '@angular/fire/firestore';
+import { Firestore, collection, onSnapshot, DocumentData, QuerySnapshot } from '@angular/fire/firestore';
 
 import { MockDatabaseService } from '../database/mock-database.service';
 
@@ -9,11 +9,26 @@ export class FirebaseUserSyncService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
   private readonly database = inject(MockDatabaseService);
+  private readonly injector = inject(EnvironmentInjector);
   private unsubUsers: (() => void) | null = null;
   private unsubChannels: (() => void) | null = null;
   private unsubMessages: (() => void) | null = null;
   private unsubThreads: (() => void) | null = null;
   private authUnsubscribe: (() => void) | null = null;
+
+  /**
+   * Registriert eine Firestore-Collection-Subscription innerhalb des Angular
+   * Injection-Context. Noetig, weil der onAuthStateChanged-Callback ausserhalb
+   * des Context laeuft und AngularFire sonst warnt.
+   */
+  private onSnap(
+    path: string,
+    handler: (snap: QuerySnapshot<DocumentData>) => void,
+  ): () => void {
+    return runInInjectionContext(this.injector, () =>
+      onSnapshot(collection(this.firestore, path), handler),
+    );
+  }
 
   start(): void {
     if (this.authUnsubscribe) {
@@ -37,7 +52,7 @@ export class FirebaseUserSyncService {
         return;
       }
 
-      this.unsubUsers = onSnapshot(collection(this.firestore, 'users'), (snap) => {
+      this.unsubUsers = this.onSnap('users', (snap) => {
         const profiles = snap.docs
           .map((doc) => {
             const d = doc.data() as DocumentData;
@@ -105,7 +120,7 @@ export class FirebaseUserSyncService {
         this.database.syncUsersFromFirestore(profiles, user.uid);
       });
 
-      this.unsubChannels = onSnapshot(collection(this.firestore, 'channels'), (snap) => {
+      this.unsubChannels = this.onSnap('channels', (snap) => {
         const profiles = snap.docs
           .map((doc) => {
             const d = doc.data() as DocumentData;
@@ -136,7 +151,7 @@ export class FirebaseUserSyncService {
         this.database.syncChannelsFromFirestore(profiles);
       });
 
-      this.unsubMessages = onSnapshot(collection(this.firestore, 'messages'), (snap) => {
+      this.unsubMessages = this.onSnap('messages', (snap) => {
         const profiles = snap.docs
           .map((doc) => {
             const d = doc.data() as DocumentData;
@@ -166,7 +181,7 @@ export class FirebaseUserSyncService {
         this.database.syncMessagesFromFirestore(profiles);
       });
 
-      this.unsubThreads = onSnapshot(collection(this.firestore, 'threads'), (snap) => {
+      this.unsubThreads = this.onSnap('threads', (snap) => {
         const profiles = snap.docs
           .map((doc) => {
             const d = doc.data() as DocumentData;

@@ -121,6 +121,15 @@
 .workspace-edit-icon {
   width: 22px;
   height: 22px;
+  background-color: #000;
+  -webkit-mask: url('/assets/icons/edit.svg') no-repeat center / contain;
+          mask: url('/assets/icons/edit.svg') no-repeat center / contain;
+  transition: background-color 0.2s ease;
+}
+
+.workspace-edit-button:hover .workspace-edit-icon,
+.workspace-edit-button:focus-visible .workspace-edit-icon {
+  background-color: #535af1;
 }
 
 .sidebar-section {
@@ -243,13 +252,13 @@
   background: #eceefe;
 }
 
-.channel-item:hover:not(.active) .channel-item-name,
 .channel-item:hover:not(.active) .channel-item-prefix,
 .dm-item:hover:not(.dm-item-active) .dm-name {
   color: #444df2;
 }
 
 .channel-item.active .channel-item-prefix,
+.channel-item.active .channel-item-name,
 .dm-item.dm-item-active .dm-name {
   color: #444df2;
   font-weight: 700;
@@ -272,14 +281,14 @@
 }
 
 .channel-item-add-icon-circle {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid #686868;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 30px;
+  flex: 0 0 24px;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -290,8 +299,8 @@
 
 .channel-item-add-plus {
   display: block;
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   position: relative;
 }
 
@@ -306,14 +315,14 @@
 
 .channel-item-add-plus::before {
   width: 2px;
-  height: 14px;
+  height: 10px;
   left: 50%;
   top: 0;
   transform: translateX(-50%);
 }
 
 .channel-item-add-plus::after {
-  width: 14px;
+  width: 10px;
   height: 2px;
   top: 50%;
   left: 0;

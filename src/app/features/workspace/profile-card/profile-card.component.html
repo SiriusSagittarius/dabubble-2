@@ -64,6 +64,16 @@
             <p class="profile-email">{{ profileUser()?.email ?? '' }}</p>
           </div>
 
+          @if (profileUser()?.bio) {
+            <div class="info-section">
+              <div class="info-title">
+                <img src="/assets/icons/person.svg" alt="" class="mail-icon" />
+                <span>Über mich</span>
+              </div>
+              <p class="profile-bio">{{ profileUser()?.bio }}</p>
+            </div>
+          }
+
           @if (isCurrentProfileUser()) {
             <div class="info-section">
               <div class="info-title">
@@ -97,12 +107,45 @@
         <form class="edit-form" [formGroup]="editForm" (ngSubmit)="saveChanges()">
           <div class="form-group">
             <label for="profile-name-input">Name</label>
-            <input id="profile-name-input" type="text" class="form-input" formControlName="name" />
+            <input
+              id="profile-name-input"
+              type="text"
+              class="form-input"
+              formControlName="name"
+              autocomplete="name"
+              [class.invalid]="editForm.controls.name.touched && editForm.controls.name.invalid"
+            />
+            @if (editForm.controls.name.touched && editForm.controls.name.invalid) {
+              <small class="field-error">Bitte gib einen Namen ein (max. 60 Zeichen).</small>
+            }
           </div>
 
           <div class="form-group">
             <label for="profile-email-input">E-Mail-Adresse</label>
-            <input id="profile-email-input" type="email" class="form-input" formControlName="email" />
+            <input
+              id="profile-email-input"
+              type="email"
+              class="form-input"
+              formControlName="email"
+              autocomplete="email"
+              [class.invalid]="editForm.controls.email.touched && editForm.controls.email.invalid"
+            />
+            @if (editForm.controls.email.touched && editForm.controls.email.invalid) {
+              <small class="field-error">Bitte gib eine gültige E-Mail-Adresse ein.</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="profile-bio-input">Über mich</label>
+            <textarea
+              id="profile-bio-input"
+              class="form-input form-textarea"
+              formControlName="bio"
+              rows="3"
+              [attr.maxlength]="bioMaxLength"
+              placeholder="Erzähl etwas über dich – Rolle, Interessen, Schwerpunkte …"
+            ></textarea>
+            <small class="char-counter">{{ bioMaxLength - editForm.controls.bio.value.length }} Zeichen übrig</small>
           </div>
 
           <div class="form-group checkbox-group">

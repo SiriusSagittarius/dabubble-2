@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import {
   Firestore,
@@ -16,6 +16,12 @@ import {
 export class FirebaseChatService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
+  private readonly injector = inject(EnvironmentInjector);
+
+  /** Fuehrt eine Firestore-Operation im Angular Injection-Context aus. */
+  private inContext<T>(operation: () => T): T {
+    return runInInjectionContext(this.injector, operation);
+  }
 
   async createMessage(payload: {
     channelId: string;
@@ -27,15 +33,17 @@ export class FirebaseChatService {
       return;
     }
 
-    await addDoc(collection(this.firestore, 'messages'), {
-      channelId: payload.channelId,
-      authorId: user.uid,
-      body: payload.body,
-      threadId: payload.threadId ?? null,
-      createdAt: new Date().toISOString(),
-      reactions: [],
-      createdAtServer: serverTimestamp(),
-    });
+    await this.inContext(() =>
+      addDoc(collection(this.firestore, 'messages'), {
+        channelId: payload.channelId,
+        authorId: user.uid,
+        body: payload.body,
+        threadId: payload.threadId ?? null,
+        createdAt: new Date().toISOString(),
+        reactions: [],
+        createdAtServer: serverTimestamp(),
+      }),
+    );
   }
 
   async createChannel(channel: {
@@ -53,18 +61,20 @@ export class FirebaseChatService {
 
     // Dokument-ID = lokale Channel-ID, damit der Snapshot-Sync denselben Channel
     // zurueckspielt (kein Duplikat).
-    await setDoc(
-      doc(this.firestore, 'channels', channel.id),
-      {
-        name: channel.name,
-        description: channel.description ?? '',
-        memberIds: channel.memberIds ?? [],
-        createdBy: channel.createdBy,
-        createdAt: channel.createdAt,
-        isPrivate: channel.isPrivate ?? false,
-        createdAtServer: serverTimestamp(),
-      },
-      { merge: true },
+    await this.inContext(() =>
+      setDoc(
+        doc(this.firestore, 'channels', channel.id),
+        {
+          name: channel.name,
+          description: channel.description ?? '',
+          memberIds: channel.memberIds ?? [],
+          createdBy: channel.createdBy,
+          createdAt: channel.createdAt,
+          isPrivate: channel.isPrivate ?? false,
+          createdAtServer: serverTimestamp(),
+        },
+        { merge: true },
+      ),
     );
   }
 
@@ -73,7 +83,9 @@ export class FirebaseChatService {
       return;
     }
 
-    await setDoc(doc(this.firestore, 'channels', channelId), { memberIds }, { merge: true });
+    await this.inContext(() =>
+      setDoc(doc(this.firestore, 'channels', channelId), { memberIds }, { merge: true }),
+    );
   }
 
   async updateChannelDetails(
@@ -95,7 +107,9 @@ export class FirebaseChatService {
       return;
     }
 
-    await setDoc(doc(this.firestore, 'channels', channelId), data, { merge: true });
+    await this.inContext(() =>
+      setDoc(doc(this.firestore, 'channels', channelId), data, { merge: true }),
+    );
   }
 
   async deleteChannel(channelId: string): Promise<void> {
@@ -103,7 +117,17 @@ export class FirebaseChatService {
       return;
     }
 
-    await deleteDoc(doc(this.firestore, 'channels', channelId));
+    await this.inContext(() => deleteDoc(doc(this.firestore, 'channels', channelId)));
+  }
+
+  async deleteMessages(messageIds: string[]): Promise<void> {
+    if (!this.auth.currentUser || messageIds.length === 0) {
+      return;
+    }
+
+    await this.inContext(() =>
+      Promise.all(messageIds.map((id) => deleteDoc(doc(this.firestore, 'messages', id)))),
+    );
   }
 
   async createThread(payload: {
@@ -115,22 +139,26 @@ export class FirebaseChatService {
       return null;
     }
 
-    const threadRef = await addDoc(collection(this.firestore, 'threads'), {
-      channelId: payload.channelId,
-      originMessageId: payload.originMessageId,
-      createdBy: user.uid,
-      createdAt: new Date().toISOString(),
-      createdAtServer: serverTimestamp(),
-    });
+    const threadRef = await this.inContext(() =>
+      addDoc(collection(this.firestore, 'threads'), {
+        channelId: payload.channelId,
+        originMessageId: payload.originMessageId,
+        createdBy: user.uid,
+        createdAt: new Date().toISOString(),
+        createdAtServer: serverTimestamp(),
+      }),
+    );
 
     return threadRef.id;
   }
 
   async updateMessage(messageId: string, body: string): Promise<void> {
-    await updateDoc(doc(this.firestore, 'messages', messageId), {
-      body,
-      updatedAtServer: serverTimestamp(),
-    });
+    await this.inContext(() =>
+      updateDoc(doc(this.firestore, 'messages', messageId), {
+        body,
+        updatedAtServer: serverTimestamp(),
+      }),
+    );
   }
 
   async toggleReaction(messageId: string, emoji: string): Promise<void> {
@@ -140,7 +168,7 @@ export class FirebaseChatService {
     }
 
     const messageRef = doc(this.firestore, 'messages', messageId);
-    const message = await getDoc(messageRef);
+    const message = await this.inContext(() => getDoc(messageRef));
 
     if (!message.exists()) {
       return;
@@ -153,7 +181,9 @@ export class FirebaseChatService {
     const existing = reactions.find((reaction) => reaction.emoji === emoji);
 
     if (!existing) {
-      await updateDoc(messageRef, { reactions: [...reactions, { emoji, count: 1, userIds: [user.uid] }] });
+      await this.inContext(() =>
+        updateDoc(messageRef, { reactions: [...reactions, { emoji, count: 1, userIds: [user.uid] }] }),
+      );
       return;
     }
 
@@ -170,7 +200,9 @@ export class FirebaseChatService {
         .map((reaction) => (reaction.emoji === emoji ? nextReaction : reaction))
         .filter((reaction) => reaction.count > 0);
 
-      await setDoc(messageRef, { reactions: nextReactions }, { merge: true });
+      await this.inContext(() =>
+        setDoc(messageRef, { reactions: nextReactions }, { merge: true }),
+      );
       return;
     }
 

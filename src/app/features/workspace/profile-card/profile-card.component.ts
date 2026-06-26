@@ -8,6 +8,7 @@ import {
   inject,
   runInInjectionContext,
   signal,
+  untracked,
 } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -57,44 +58,56 @@ export class ProfileCardComponent {
     return this.profileUser()?.profileCategories ?? [];
   });
 
+  protected readonly bioMaxLength = 280;
+
   protected readonly editForm = new FormGroup({
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(60)],
+    }),
     email: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.email],
     }),
     isActive: new FormControl(true, { nonNullable: true }),
     isPublic: new FormControl(true, { nonNullable: true }),
+    bio: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.maxLength(this.bioMaxLength)],
+    }),
   });
 
   constructor() {
+    // WICHTIG: nur auf die ID des geoeffneten Profils reagieren (Dialog auf/zu/
+    // Wechsel) – NICHT auf den kompletten Nutzer. Sonst feuert dieser Effect bei
+    // jeder Hintergrund-Aktualisierung (Praesenz-Heartbeats, Firestore-Snapshots,
+    // eigener Speichervorgang) und setzt isEditing/das Formular zurueck, wodurch
+    // der Bearbeiten-Modus staendig "zurueckspringt".
     effect(() => {
-      const user = this.profileUser();
-      if (!user) {
-        this.isEditing.set(false);
-        this.editForm.reset(
-          {
-            name: '',
-            email: '',
-            isActive: false,
-            isPublic: false,
-          },
-          { emitEvent: false },
-        );
-        return;
-      }
-
-      this.editForm.reset(
-        {
-          name: user.name,
-          email: user.email,
-          isActive: user.isOnline,
-          isPublic: user.isPublic ?? true,
-        },
-        { emitEvent: false },
-      );
-      this.isEditing.set(false);
+      const userId = this.profileDialog.profileUserId();
+      untracked(() => this.resetState(userId ? this.database.findUser(userId) : null));
     });
+  }
+
+  /** Setzt Edit-Zustand zurueck und befuellt das Formular aus dem Nutzer-Snapshot. */
+  private resetState(user: MockUser | null): void {
+    this.isEditing.set(false);
+    this.showCategoryEdit.set(false);
+    this.editAvatarImage.set(null);
+    this.fillForm(user);
+  }
+
+  private fillForm(user: MockUser | null): void {
+    this.editForm.reset(
+      {
+        name: user?.name ?? '',
+        email: user?.email ?? '',
+        isActive: user?.isOnline ?? false,
+        isPublic: user?.isPublic ?? true,
+        bio: user?.bio ?? '',
+      },
+      { emitEvent: false },
+    );
   }
 
   protected closeCard(): void {
@@ -112,34 +125,15 @@ export class ProfileCardComponent {
       return;
     }
 
-    this.editForm.reset(
-      {
-        name: user.name,
-        email: user.email,
-        isActive: user.isOnline,
-        isPublic: user.isPublic ?? true,
-      },
-      { emitEvent: false },
-    );
+    this.fillForm(user);
     this.editAvatarImage.set(null);
     this.isEditing.set(true);
   }
 
   protected cancelEditing(): void {
-    const user = this.profileUser();
-    if (user) {
-      this.editForm.reset(
-        {
-          name: user.name,
-          email: user.email,
-          isActive: user.isOnline,
-          isPublic: user.isPublic ?? true,
-        },
-        { emitEvent: false },
-      );
-    }
-
+    this.fillForm(this.profileUser());
     this.editAvatarImage.set(null);
+    this.showCategoryEdit.set(false);
     this.isEditing.set(false);
   }
 
@@ -168,24 +162,26 @@ export class ProfileCardComponent {
       return;
     }
 
-    const { name, email, isActive, isPublic } = this.editForm.getRawValue();
+    const { name, email, isActive, isPublic, bio } = this.editForm.getRawValue();
     const avatarImage = this.editAvatarImage();
     const updated = this.database.updateCurrentUserProfile({
       name,
       email,
       isOnline: isActive,
       isPublic,
+      bio: bio.trim(),
       ...(avatarImage ? { avatarImage } : {}),
     });
 
     if (updated) {
-      // Aktuellen Profilstand (inkl. Avatar) nach Firestore spiegeln, damit der
-      // Avatar auf allen Geraeten und fuer andere Nutzer gleich angezeigt wird.
+      // Aktuellen Profilstand (inkl. Avatar, Bio) nach Firestore spiegeln, damit er
+      // auf allen Geraeten und fuer andere Nutzer gleich angezeigt wird.
       void runInInjectionContext(this.injector, () =>
         this.firebaseUsers.upsertCurrentUserProfile({
           uid: updated.id,
           email: updated.email,
           name: updated.name,
+          bio: updated.bio ?? null,
           avatarImage: updated.avatarImage ?? null,
           avatarId: typeof updated.avatarId === 'number' ? updated.avatarId : null,
         }),

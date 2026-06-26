@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Firestore, doc, serverTimestamp, setDoc } from '@angular/fire/firestore';
 import { ProfileCategory } from '../database/mock-database.models';
@@ -24,6 +24,7 @@ const MAX_AVATAR_IMAGE_LENGTH = 900_000;
 export class FirebaseUserService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
+  private readonly injector = inject(EnvironmentInjector);
 
   async upsertCurrentUserProfile(profile: FirebaseUserProfile): Promise<void> {
     const currentUser = this.auth.currentUser;
@@ -58,6 +59,8 @@ export class FirebaseUserService {
       data['profileCategories'] = profile.profileCategories;
     }
 
-    await setDoc(doc(this.firestore, 'users', uid), data, { merge: true });
+    await runInInjectionContext(this.injector, () =>
+      setDoc(doc(this.firestore, 'users', uid), data, { merge: true }),
+    );
   }
 }

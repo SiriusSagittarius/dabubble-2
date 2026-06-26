@@ -8,7 +8,7 @@
   left: auto;
   width: 268px;
   height: 72px;
-  border-radius: 30px 25px 0 30px;
+  border-radius: 30px 25px 0px 30px;
   background: #fff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
   display: flex;
@@ -32,8 +32,30 @@
 
 .message-edit-menu-item:hover,
 .message-edit-menu-item:focus-visible {
-  background: #eceefe;
+  background: #636cb6;
   color: #535af1;
+  outline: none;
+}
+
+
+.message-right .message-edit-menu {
+  background: #fff;
+  color: #535af1;
+  border-radius: 0px 25px 30px 25px;
+  top: auto;
+  left: 275px;
+}
+
+.message-right .message-edit-menu-item {
+  color: #000;
+  background: #fff;
+  border-radius: 30px;
+}
+
+.message-right .message-edit-menu-item:hover,
+.message-right .message-edit-menu-item:focus-visible {
+  background: #eceefe;
+  color: #444df2;
   outline: none;
 }
 

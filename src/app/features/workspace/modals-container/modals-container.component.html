@@ -50,7 +50,7 @@
             <line x1="10" y1="3" x2="8" y2="21"></line>
             <line x1="16" y1="3" x2="14" y2="21"></line>
           </svg>
-          <span>Entwicklerteam</span>
+          <span>{{ database.activeChannel().name }}</span>
         </div>
         <div class="add-members-input-wrap">
           @for (member of selectedAddMembers(); track member.id) {
@@ -270,7 +270,7 @@
         <form class="add-channel-members-form" novalidate (submit)="finishAddChannelMembers(); $event.preventDefault()">
           <label class="add-channel-member-option">
             <input type="radio" name="addChannelMemberMode" value="all" [(ngModel)]="addChannelMemberMode" />
-            <span>Alle Mitglieder von Devspace hinzufügen</span>
+            <span>Alle Mitglieder von <span class="add-channel-member-source">{{ addChannelSourceChannelName() }}</span> hinzufügen</span>
           </label>
           <label class="add-channel-member-option">
             <input type="radio" name="addChannelMemberMode" value="selected" [(ngModel)]="addChannelMemberMode" />

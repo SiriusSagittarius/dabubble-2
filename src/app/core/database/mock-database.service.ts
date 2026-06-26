@@ -173,6 +173,13 @@ export class MockDatabaseService {
     this.authService.removeContact(userId);
   }
 
+  deleteDirectConversation(otherUserId: string): boolean {
+    if (this.isGuest()) {
+      return false;
+    }
+    return this.messageService.deleteDirectConversation(otherUserId);
+  }
+
   addExistingContact(userId: string): void {
     if (this.isGuest()) {
       return;

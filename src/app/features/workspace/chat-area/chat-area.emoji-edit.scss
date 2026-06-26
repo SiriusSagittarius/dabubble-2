@@ -154,7 +154,7 @@
 .channel-edition-card {
   width: min(872px, calc(100vw - 32px));
   height: min(660px, calc(100vh - 48px));
-  border-radius: 30px;
+  border-radius: 0 30px 30px 30px;
   background: #fff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   overflow: hidden;
@@ -232,10 +232,8 @@
 .channel-edition-edit-button {
   border: 0;
   background: transparent;
-  padding: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  padding: 4px 12px;
+  border-radius: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -252,7 +250,7 @@
 .channel-edition-action-icon {
   width: 24px;
   height: 24px;
-  display: block;
+  display: none;
   background-color: #1c1b1f;
   -webkit-mask-position: center;
   mask-position: center;
@@ -270,6 +268,32 @@
 .channel-edition-edit-button:hover .channel-edition-action-icon,
 .channel-edition-edit-button:focus-visible .channel-edition-action-icon {
   background-color: #535af1;
+}
+
+/* Desktop: "Bearbeiten" / "Speichern" als blauer Text statt Stift-Icon. */
+.channel-edition-action-text {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #444df2;
+}
+
+/* Mobil (<= 530px): wieder Stift-/Haken-Icon als runder Button, Text aus. */
+@media (max-width: 530px) {
+  .channel-edition-edit-button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .channel-edition-action-icon {
+    display: block;
+  }
+
+  .channel-edition-action-text {
+    display: none;
+  }
 }
 
 .channel-edition-value {

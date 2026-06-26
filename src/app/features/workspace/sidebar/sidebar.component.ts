@@ -255,20 +255,11 @@ export class Sidebar {
     this.closeContactMenu();
   }
 
-  protected contactAddToChannel(userId: string): void {
-    const channelId = this.database.selectedChannelId();
-    if (channelId) {
-      this.database.addMembersToChannel(channelId, [userId]);
-    } else {
-      this.uiState.openAddMembersPanel();
-    }
-    this.closeContactMenu();
-  }
-
-  // Zweistufiges Loeschen: erster Klick "scharf schalten", zweiter Klick loescht.
+  // Zweistufiges Loeschen: erster Klick "scharf schalten", zweiter Klick loescht
+  // nur die DM-Unterhaltung mit diesem Nutzer, nicht den Kontakt selbst.
   protected contactDelete(userId: string): void {
     if (this.deleteArmedId() === userId) {
-      this.database.removeContact(userId);
+      this.database.deleteDirectConversation(userId);
       this.deleteArmedId.set(null);
       this.closeContactMenu();
     } else {

@@ -110,6 +110,18 @@
   word-break: break-all;
 }
 
+.profile-bio {
+  margin: 0;
+  padding-left: 30px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-gray);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
 .profile-message-action {
   margin-top: 24px;
   display: flex;
@@ -183,6 +195,32 @@
 
 .form-input:focus {
   border-color: var(--primary-color);
+}
+
+.form-input.invalid {
+  border-color: #e53e3e;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.45;
+  font-family: var(--font-family);
+}
+
+.char-counter {
+  align-self: flex-end;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0aec0;
+}
+
+.field-error {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 600;
+  color: #e53e3e;
 }
 
 .checkbox-group {

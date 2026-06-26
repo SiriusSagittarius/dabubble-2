@@ -3,12 +3,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MockDatabaseService } from '../../../core/database/mock-database.service';
-import { ThreadReactionButtonsComponent } from './thread-reaction-buttons.component';
 
 @Component({
   selector: 'app-thread-panel',
   standalone: true,
-  imports: [FormsModule, PickerComponent, ThreadReactionButtonsComponent],
+  imports: [FormsModule, PickerComponent],
   templateUrl: './thread-panel.component.html',
   styleUrls: [
     './thread-panel.header-messages.scss',
@@ -89,11 +88,6 @@ export class ThreadPanel {
   protected toggleThreadEditMenu(messageId: string): void {
     this.activeThreadReactionBarId.set(null);
     this.activeThreadEditMenuId.update((activeId) => (activeId === messageId ? null : messageId));
-  }
-
-  protected toggleThreadReactionBar(messageId: string): void {
-    this.activeThreadEditMenuId.set(null);
-    this.activeThreadReactionBarId.update((activeId) => (activeId === messageId ? null : messageId));
   }
 
   protected closeThreadReactionBar(): void {

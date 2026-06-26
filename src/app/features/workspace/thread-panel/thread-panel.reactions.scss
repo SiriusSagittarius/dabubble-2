@@ -95,9 +95,9 @@
   right: auto;
   transform: translate(-50%, -50%);
   z-index: 35;
-  width: 340px;
+  width: max-content;
   height: min(360px, calc(100vh - 120px));
-  max-width: min(340px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
   overflow: hidden;
   border: 1px solid #adb0d9;
   border-radius: 20px;

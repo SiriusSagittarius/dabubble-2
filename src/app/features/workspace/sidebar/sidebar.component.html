@@ -7,7 +7,7 @@
       </button>
     </div>
     <button type="button" class="workspace-edit-button" aria-label="Neue Nachricht" (click)="openMainChatIntro()">
-      <img src="/assets/icons/edit.svg" alt="" class="workspace-edit-icon" />
+      <span class="workspace-edit-icon" aria-hidden="true"></span>
     </button>
   </div>
 
@@ -314,9 +314,6 @@
                   </button>
                   @if (openContactMenuId() === user.id) {
                     <div class="kontakte-context-menu" role="menu">
-                      @if (!database.isGuest()) {
-                        <button type="button" class="kontakte-context-item" (click)="contactAddToChannel(user.id)">Hinzufügen</button>
-                      }
                       <button type="button" class="kontakte-context-item" (click)="contactMessage(user.id)">Nachricht</button>
                       <button type="button" class="kontakte-context-item" (click)="contactProfile(user.id)">Profil</button>
                       @if (!database.isGuest()) {

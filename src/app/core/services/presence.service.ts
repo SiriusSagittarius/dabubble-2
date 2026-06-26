@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Firestore, doc, serverTimestamp, setDoc } from '@angular/fire/firestore';
 
@@ -18,6 +18,7 @@ export class PresenceService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
   private readonly database = inject(MockDatabaseService);
+  private readonly injector = inject(EnvironmentInjector);
 
   private authUnsubscribe: (() => void) | null = null;
   private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
@@ -72,7 +73,9 @@ export class PresenceService {
     }
 
     try {
-      await setDoc(doc(this.firestore, 'users', uid), { lastActive: serverTimestamp() }, { merge: true });
+      await runInInjectionContext(this.injector, () =>
+        setDoc(doc(this.firestore, 'users', uid), { lastActive: serverTimestamp() }, { merge: true }),
+      );
     } catch {
       // Netzwerk-/Rechtefehler hier bewusst ignorieren – Praesenz ist best-effort.
     }
