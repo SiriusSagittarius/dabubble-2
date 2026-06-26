@@ -1,0 +1,180 @@
+/* ==========================================
+   RESPONSIVE: HEADER (Mobile/Tablet)
+   ========================================== */
+/* Logo-/Profil-Abstand nur auf grossem Desktop (>1480px) */
+@media (max-width: 1480px) {
+  .header .logo-container {
+    padding-left: 0;
+  }
+
+  :host ::ng-deep app-profile {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1425px) {
+  .header.header {
+    height: 115px;
+    grid-template-columns: auto 1fr auto;
+    grid-auto-flow: column;
+    padding: 0 20px;
+  }
+
+  .header .searchbar-container {
+    min-width: 0;
+  }
+
+  ::ng-deep app-profile .profile-container {
+    width: auto;
+  }
+
+  ::ng-deep app-profile .profile-name {
+    display: none;
+  }
+
+  ::ng-deep app-profile .profile-arrow {
+    display: none;
+  }
+
+  ::ng-deep app-profile .profile-image.profile-image {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 960px) {
+  .header.header {
+    height: 80px;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "logo . profile";
+    grid-auto-flow: column;
+  }
+
+  .header .logo-container {
+    grid-area: logo;
+  }
+
+  .header .searchbar-container,
+  .header .searchbar-container-mobile {
+    display: none;
+  }
+
+  .header-searchbar-row.header-searchbar-row {
+    display: flex;
+    height: 48px;
+  }
+
+  .header-searchbar-row .searchbar-container-mobile.searchbar-container-mobile {
+    display: flex;
+  }
+
+  .header-searchbar-row .searchbar {
+    min-height: 48px;
+  }
+
+  ::ng-deep app-profile {
+    grid-area: profile;
+  }
+}
+
+
+
+@media (max-width: 490px) {
+  .header.header {
+    gap: 8px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .header .logo-container {
+    width: auto;
+  }
+}
+
+.mobile-search-box {
+  display: none !important;
+}
+
+@media (max-width: 430px) {
+  .mobile-search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 60px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(68, 77, 242, 0.15);
+  }
+
+  .mobile-search-box-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .mobile-search-box-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font: inherit;
+    font-size: 16px;
+    color: #1f1f1f;
+    background: transparent;
+  }
+
+  .mobile-search-box-input::placeholder {
+    color: #8f98c8;
+  }
+
+  .mobile-search-box-close {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    color: #8f98c8;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .header.header {
+    grid-template-columns: 130px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding:0px 5px;
+  }
+  .devspace-logo {
+    width: 50px;
+    height: 50px;
+  }
+  .header .logo {
+    width: 161.5px;
+    height: 45px;
+    flex-shrink: 0;
+  }
+
+  .header-searchbar-row .searchbar {
+    min-height: 40px;
+    padding: 0 40px 0 14px;
+    font-size: 14px;
+  }
+
+  .header-searchbar-row .searchbar-icon {
+    width: 18px;
+    height: 18px;
+    right: 12px;
+  }
+  .header-searchbar-row.header-searchbar-row {
+    display: none;
+  }
+  ::ng-deep app-profile .profile-image.profile-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  ::ng-deep app-profile .profile-dropdown {
+    right: -8px;
+    max-width: 200px;
+  }
+}

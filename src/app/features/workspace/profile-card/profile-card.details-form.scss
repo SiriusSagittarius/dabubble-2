@@ -1,0 +1,370 @@
+:host {
+  --primary-color: #535af1;
+  --primary-dark: #444df2;
+  --text-black: #000000;
+  --text-gray: #666666;
+  --green-active: #92c83e;
+  --bg-white: #ffffff;
+  --font-family: Nunito, sans-serif;
+}
+
+.profile-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-name {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-family);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-black);
+  word-break: break-word;
+}
+
+.profile-self-tag {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--primary-dark);
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #cccccc;
+  flex: 0 0 auto;
+}
+
+.status-dot.active {
+  background: var(--green-active);
+}
+
+.status-dot.offline {
+  background: #adb0d9;
+}
+
+.status-text {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--green-active);
+  font-family: var(--font-family);
+}
+
+.status-text.offline {
+  color: #adb0d9;
+}
+
+.info-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-family);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text-black);
+}
+
+.mail-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  flex: 0 0 auto;
+  filter: brightness(0) saturate(100%);
+}
+
+.profile-email {
+  margin: 0;
+  padding-left: 30px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--primary-color);
+  word-break: break-all;
+}
+
+.profile-message-action {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.message-button {
+  min-width: 160px;
+  height: 49px;
+  border: 0;
+  border-radius: 25px;
+  background: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  font-family: var(--font-family);
+  font-size: 18px;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+}
+
+.message-button:hover,
+.message-button:focus-visible {
+  background: var(--primary-dark);
+  outline: none;
+}
+
+.message-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* ---- Edit form ---- */
+.edit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-gray);
+}
+
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.checkbox-text {
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checkbox-hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: #686868;
+}
+
+.switch-label {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch-label input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: 0.4s;
+}
+
+.switch-label input:checked + .switch-slider {
+  background-color: var(--green-active);
+}
+
+.switch-label input:checked + .switch-slider::before {
+  transform: translateX(24px);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.btn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-primary:focus-visible:not(:disabled) {
+  background-color: var(--primary-dark);
+  outline: none;
+}
+
+.btn-secondary {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background-color: #e2e8f0;
+  outline: none;
+}
+
+.btn-edit-categories {
+  width: 100%;
+  height: 49px;
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+
+  img {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) saturate(100%) invert(31%) sepia(69%) saturate(1376%) hue-rotate(246deg) brightness(103%) contrast(104%);
+  }
+
+  &:hover {
+    background: var(--primary-color);
+    color: #fff;
+
+    img {
+      filter: brightness(0) saturate(100%) invert(100%);
+    }
+  }
+}
+
+.categories-edit-section-wrapper {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.categories-section-title {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-black);
+}
+
+.btn-full-width {
+  width: 100%;
+}
+
+@media (max-width: 430px) {
+  .profile-name {
+    font-size: 22px;
+  }
+
+  .status-text {
+    font-size: 16px;
+  }
+
+  .btn-edit-categories {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .categories-section-title {
+    font-size: 16px;
+  }
+}

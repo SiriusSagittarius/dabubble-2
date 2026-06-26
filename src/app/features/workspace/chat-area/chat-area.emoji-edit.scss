@@ -1,0 +1,538 @@
+.emoji-picker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 34;
+  background: transparent;
+}
+
+.emoji-picker-popover {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 35;
+  width: 680px;
+  height: 520px;
+  max-width: min(680px, calc(100vw - 32px));
+  max-height: min(520px, calc(100vh - 120px));
+  overflow: hidden;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+.emoji-picker-popover emoji-mart { display: block; height: 100%; }
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart {
+  width: 100% !important;
+  height: 100%;
+  border: 0;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  font-family: Nunito, sans-serif;
+  overflow: hidden;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-bar {
+  border: 0;
+  flex: 0 0 auto;
+  order: 1;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchors {
+  height: 84px;
+  padding: 12px 16px 10px;
+  border-bottom: 2px solid #c7cbfa;
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor {
+  flex: 1 1 0;
+  min-width: 0;
+  align-self: stretch;
+  min-height: 52px;
+  padding: 4px 2px;
+  border-radius: 14px;
+  background: #e8eaff;
+  border: 1px solid #c7cbfa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.15s ease;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor svg {
+  fill: #2c2f8f !important;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor:hover,
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor:focus {
+  background: #d4d7ff;
+  border-color: #8589f0;
+  outline: 2px solid #8589f0;
+  outline-offset: -1px;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor-selected {
+  background: #444df2;
+  border-color: #3138e0;
+}
+
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor-selected svg {
+  fill: #fff !important;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-anchor-selected .emoji-mart-anchor-bar {
+  background: #fff !important;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-preview,
+:host ::ng-deep .emoji-picker-popover .emoji-mart-category-label,
+:host ::ng-deep .emoji-picker-popover .emoji-mart-search {
+  display: none;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-scroll {
+  order: 2;
+  height: calc(100% - 84px);
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 18px 16px;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-scroll::-webkit-scrollbar { display: none; width: 0; }
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-category-list { padding: 0; }
+
+:host ::ng-deep .emoji-picker-popover .emoji-mart-category-list li { margin: 4px; }
+
+@media (max-width: 520px) {
+  .emoji-picker-popover {
+    /* Basis-Zentrierung (top/left 50% + translate) zurücksetzen, sonst schiebt
+       das verbleibende transform den Picker um die halbe Höhe nach oben in den
+       Header. Stattdessen unten rechts über dem Eingabefeld verankern. */
+    top: auto !important;
+    left: auto !important;
+    right: 0 !important;
+    bottom: 200px !important;
+    transform: none !important;
+    width: 92% !important;
+    max-width: 92% !important;
+    height: min(380px, calc(100dvh - 280px)) !important;
+    max-height: min(380px, calc(100dvh - 280px)) !important;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.16) !important;
+    z-index: 10000 !important;
+  }
+}
+
+.channel-edition-backdrop {
+  position: fixed;
+  inset: 0;
+  /* Über dem Header (z-index 100), damit die Karte als echtes Modal ganz oben
+     liegt und nicht vom Header/Workspace ueberlagert wird (Desktop + Mobil). */
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.channel-edition-card {
+  width: min(872px, calc(100vw - 32px));
+  height: min(660px, calc(100vh - 48px));
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  position: relative;
+  padding: 36px 40px 32px;
+  box-sizing: border-box;
+}
+
+.channel-edition-top-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.channel-edition-top-title {
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 33px;
+  color: #000;
+}
+
+.channel-edition-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  color: #000;
+  cursor: pointer;
+}
+
+.channel-edition-close:hover,
+.channel-edition-close:focus-visible {
+  background: #eceefe;
+  color: #444df2;
+  outline: none;
+}
+
+.channel-edition-section {
+  position: absolute;
+  left: 40px;
+  width: calc(100% - 80px);
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 20px 22px 18px;
+}
+
+.channel-edition-section-name { top: 104px; height: 144px; }
+
+.channel-edition-section-description { top: 270px; height: 270px; }
+
+.channel-edition-section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.channel-edition-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.channel-edition-edit-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.channel-edition-edit-button:hover,
+.channel-edition-edit-button:focus-visible {
+  background: #eceefe;
+  outline: none;
+}
+
+.channel-edition-action-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  background-color: #1c1b1f;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: background-color 0.15s ease;
+}
+
+.channel-edition-action-icon-edit { -webkit-mask-image: url('/assets/icons/edit-pencil.svg'); mask-image: url('/assets/icons/edit-pencil.svg'); }
+
+.channel-edition-action-icon-save { -webkit-mask-image: url('/assets/icons/check-circle.svg'); mask-image: url('/assets/icons/check-circle.svg'); }
+
+.channel-edition-edit-button:hover .channel-edition-action-icon,
+.channel-edition-edit-button:focus-visible .channel-edition-action-icon {
+  background-color: #535af1;
+}
+
+.channel-edition-value {
+  margin-top: 18px;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  color: #000;
+}
+
+.channel-edition-value-channel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.channel-edition-channel-hash { font-size: 22px; font-weight: 700; }
+
+.channel-edition-description {
+  margin-top: 18px;
+  max-height: 96px;
+  overflow: hidden;
+}
+
+.channel-edition-name-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.channel-edition-input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+.channel-edition-input-description { margin-top: 18px; }
+
+.channel-edition-divider {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 144px;
+  height: 1px;
+  background: #e2e4ff;
+}
+
+.channel-edition-created-by { margin-top: 24px; }
+
+.channel-edition-created-label {
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #000;
+}
+
+.channel-edition-created-user {
+  display: block;
+  margin-top: 18px;
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #000;
+}
+
+.channel-edition-leave-button {
+  position: absolute;
+  bottom: 28px;
+  height: 49px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 25px;
+  background: #444df2;
+  color: #fff;
+  font-family: Nunito, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.channel-edition-leave-button:hover,
+.channel-edition-leave-button:focus-visible {
+  background: #2733f0;
+  outline: none;
+}
+
+/* Mobiler Kopf nur ≤430px (siehe Media Query unten) */
+.channel-edition-mobile-head {
+  display: none;
+}
+
+@media (max-width: 430px) {
+  .channel-edition-backdrop {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+  }
+
+  /* Desktop-Kopfzeile (# Name + X) durch den mobilen App-Kopf ersetzen */
+  .channel-edition-top-row {
+    display: none;
+  }
+
+  .channel-edition-mobile-head {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .channel-edition-mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .channel-edition-mobile-back {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .channel-edition-mobile-back:hover,
+  .channel-edition-mobile-back:focus-visible {
+    background: #eceefe;
+    outline: none;
+  }
+
+  .channel-edition-mobile-logo {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+  }
+
+  .channel-edition-mobile-devspace {
+    font-family: Nunito, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .channel-edition-mobile-avatar {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    margin-left: auto;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .channel-edition-mobile-row2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .channel-edition-mobile-channel {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: Nunito, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .channel-edition-mobile-addmember {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .channel-edition-mobile-addmember:hover,
+  .channel-edition-mobile-addmember:focus-visible {
+    background: #eceefe;
+    outline: none;
+  }
+
+  .channel-edition-mobile-addmember img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .channel-edition-card {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    overflow-y: auto;
+    padding: 28px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .channel-edition-top-title {
+    font-size: 22px;
+  }
+
+  .channel-edition-section {
+    position: static;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    padding: 24px 22px;
+  }
+
+  .channel-edition-section-name,
+  .channel-edition-section-description {
+    top: auto;
+    height: auto;
+  }
+
+  .channel-edition-value {
+    margin-top: 16px;
+  }
+
+  .channel-edition-description {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .channel-edition-divider {
+    position: static;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .channel-edition-leave-button {
+    font-size: 17px;
+    padding: 0px !important;
+    width: 50%;
+    align-self: self-end;
+  }
+}

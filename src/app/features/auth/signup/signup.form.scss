@@ -1,0 +1,342 @@
+@use 'sass:color';
+@use '../../../styles/fluid' as *;
+
+    $purple-1: #444DF2;
+    $purple-2: #797EF3;
+    $light-purple-bg: #ECEEFE;
+    $lines-color: #ADB0D9;
+    $error-pink: #ED1E79;
+    $text-gray: #686868;
+    $menu-color: #42526E;
+
+    // Formular im Fluss (kein absolute) -> skaliert flüssig, nichts kollidiert
+    .login-form {
+      position: relative;
+      width: 100%;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: fluid(431, 1920, 22, 34);
+      margin-top: fluid(431, 1920, 18, 28);
+
+      @media (max-width: 430px) {
+        gap: fluid(320, 430, 18, 22);
+        margin-top: fluid(320, 430, 14, 18);
+      }
+    }
+
+    // Input-Reihen: im Fluss, Inline-top aus dem Template wird überschrieben
+    .input-group {
+      position: relative !important;
+      width: 100%;
+      min-height: 60px;
+      top: auto !important;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      @media (max-width: 430px) {
+        min-height: 50px;
+      }
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0 fluid(431, 1920, 24, 32);
+      width: 100%;
+      height: fluid(431, 1920, 50, 60);
+      background: $light-purple-bg;
+      border-radius: 100px;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      box-sizing: border-box;
+
+      &:hover {
+        border-color: #000000;
+      }
+
+      &:focus-within {
+        border-color: $purple-1;
+        background-color: color.adjust($light-purple-bg, $lightness: 2%);
+      }
+
+      &:focus-within .input-icon {
+        color: #000000;
+      }
+
+      .input-icon {
+        width: 24px;
+        height: 24px;
+        color: $text-gray;
+        margin-right: 20px;
+        flex-shrink: 0;
+      }
+
+      .form-control {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 120%;
+        color: $text-gray;
+        outline: none;
+        font-size: fluid(431, 1920, 16, 18);
+
+        &::placeholder {
+          color: rgba($text-gray, 0.6);
+        }
+      }
+
+      .btn-toggle-password {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 10px;
+        color: $text-gray;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: $purple-1;
+        }
+
+        svg {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+
+    // Fehlermeldung unterhalb der Eingabefelder (absolut -> kein Layout-Shift)
+    .error-text {
+      position: absolute;
+      bottom: -20px;
+      left: fluid(431, 1920, 20, 32);
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 1.4;
+      color: $error-pink;
+      white-space: nowrap;
+
+      @media (max-width: 430px) {
+        left: 16px;
+        white-space: normal;
+      }
+    }
+
+    // Passwort-Richtlinie: dauerhaft sichtbarer Hinweis im Fluss unter dem Feld.
+    // Wird pink, sobald das Feld berührt und ungültig ist.
+    .password-hint {
+      margin: 0 0 0 fluid(431, 1920, 20, 32);
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 1.4;
+      color: $text-gray;
+      transition: color 0.2s ease;
+
+      &--error {
+        color: $error-pink;
+      }
+
+      @media (max-width: 430px) {
+        margin-left: 16px;
+      }
+    }
+
+    // Untere Reihe: Datenschutz-Hinweis + Weiter-Button, gestapelt im Fluss
+    .bottom-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: fluid(431, 1920, 12, 18);
+      margin-top: fluid(431, 1920, 20, 30);
+
+      @media (max-width: 430px) {
+        gap: 12px;
+        margin-top: fluid(320, 430, 16, 20);
+      }
+    }
+
+    .policy-error-text {
+      margin: 0 0 0 fluid(431, 1920, 30, 40);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 1.4;
+      color: transparent;
+      visibility: hidden;
+
+      &--visible {
+        color: $error-pink;
+        visibility: visible;
+        animation: fadeIn 0.2s ease-out forwards;
+      }
+
+      @media (max-width: 430px) {
+        margin-left: 24px;
+      }
+    }
+
+    // Checkbox für Datenschutzerklärung
+    .policy-container {
+      position: relative;
+      width: auto;
+      left: 0;
+      top: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+
+      @media (max-width: 640px) {
+        align-items: flex-start;
+      }
+
+      &:has(.link:hover),
+      &:has(.link:focus-visible) {
+        .custom-checkbox:not(.checked) {
+          background-color: $light-purple-bg;
+          border-color: $purple-1;
+        }
+
+        .custom-checkbox.checked {
+          border-color: $purple-1;
+        }
+      }
+    }
+
+    .hidden-checkbox {
+      display: none;
+    }
+
+    .custom-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid $purple-2;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+
+      &.checked {
+        background-color: $purple-2;
+        border-color: $purple-2;
+      }
+
+      .check-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .label-text {
+      font-family: 'Open Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 120%;
+      color: $menu-color;
+
+      .link {
+        font-family: 'Figtree', sans-serif;
+        color: $purple-2;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 18px;
+        padding: 2px 6px;
+        margin: -2px -6px;
+        border-radius: 30px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+          background-color: $light-purple-bg;
+          color: $purple-1;
+          outline: none;
+        }
+      }
+    }
+
+    // Weiter-Button im Fluss, unten rechts
+    .action-footer {
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+      align-self: flex-end;
+      width: auto;
+      height: auto;
+
+      .btn-primary {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 107px;
+        height: 49px;
+        background: $purple-1;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 25px;
+        color: #FFFFFF;
+
+        &:hover {
+          background: color.adjust($purple-1, $lightness: -8%);
+        }
+
+        &:active {
+          transform: scale(0.97);
+        }
+      }
+    }
+
+    @keyframes signupSuccessIn {
+      from {
+        opacity: 0;
+        transform: translate3d(120px, 90px, 0);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }

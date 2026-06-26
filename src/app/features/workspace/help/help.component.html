@@ -1,0 +1,77 @@
+<section class="help" aria-label="Hilfe und erste Schritte">
+  <div class="help-card">
+    @if (!database.onboardingActive()) {
+      <button type="button" class="help-close" aria-label="Hilfe schließen" (click)="close()">✕</button>
+    }
+
+    <header class="help-header">
+      <img src="/assets/icons/workspace.svg" alt="" class="help-logo" />
+      <h1 class="help-title">Willkommen bei DABubble</h1>
+      <p class="help-subtitle">
+        Dein Team-Chat: Unterhalte dich in Channels, antworte in Threads,
+        schreibe Direktnachrichten und reagiere mit Emojis.
+      </p>
+    </header>
+
+    @if (database.onboardingActive()) {
+      <div class="help-onboarding-note" role="note">
+        <strong>Du bist startklar – aber noch in keinem Channel.</strong>
+        Solange du keinem Channel beigetreten bist, kannst du noch keine Nachrichten
+        senden oder lesen. Erstelle einen Channel oder tritt links einem bestehenden bei,
+        um loszulegen.
+      </div>
+    }
+
+    <h2 class="help-section-title">Was du tun kannst</h2>
+    <ul class="help-features">
+      <li class="help-feature">
+        <span class="help-feature-icon">#</span>
+        <div class="help-feature-body">
+          <span class="help-feature-name">Channels</span>
+          <span class="help-feature-text">Themen-Räume fürs Team – Nachrichten, die alle Mitglieder sehen.</span>
+        </div>
+      </li>
+      <li class="help-feature">
+        <span class="help-feature-icon">💬</span>
+        <div class="help-feature-body">
+          <span class="help-feature-name">Threads</span>
+          <span class="help-feature-text">Antworte gezielt auf eine Nachricht, ohne den Channel vollzuschreiben.</span>
+        </div>
+      </li>
+      <li class="help-feature">
+        <span class="help-feature-icon">@</span>
+        <div class="help-feature-body">
+          <span class="help-feature-name">Direktnachrichten</span>
+          <span class="help-feature-text">Schreibe einzelnen Personen privat.</span>
+        </div>
+      </li>
+      <li class="help-feature">
+        <span class="help-feature-icon">😊</span>
+        <div class="help-feature-body">
+          <span class="help-feature-name">Reaktionen</span>
+          <span class="help-feature-text">Reagiere schnell mit Emojis auf Nachrichten.</span>
+        </div>
+      </li>
+      <li class="help-feature">
+        <span class="help-feature-icon">👥</span>
+        <div class="help-feature-body">
+          <span class="help-feature-name">Kontakte</span>
+          <span class="help-feature-text">Finde öffentliche Kontakte über die Suche und füge sie deiner Liste hinzu.</span>
+        </div>
+      </li>
+    </ul>
+
+    <h2 class="help-section-title">So legst du los</h2>
+    <ol class="help-steps">
+      <li><span class="help-step-num">1</span><span>Erstelle einen Channel – oder tritt links einem bestehenden bei.</span></li>
+      <li><span class="help-step-num">2</span><span>Lade Mitglieder ein oder füge Kontakte über die Kontakte-Suche hinzu.</span></li>
+      <li><span class="help-step-num">3</span><span>Schreibe deine erste Nachricht, starte Threads und reagiere mit Emojis.</span></li>
+    </ol>
+
+    @if (!database.isGuest()) {
+      <div class="help-actions">
+        <button type="button" class="help-cta" (click)="createChannel()">Channel erstellen</button>
+      </div>
+    }
+  </div>
+</section>

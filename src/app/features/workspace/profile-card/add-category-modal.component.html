@@ -1,0 +1,87 @@
+@if (isOpen()) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">Neue Kategorie erstellen</h2>
+        <button type="button" class="modal-close" (click)="onClose()" aria-label="Schliessen">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form class="modal-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="modal-name">Kategorie Name *</label>
+          <input
+            id="modal-name"
+            type="text"
+            class="form-input"
+            formControlName="name"
+            placeholder="z.B. Skills, Interessen, Links..."
+            maxlength="30"
+          />
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <span class="error-message">Der Name ist erforderlich (max. 30 Zeichen)</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Icon auswählen *</label>
+          <div class="emoji-selector">
+            <button
+              type="button"
+              class="emoji-display"
+              (click)="showEmojiPicker.set(!showEmojiPicker())"
+              [attr.aria-expanded]="showEmojiPicker()"
+            >
+              <span class="emoji-large">{{ selectedEmoji() }}</span>
+              <span class="emoji-label">Klick zum ändern</span>
+            </button>
+
+            @if (showEmojiPicker()) {
+              <div class="emoji-picker-grid">
+                @for (emoji of getCommonEmojis(); track emoji) {
+                  <button
+                    type="button"
+                    class="emoji-option"
+                    [class.selected]="emoji === selectedEmoji()"
+                    (click)="onEmojiSelect(emoji)"
+                  >
+                    {{ emoji }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-color">Farbe wählen *</label>
+          <div class="gradient-selector">
+            @for (gradient of getGradients(); track gradient.id) {
+              <button
+                type="button"
+                class="gradient-option"
+                [class.selected]="form.get('color')?.value === gradient.id"
+                [style.background]="getGradientCSS(gradient.id)"
+                [attr.aria-label]="gradient.name"
+                (click)="form.get('color')?.setValue(gradient.id)"
+              >
+                @if (form.get('color')?.value === gradient.id) {
+                  <span class="checkmark">✓</span>
+                }
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="onClose()">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Erstellen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

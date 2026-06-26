@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -48,11 +49,17 @@
             "assets": [
               {
                 "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+              "src/app/styles/styles.scss"
             ]
           },
           "configurations": {
@@ -60,13 +67,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "20kB",
+                  "maximumError": "25kB"
                 }
               ],
               "outputHashing": "all"

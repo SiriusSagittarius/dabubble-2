@@ -1,0 +1,326 @@
+import { Injectable, computed, inject, signal } from '@angular/core';
+
+import { MOCK_DATABASE_SEED } from './mock-database.seed';
+import { UiStateService } from '../services/ui-state.service';
+import { MockChannel, MockDatabaseState, MockUser } from './mock-database.models';
+import { cloneState, dmChannelId, formatTime, isOnlineFromLastActive } from './mock-database.utils';
+
+const STORAGE_KEY = 'dabubble.mock-database.v1';
+
+// Platzhalter-Channel, damit Templates gefahrlos auf .name/.id usw. zugreifen
+// koennen, wenn (noch) kein Channel existiert (z. B. leere Firestore-Daten).
+const EMPTY_CHANNEL: MockChannel = {
+  id: '',
+  name: '',
+  description: '',
+  memberIds: [],
+  createdBy: '',
+  createdAt: '',
+};
+
+@Injectable({ providedIn: 'root' })
+export class MockDatabaseStore {
+  private readonly uiState = inject(UiStateService);
+  readonly state = signal<MockDatabaseState>(this.loadState());
+
+  readonly users = computed(() => this.state().users);
+  readonly channels = computed(() => this.state().channels);
+  readonly messages = computed(() => this.state().messages);
+  readonly threads = computed(() => this.state().threads);
+  readonly selectedChannelId = computed(() => this.state().selectedChannelId);
+  readonly recentReactionEmojis = computed(() => {
+    const fallback = ['👍', '❤️', '😂', '😮', '😢'];
+    const recent = this.state().recentReactionEmojis.slice(0, 5).filter(Boolean);
+
+    return recent.length > 0 ? recent : fallback;
+  });
+  readonly currentUser = computed(() => this.findUser(this.state().currentUserId));
+  readonly isGuest = computed(() => this.state().isGuestSession ?? false);
+  readonly contacts = computed(() => this.state().users);
+
+  // Kontakte, die der aktuelle Nutzer sehen darf. Gaeste sehen nur Mitglieder
+  // der Channels, denen sie beigetreten sind; alle anderen sehen alle Nutzer.
+  readonly visibleContacts = computed(() => {
+    const users = this.state().users;
+    if (!this.isGuest()) {
+      return users;
+    }
+
+    const userId = this.state().currentUserId;
+    const memberIds = new Set<string>();
+    for (const channel of this.state().channels) {
+      if (channel.memberIds.includes(userId)) {
+        for (const id of channel.memberIds) {
+          memberIds.add(id);
+        }
+      }
+    }
+
+    return users.filter((user) => memberIds.has(user.id));
+  });
+  readonly directMessageUsers = computed(() => {
+    const currentUser = this.currentUser();
+    const users = this.state().users;
+
+    if (!currentUser) {
+      return users;
+    }
+
+    return [currentUser, ...users.filter((user) => user.id !== currentUser.id)];
+  });
+
+  // Tatsaechlich gefuehrte Direktnachrichten: Nutzer, mit denen der aktuelle
+  // User schon einen DM-Verlauf hat (unabhaengig von Channel-Mitgliedschaften).
+  // Dadurch bleibt die DM-Liste leer, solange keine DM geschrieben wurde, und
+  // wird durch Channel-Beitritt/-Verlassen nicht beeinflusst.
+  readonly directMessagePartners = computed(() => {
+    const currentUser = this.currentUser();
+    if (!currentUser) {
+      return [];
+    }
+
+    const dmChannelIds = new Set(
+      this.state()
+        .messages.map((message) => message.channelId)
+        .filter((id) => id.startsWith('dm-')),
+    );
+
+    return this.state().users.filter(
+      (user) => user.id !== currentUser.id && dmChannelIds.has(dmChannelId(currentUser.id, user.id)),
+    );
+  });
+
+  readonly contactUsers = computed(() => {
+    const ids = this.state().contactUserIds ?? [];
+    return this.state().users.filter(u => ids.includes(u.id));
+  });
+
+  readonly joinedChannels = computed(() => {
+    const userId = this.state().currentUserId;
+    return this.state().channels.filter(c => c.memberIds.includes(userId));
+  });
+
+  // Onboarding-Zustand: eingeloggter (kein Gast) Nutzer, der noch keinem Channel
+  // beigetreten ist / erstellt wurde / eingeladen wurde. Fuer ihn wird die Hilfe
+  // als Startseite gezeigt und Nachrichten-/Channel-Funktionen sind gesperrt.
+  readonly onboardingActive = computed(() =>
+    !this.isGuest() && this.currentUser() != null && this.joinedChannels().length === 0
+  );
+
+  readonly availablePublicChannels = computed(() => {
+    const userId = this.state().currentUserId;
+    return this.state().channels.filter(c => !c.isPrivate && !c.memberIds.includes(userId));
+  });
+
+  readonly allPublicChannels = computed(() =>
+    this.state().channels.filter(c => !c.isPrivate)
+  );
+
+  // Alle Channels, die der aktuelle User sehen darf: oeffentlich ODER er ist Mitglied.
+  // Einzige Quelle fuer Suche/Mentions, damit private Channels nirgends leaken.
+  readonly visibleChannels = computed(() => {
+    const userId = this.state().currentUserId;
+    return this.state().channels.filter(c => !c.isPrivate || c.memberIds.includes(userId));
+  });
+
+  readonly activeChannel = computed(() => {
+    const state = this.state();
+    return state.channels.find((channel) => channel.id === state.selectedChannelId) ?? state.channels[0] ?? EMPTY_CHANNEL;
+  });
+
+  readonly activeChannelMembers = computed(() => {
+    const channel = this.activeChannel();
+    if (!channel) {
+      return [];
+    }
+
+    return channel.memberIds
+      .map((userId) => this.findUser(userId))
+      .filter((user): user is MockUser => !!user);
+  });
+
+  readonly activeDirectMessageChannelId = computed(() => {
+    const otherUserId = this.uiState.selectedDirectMessageUserId();
+    const currentUser = this.currentUser();
+
+    if (!otherUserId || !currentUser) {
+      return null;
+    }
+
+    return dmChannelId(currentUser.id, otherUserId);
+  });
+
+  readonly activeMessageChannelId = computed(() => {
+    return this.activeDirectMessageChannelId() ?? this.activeChannel()?.id ?? null;
+  });
+
+  readonly channelMessages = computed(() => {
+    const channelId = this.activeMessageChannelId();
+    if (!channelId) {
+      return [];
+    }
+
+    return this.state().messages
+      .filter((message) => message.channelId === channelId && !message.threadId)
+      .sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
+  });
+
+  readonly activeThread = computed(() => {
+    const state = this.state();
+    const channelId = this.activeMessageChannelId();
+    if (!channelId) {
+      return null;
+    }
+
+    return (
+      state.threads.find((thread) => thread.id === state.selectedThreadId && thread.channelId === channelId) ??
+      state.threads.find((thread) => thread.channelId === channelId) ??
+      null
+    );
+  });
+
+  readonly activeThreadOrigin = computed(() => {
+    const thread = this.activeThread();
+    if (!thread) {
+      return null;
+    }
+
+    return this.state().messages.find((message) => message.id === thread.originMessageId) ?? null;
+  });
+
+  readonly threadMessages = computed(() => {
+    const thread = this.activeThread();
+    if (!thread) {
+      return [];
+    }
+
+    return this.state().messages
+      .filter((message) => message.threadId === thread.id)
+      .sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
+  });
+
+  findUser(userId: string): MockUser | null {
+    return this.state().users.find((user) => user.id === userId) ?? null;
+  }
+
+  userName(userId: string): string {
+    return this.findUser(userId)?.name ?? 'Unbekannt';
+  }
+
+  avatarClass(userId: string): string {
+    return this.findUser(userId)?.avatarClass ?? 'avatar-4';
+  }
+
+  isCurrentUser(userId: string): boolean {
+    return userId === this.state().currentUserId;
+  }
+
+  formatTime(date: string): string {
+    return formatTime(date);
+  }
+
+  // Bewertet den Online-Status anhand des letzten Heartbeats neu. Wird per Timer
+  // aufgerufen, damit Nutzer ohne frischen Heartbeat offline werden, auch wenn
+  // kein neues Firestore-Snapshot mehr eintrifft. Aktueller Nutzer bleibt online.
+  refreshPresence(): void {
+    const now = Date.now();
+    const currentId = this.state().currentUserId;
+    let changed = false;
+
+    const users = this.state().users.map((user) => {
+      const online = user.id === currentId || isOnlineFromLastActive(user.lastActiveAt, now);
+      if (online === user.isOnline) {
+        return user;
+      }
+      changed = true;
+      return { ...user, isOnline: online };
+    });
+
+    if (changed) {
+      this.patchState((state) => ({ ...state, users }));
+    }
+  }
+
+  patchState(updater: (state: MockDatabaseState) => MockDatabaseState): void {
+    const nextState = updater(this.state());
+    this.state.set(nextState);
+    this.persistState(nextState);
+  }
+
+  // Entfernt einen User komplett: aus allen Channels, alle seine Nachrichten,
+  // seine Reaktionen, zugehoerige Threads sowie aus Usern/Kontakten.
+  deleteUserEverywhere(userId: string): void {
+    this.patchState((state) => {
+      const deletedMessageIds = new Set(
+        state.messages.filter((m) => m.authorId === userId).map((m) => m.id),
+      );
+
+      return {
+        ...state,
+        users: state.users.filter((u) => u.id !== userId),
+        contactUserIds: (state.contactUserIds ?? []).filter((id) => id !== userId),
+        channels: state.channels.map((c) => ({
+          ...c,
+          memberIds: c.memberIds.filter((id) => id !== userId),
+        })),
+        messages: state.messages
+          .filter((m) => m.authorId !== userId)
+          .map((m) => ({
+            ...m,
+            reactions: m.reactions
+              .map((r) => {
+                const userIds = r.userIds.filter((id) => id !== userId);
+                return { ...r, userIds, count: userIds.length };
+              })
+              .filter((r) => r.count > 0),
+          })),
+        threads: state.threads.filter((t) => !deletedMessageIds.has(t.originMessageId)),
+      };
+    });
+  }
+
+  resetDatabase(): void {
+    const seed = cloneState(MOCK_DATABASE_SEED);
+    this.state.set(seed);
+    this.persistState(seed);
+  }
+
+  private loadState(): MockDatabaseState {
+    const storage = this.getStorage();
+    if (!storage) {
+      return cloneState(MOCK_DATABASE_SEED);
+    }
+
+    const storedState = storage.getItem(STORAGE_KEY);
+    if (!storedState) {
+      const seed = cloneState(MOCK_DATABASE_SEED);
+      this.persistState(seed);
+      return seed;
+    }
+
+    try {
+      return JSON.parse(storedState) as MockDatabaseState;
+    } catch {
+      const seed = cloneState(MOCK_DATABASE_SEED);
+      this.persistState(seed);
+      return seed;
+    }
+  }
+
+  private persistState(state: MockDatabaseState): void {
+    const storage = this.getStorage();
+    if (!storage) {
+      return;
+    }
+
+    storage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  private getStorage(): Storage | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    return window.localStorage;
+  }
+}

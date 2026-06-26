@@ -1,0 +1,27 @@
+@if (categories().length > 0) {
+  <div class="categories-section">
+    <div class="categories-grid">
+      @for (category of categories(); track category.id) {
+        <div class="category-card" [style.background]="getGradientCSS(category.color)">
+          <div class="category-header">
+            <span class="category-icon" aria-hidden="true">{{ category.icon }}</span>
+            <h3 class="category-name">{{ category.name }}</h3>
+          </div>
+
+          @if (category.entries.length > 0) {
+            <div class="entries-list">
+              @for (entry of category.entries; track entry.value) {
+                <div class="entry-tag">
+                  @if (entry.emoji) {
+                    <span class="entry-emoji">{{ entry.emoji }}</span>
+                  }
+                  <span class="entry-text">{{ entry.value }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

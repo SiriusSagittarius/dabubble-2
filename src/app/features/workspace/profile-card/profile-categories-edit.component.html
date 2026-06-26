@@ -1,0 +1,91 @@
+<div class="categories-edit-section">
+  <button type="button" class="add-category-btn" (click)="openAddModal()" title="Neue Kategorie hinzufügen">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span>Kategorie hinzufügen</span>
+  </button>
+
+  @if (localCategories.length > 0) {
+    <div class="categories-grid">
+      @for (category of localCategories; track category.id) {
+        <div class="category-card-edit" [style.background]="getGradientCSS(category.color)">
+          <div class="category-edit-header">
+            <div class="category-header-content">
+              <span class="category-icon">{{ category.icon }}</span>
+              <h3 class="category-name">{{ category.name }}</h3>
+            </div>
+            <button
+              type="button"
+              class="delete-category-btn"
+              (click)="deleteCategory(category.id)"
+              title="Kategorie löschen"
+              aria-label="Kategorie löschen"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="entries-edit-list">
+            @if (category.entries.length > 0) {
+              @for (entry of category.entries; track entry.value) {
+                <div class="entry-tag-edit">
+                  @if (entry.emoji) {
+                    <span class="entry-emoji">{{ entry.emoji }}</span>
+                  }
+                  <span class="entry-text">{{ entry.value }}</span>
+                  <button
+                    type="button"
+                    class="delete-entry-btn"
+                    (click)="deleteEntry(category.id, entry.value)"
+                    title="Eintrag löschen"
+                    aria-label="Eintrag löschen"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              }
+            }
+          </div>
+
+          <div class="add-entry-form">
+            <input
+              type="text"
+              class="entry-input"
+              placeholder="Eintrag hinzufügen..."
+              [value]="getNewEntryValue(category.id)"
+              (input)="setNewEntryValue(category.id, $event)"
+              (keyup.enter)="addEntry(category.id)"
+            />
+            <div class="emoji-quick-pick">
+              @for (emoji of getCommonEmojis(); track emoji) {
+                <button
+                  type="button"
+                  class="emoji-btn"
+                  (click)="addEntry(category.id, emoji)"
+                  [attr.aria-label]="'Mit Emoji ' + emoji + ' hinzufügen'"
+                  title="Mit Emoji hinzufügen"
+                >
+                  {{ emoji }}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<app-profile-categories-add-modal
+  [isOpen]="showAddModal"
+  (close)="closeAddModal()"
+  (categoryCreated)="onNewCategoryCreated($event)"
+/>

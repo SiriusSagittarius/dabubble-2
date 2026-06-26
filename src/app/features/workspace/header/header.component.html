@@ -1,0 +1,163 @@
+<header class="header">
+  <div class="logo-container">
+    @if (showDevspace && isMobile()) {
+      <button type="button" class="devspace-back-btn" aria-label="Zurück" (click)="backToSidebar.emit()">
+        <svg class="devspace-back-icon" viewBox="0 0 25 25" width="25" height="25" aria-hidden="true"><path d="M9.01058 12.4997C9.01058 12.3608 9.03662 12.2264 9.08871 12.0965C9.14079 11.966 9.21023 11.8573 9.29704 11.7705L14.0887 6.97884C14.2797 6.78787 14.5227 6.69238 14.8179 6.69238C15.113 6.69238 15.3561 6.78787 15.547 6.97884C15.738 7.16981 15.8335 7.41287 15.8335 7.70801C15.8335 8.00315 15.738 8.2462 15.547 8.43718L11.4845 12.4997L15.547 16.5622C15.738 16.7531 15.8335 16.9962 15.8335 17.2913C15.8335 17.5865 15.738 17.8295 15.547 18.0205C15.3561 18.2115 15.113 18.307 14.8179 18.307C14.5227 18.307 14.2797 18.2115 14.0887 18.0205L9.29704 13.2288C9.19287 13.1247 9.11926 13.0118 9.07621 12.8903C9.03246 12.7688 9.01058 12.6386 9.01058 12.4997Z" fill="#444df2"/></svg>
+      </button>
+      <img src="/assets/icons/workspace.svg" alt="" class="devspace-logo" />
+      <span class="devspace-name">Devspace</span>
+    } @else {
+      <img src="/assets/icons/logo.svg" alt="DABubble Logo" class="logo" />
+    }
+  </div>
+
+  <div #workspaceSearchArea class="searchbar-container" aria-label="Suche">
+    <input
+      type="text"
+      placeholder="Devspace durchsuchen"
+      class="searchbar"
+      name="workspaceSearchDraft"
+      [(ngModel)]="workspaceSearchDraft"
+    />
+    <img src="/assets/icons/search-icon.svg" alt="" class="searchbar-icon" />
+
+    @if (showWorkspaceSearchResults()) {
+      <div class="workspace-search-results" role="listbox" aria-label="Suchergebnisse">
+        @if (workspaceSearchChannels().length > 0) {
+          <div class="workspace-search-group">
+            <span class="workspace-search-group-title">Kanäle</span>
+            @for (channel of workspaceSearchChannels(); track channel.id) {
+              <button
+                type="button"
+                class="workspace-search-item workspace-search-item-channel"
+                (click)="openWorkspaceSearchChannel(channel.id)"
+              >
+                <span class="workspace-search-item-prefix">#</span>
+                <span class="workspace-search-item-text">{{ channel.name }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        @if (workspaceSearchUsers().length > 0) {
+          <div class="workspace-search-group">
+            <span class="workspace-search-group-title">Profile</span>
+            @for (user of workspaceSearchUsers(); track user.id) {
+              <button
+                type="button"
+                class="workspace-search-item workspace-search-item-user"
+                (click)="openWorkspaceSearchUser(user.id)"
+              >
+                <img class="workspace-search-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+                <span class="workspace-search-item-text">{{ user.name }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        @if (workspaceSearchMessages().length > 0) {
+          <div class="workspace-search-group">
+            <span class="workspace-search-group-title">Nachrichten</span>
+            @for (message of workspaceSearchMessages(); track message.id) {
+              <button
+                type="button"
+                class="workspace-search-item workspace-search-item-message"
+                (click)="openWorkspaceSearchMessage(message.id)"
+              >
+                <img
+                  class="workspace-search-avatar workspace-search-avatar-small"
+                  [src]="avatarSvgPath(message.authorId)"
+                  [alt]="database.userName(message.authorId)"
+                />
+                <span class="workspace-search-item-text workspace-search-item-text-message">
+                  <span class="workspace-search-item-message-channel"># {{ channelName(message.channelId) }}</span>
+                  <span class="workspace-search-item-message-body">{{ message.body }}</span>
+                </span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <app-profile></app-profile>
+</header>
+
+<div class="mobile-search-box">
+  <img src="/assets/icons/search-icon.svg" alt="" class="mobile-search-box-icon" />
+  <input type="text" placeholder="Suche" class="mobile-search-box-input" />
+  <button type="button" class="mobile-search-box-close" aria-label="Suche schließen">✕</button>
+</div>
+
+<div class="header-searchbar-row">
+  <div class="searchbar-container-mobile" aria-label="Suche">
+    <input
+      type="text"
+      placeholder="Devspace durchsuchen"
+      class="searchbar"
+      name="workspaceSearchDraftMobile"
+      [(ngModel)]="workspaceSearchDraft"
+    />
+    <img src="/assets/icons/search-icon.svg" alt="" class="searchbar-icon" />
+
+    @if (showWorkspaceSearchResults()) {
+      <div class="workspace-search-results" role="listbox" aria-label="Suchergebnisse">
+        @if (workspaceSearchChannels().length > 0) {
+          <div class="workspace-search-group">
+            <span class="workspace-search-group-title">Kanäle</span>
+            @for (channel of workspaceSearchChannels(); track channel.id) {
+              <button
+                type="button"
+                class="workspace-search-item workspace-search-item-channel"
+                (click)="openWorkspaceSearchChannel(channel.id)"
+              >
+                <span class="workspace-search-item-prefix">#</span>
+                <span class="workspace-search-item-text">{{ channel.name }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        @if (workspaceSearchUsers().length > 0) {
+          <div class="workspace-search-group">
+            <span class="workspace-search-group-title">Profile</span>
+            @for (user of workspaceSearchUsers(); track user.id) {
+              <button
+                type="button"
+                class="workspace-search-item workspace-search-item-user"
+                (click)="openWorkspaceSearchUser(user.id)"
+              >
+                <img class="workspace-search-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+                <span class="workspace-search-item-text">{{ user.name }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        @if (workspaceSearchMessages().length > 0) {
+          <div class="workspace-search-group">
+            <span class="workspace-search-group-title">Nachrichten</span>
+            @for (message of workspaceSearchMessages(); track message.id) {
+              <button
+                type="button"
+                class="workspace-search-item workspace-search-item-message"
+                (click)="openWorkspaceSearchMessage(message.id)"
+              >
+                <img
+                  class="workspace-search-avatar workspace-search-avatar-small"
+                  [src]="avatarSvgPath(message.authorId)"
+                  [alt]="database.userName(message.authorId)"
+                />
+                <span class="workspace-search-item-text workspace-search-item-text-message">
+                  <span class="workspace-search-item-message-channel"># {{ channelName(message.channelId) }}</span>
+                  <span class="workspace-search-item-message-body">{{ message.body }}</span>
+                </span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

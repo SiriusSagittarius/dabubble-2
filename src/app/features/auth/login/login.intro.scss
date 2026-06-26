@@ -1,0 +1,375 @@
+
+@use 'sass:color';
+@use '../../../styles/fluid' as *;
+
+    $purple-1: #444DF2;
+    $purple-2: #797EF3;
+    $light-purple-bg: #ECEEFE;
+    $lines-color: #ADB0D9;
+    $error-pink: #ED1E79;
+    $text-gray: #686868;
+
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .login-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      padding: 0;
+      box-sizing: border-box;
+
+      * {
+        box-sizing: border-box;
+      }
+    }
+
+    .login-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      overflow: hidden;
+      background: linear-gradient(180deg, #797ef3 0%, #313ae6 100%);
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 380ms ease;
+    }
+
+    .login-intro--leave {
+      opacity: 0;
+    }
+
+    /* Skaliert die gesamte Intro-Komposition (Symbol + Wort) flüssig herunter,
+       damit "DABubble" auf schmalen Viewports (~1060px abwärts) nicht mehr rechts
+       abgeschnitten wird. Verankert am finalen Logo-Punkt oben links (75/75px),
+       sodass auf Desktop (>= ~1060px -> scale 1) die Übergabe ans echte Logo
+       unverändert bleibt. */
+    .login-intro-stage {
+      position: absolute;
+      inset: 0;
+      transform-origin: 75px 75px;
+      transform: scale(clamp(0.35, calc(0.37 + (100vw - 320px) / 780px * 0.63), 1));
+    }
+
+    .login-intro-brand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 240px;
+      height: 236px;
+      transform: translate(-50%, -50%);
+      transform-origin: left top;
+      animation: loginIntroBrandTravel 3.05s cubic-bezier(0.2, 0.86, 0.18, 1) both;
+      will-change: left, top, transform;
+    }
+
+    .login-intro-mark {
+      width: 240px;
+      height: 236px;
+      overflow: hidden;
+
+      img {
+        display: block;
+        width: 892px;
+        height: 236px;
+        max-width: none;
+        transform: translateX(-267px);
+      }
+    }
+
+    .login-intro-word {
+      position: absolute;
+      left: 282px;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      transform: translateY(-50%);
+      color: #ffffff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 104px;
+      font-weight: 700;
+      letter-spacing: -2.8px;
+      line-height: 1;
+      white-space: nowrap;
+
+      span {
+        opacity: 0;
+        transform: translateX(-24px);
+        animation: loginIntroLetterReveal 420ms cubic-bezier(0.22, 0.94, 0.28, 1) both;
+        animation-delay: calc(860ms + var(--letter-index) * 72ms);
+        will-change: opacity, transform;
+      }
+    }
+
+    .auth-new {
+      position: absolute;
+      top: 75px;
+      right: 75px;
+      width: 169px;
+      height: 77px;
+      z-index: 3;
+    }
+
+    .auth-account-group-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .auth-create-account-link {
+      position: absolute;
+      left: 16px;
+      top: 35px;
+      width: 152px;
+      height: 42px;
+      display: block;
+      border: 2px solid transparent;
+      padding: 0;
+      background: transparent;
+      border-radius: 25px;
+      cursor: pointer;
+      z-index: 4;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+
+      &:hover,
+      &:focus-visible {
+        background: rgba($light-purple-bg, 0.3);
+        border-color: $purple-1;
+        outline: none;
+      }
+    }
+
+    .auth-create-account-text {
+      display: none;
+    }
+
+    .auth-new-mobile {
+      display: none;
+    }
+
+.login-container {
+      position: relative;
+      top: 30px;
+      width: fluid(320, 430, 300, 398);
+      background: #FFFFFF;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+      border-radius: 30px;
+      padding: fluid(320, 430, 16, 24) fluid(320, 430, 14, 20);
+
+      @media (min-width: 431px) {
+        width: fluid(431, 1920, 398, 610);
+        padding: fluid(431, 1920, 24, 50) fluid(431, 1920, 20, 60);
+      }
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .login-success-overlay {
+      position: fixed;
+      right: 30px;
+      bottom: 5px;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .login-success-overlay-card {
+      display: flex;
+      width: 273px;
+      height: 149px;
+      background: transparent;
+      overflow: hidden;
+      animation: loginSuccessIn 280ms ease-out both;
+      will-change: transform, opacity;
+    }
+
+    .login-success-overlay-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    @media (max-width: 480px) {
+      .login-success-overlay {
+        right: auto;
+        left: 50%;
+        bottom: 32px;
+        transform: translateX(-50%);
+      }
+
+      .login-success-overlay-card {
+        width: min(273px, calc(100vw - 40px));
+      }
+    }
+
+    @keyframes loginSuccessIn {
+      from {
+        opacity: 0;
+        transform: translate3d(120px, 120px, 0);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes loginIntroBrandTravel {
+      0% {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      18% {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      38% {
+        left: 50%;
+        top: 50%;
+        transform: translate(calc(-50% - 126px), -50%) scale(1);
+      }
+
+      68% {
+        left: 50%;
+        top: 50%;
+        transform: translate(calc(-50% - 126px), -50%) scale(1);
+      }
+
+      100% {
+        left: 75px;
+        top: 75px;
+        transform: translate(0, 0) scale(0.292);
+      }
+    }
+
+    @keyframes loginIntroLetterReveal {
+      from {
+        opacity: 0;
+        transform: translateX(-24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .login-content {
+      width: 100%;
+      max-width: 385px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+
+      @media (max-width: 430px) {
+        max-width: fluid(320, 430, 280, 385);
+        gap: fluid(320, 430, 8, 14);
+      }
+
+      @media (min-width: 431px) {
+        max-width: fluid(431, 1920, 385, 500);
+        gap: fluid(431, 1920, 14, 30);
+      }
+    }
+
+    .login-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+
+      .title {
+        margin: 0;
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 32px;
+
+        @media (max-width: 430px) {
+          font-size: fluid(320, 430, 24, 32);
+        }
+
+        @media (min-width: 431px) {
+          font-size: fluid(431, 1920, 32, 46);
+        }
+        line-height: 120%;
+        color: $purple-1;
+      }
+
+      .subtitle {
+        margin: 0;
+        max-width: 486px;
+        font-family: 'Nunito', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+
+        @media (max-width: 430px) {
+          font-size: fluid(320, 430, 11, 14);
+        }
+
+        @media (min-width: 431px) {
+          font-size: fluid(431, 1920, 14, 20);
+        }
+        line-height: 120%;
+        color: #000000;
+      }
+    }
+
+    @media (max-width: 530px) {
+      .auth-new {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-wrapper {
+        padding: 16px;
+      }
+
+      .login-container {
+        padding: 24px 16px;
+        border-radius: 30px;
+      }
+    }
+
+    /* ≤530px: Die auth-shell ist jetzt der gemeinsame Flow-/Scroll-Container
+       (Logo -> Karte -> "Neu bei DABubble" -> Links). Der Wrapper darf deshalb
+       NICHT mehr selbst die volle Höhe einnehmen oder mit festen top/bottom-
+       Paddings den Platz fürs Logo/CTA reservieren — sonst überlagern sich die
+       Elemente. Karte einfach im Fluss zentrieren, Höhe = Inhalt. */
+    @media (max-width: 530px) {
+      .login-wrapper {
+        align-items: center;
+        justify-content: flex-start;
+        height: auto;
+        min-height: 0;
+        padding: 0;
+        overflow: visible;
+      }
+
+      .login-container {
+        top: 0;
+        width: 100%;
+        max-width: 398px;
+      }
+    }

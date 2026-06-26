@@ -1,0 +1,146 @@
+/* Radio Optionen im Schritt 2 */
+.add-channel-member-options {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-channel-member-option {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.add-channel-member-option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 1px solid #adb0d9;
+  border-radius: 50%;
+  appearance: none;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.add-channel-member-option input::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #444df2;
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+
+.add-channel-member-option input:checked::before {
+  transform: scale(1);
+}
+
+.add-channel-member-option input:focus-visible {
+  outline: 2px solid #535af1;
+  outline-offset: 2px;
+}
+
+.add-channel-member-option-text {
+  font-family: Nunito, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+}
+
+/* Mitglieder suchen / Vorschläge */
+.add-members-panel-input-box {
+  position: relative;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.add-members-suggestions-list {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 110;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-members-suggestion-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 8px 16px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.add-members-suggestion-item:hover {
+  background: #eceefe;
+}
+
+.add-members-suggestion-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.add-members-suggestion-name {
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Ausgewählte Mitglieder Tags */
+.selected-members-tags-box {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selected-member-tag {
+  background: #eceefe;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Nunito, sans-serif;
+  font-size: 14px;
+  color: #444df2;
+  font-weight: 600;
+}
+
+.selected-member-tag-remove {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #adb0d9;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.selected-member-tag-remove:hover {
+  color: #ff5252;
+}

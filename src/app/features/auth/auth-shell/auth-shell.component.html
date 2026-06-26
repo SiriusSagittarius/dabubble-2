@@ -1,0 +1,46 @@
+<div class="auth-shell">
+  <img
+    src="/assets/icons/logo.svg"
+    alt="DABubble Logo"
+    class="auth-logo"
+    [class.auth-logo--intro-active]="introVisible"
+    [class.auth-logo--signup]="isSignupRoute"
+  />
+
+  @if (introVisible) {
+    <div class="auth-intro" [class.auth-intro--leave]="introLeaving" aria-hidden="true">
+      <div class="auth-intro-brand">
+        <div class="auth-intro-mark">
+          <img src="/assets/intro/Default.svg" alt="" />
+        </div>
+
+        <div class="auth-intro-word">
+          <span style="--letter-index: 0">D</span>
+          <span style="--letter-index: 1">A</span>
+          <span style="--letter-index: 2">B</span>
+          <span style="--letter-index: 3">u</span>
+          <span style="--letter-index: 4">b</span>
+          <span style="--letter-index: 5">b</span>
+          <span style="--letter-index: 6">l</span>
+          <span style="--letter-index: 7">e</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isLoginRoute) {
+    <div class="auth-new-mobile">
+      <p class="auth-new-mobile-label">Neu bei DABubble?</p>
+      <a class="auth-new-mobile-btn" routerLink="/signup">Konto erstellen</a>
+    </div>
+  }
+
+  <nav class="auth-footer-links" aria-label="Rechtliches">
+    <a routerLink="/info/legal">Impressum</a>
+    <a routerLink="/info/privacy">Datenschutz</a>
+  </nav>
+
+  <div class="auth-stage">
+    <router-outlet></router-outlet>
+  </div>
+</div>

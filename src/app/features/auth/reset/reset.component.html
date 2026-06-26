@@ -1,0 +1,140 @@
+<div class="page-background">
+  @if (showSuccessOverlay()) {
+    <div class="reset-success-overlay" role="status" aria-live="polite">
+      <div class="reset-success-overlay-card">
+        <svg class="reset-success-overlay-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <g transform="translate(-61.333 -62.3933)">
+            <path
+              d="M64.2497 93.6086C63.5552 93.8864 62.8955 93.8253 62.2705 93.4253C61.6455 93.0267 61.333 92.4454 61.333 91.6815V83.9211C61.333 83.435 61.4719 83.001 61.7497 82.619C62.0275 82.2371 62.4094 81.994 62.8955 81.8899L77.9997 78.1399L62.8955 74.3899C62.4094 74.2857 62.0275 74.0426 61.7497 73.6607C61.4719 73.2788 61.333 72.8447 61.333 72.3586V64.5982C61.333 63.8343 61.6455 63.2524 62.2705 62.8524C62.8955 62.4538 63.5552 62.3933 64.2497 62.6711L96.333 76.2128C97.2011 76.5947 97.6351 77.2371 97.6351 78.1399C97.6351 79.0426 97.2011 79.685 96.333 80.0669L64.2497 93.6086Z"
+              fill="white"
+            />
+          </g>
+        </svg>
+        <span class="reset-success-overlay-text">{{ successMessage() }}</span>
+      </div>
+    </div>
+  }
+
+  <div class="login-container">
+    <button type="button" class="btn-back" (click)="goBack()" title="Zurück">
+      <svg class="icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+    </button>
+
+    <div class="login-header">
+      @if (isConfirmStep()) {
+        <h1 class="title">Neues Passwort erstellen</h1>
+      } @else {
+        <h1 class="title">Passwort zurücksetzen</h1>
+      }
+    </div>
+
+    @if (isConfirmStep()) {
+      <form id="new-password-form" [formGroup]="newPasswordForm" (ngSubmit)="onSubmitNewPassword()" class="password-form" novalidate>
+        <div class="input-group password-group">
+          <label class="field-label">Neues Passwort</label>
+          <div class="input-wrapper" [class.has-error]="isNewPasswordFieldInvalid('password')">
+            <img class="input-icon" src="assets/icons/lock.svg" alt="" />
+            <input
+              [type]="showNewPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Neues Passwort eingeben"
+              class="form-control"
+            />
+            <button type="button" class="btn-toggle-password" (click)="toggleNewPassword()">
+              @if (showNewPassword()) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              }
+            </button>
+          </div>
+
+          @if (isNewPasswordFieldInvalid('password')) {
+            <p class="error-text password-error">*Mind. 8 Zeichen mit Groß- und Kleinbuchstabe, Zahl und Sonderzeichen.</p>
+          }
+        </div>
+
+        <div class="input-group password-group">
+          <label class="field-label">Passwort bestätigen</label>
+          <div class="input-wrapper" [class.has-error]="isNewPasswordFieldInvalid('confirmPassword') || passwordsMismatch()">
+            <img class="input-icon" src="assets/icons/lock.svg" alt="" />
+            <input
+              [type]="showConfirmPassword() ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="Passwort wiederholen"
+              class="form-control"
+            />
+            <button type="button" class="btn-toggle-password" (click)="toggleConfirmPassword()">
+              @if (showConfirmPassword()) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              }
+            </button>
+          </div>
+
+          @if (passwordsMismatch()) {
+            <p class="error-text password-error">*Die Passwörter stimmen nicht überein.</p>
+          } @else if (isNewPasswordFieldInvalid('confirmPassword')) {
+            <p class="error-text password-error">*Bitte wiederholen Sie Ihr Passwort.</p>
+          }
+        </div>
+      </form>
+    } @else {
+      <form id="reset-form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+        <p class="instruction-text">Bitte geben Sie Ihre E-Mail-Adresse ein:</p>
+
+        <div class="input-group">
+          <div class="input-wrapper" [class.has-error]="isFieldInvalid('email')">
+            <img class="input-icon" src="assets/icons/mail.svg" alt="" />
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="beispielname@email.com"
+              class="form-control"
+            />
+          </div>
+
+          @if (isFieldInvalid('email')) {
+            <p class="error-text">*Diese E-Mail-Adresse ist leider ungültig.</p>
+          }
+        </div>
+
+        <p class="reset-info">
+          Wir senden Ihnen eine E-Mail mit einem Link,<br />
+          über den Sie Ihr Passwort zurücksetzen können.
+        </p>
+
+        <p class="reset-info-hint">
+          Falls Sie die E-Mail nicht finden, sehen Sie bitte in Ihrem Spam-Ordner nach.
+          Gerade beim ersten Mal kann sie dort landen, da der Absender noch nicht als
+          sicher markiert ist.
+        </p>
+      </form>
+    }
+
+    <div class="action-footer">
+      @if (isConfirmStep()) {
+        <button type="submit" form="new-password-form" class="btn-primary" [disabled]="!canSaveNewPassword()">
+          Passwort ändern
+        </button>
+      } @else {
+        <button type="submit" form="reset-form" class="btn-primary" [disabled]="!canSendEmail()">
+          E-Mail senden
+        </button>
+      }
+    </div>
+  </div>
+</div>

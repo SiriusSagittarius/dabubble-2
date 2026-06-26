@@ -1,5 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+import { FirebaseUserSyncService } from './core/services/firebase-user-sync.service';
+import { PresenceService } from './core/services/presence.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +11,12 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
+  private readonly userSync = inject(FirebaseUserSyncService);
+  private readonly presence = inject(PresenceService);
   protected readonly title = signal('dabubble');
+
+  constructor() {
+    this.userSync.start();
+    this.presence.start();
+  }
 }

@@ -1,0 +1,430 @@
+<div class="center-card">
+  @if (uiState.showMainChatIntro()) {
+    <div class="main-chat-intro" aria-label="Neue Nachricht">
+      <header class="main-chat-intro-header">
+        <h2>Neue Nachricht</h2>
+        <div class="main-chat-recipient-field">
+          <span class="main-chat-recipient-label">An:</span>
+          <div class="main-chat-recipient-input-wrap">
+            <input type="text" class="main-chat-recipient-input" placeholder="#channel, @jemand oder E-Mail Adresse"
+              [ngModel]="uiState.newMessageRecipient()" (ngModelChange)="uiState.newMessageRecipient.set($event)" />
+            @if (showRecipientSuggestions()) {
+              <div class="recipient-suggestions-list">
+                @for (channel of recipientChannelSuggestions(); track channel.id) {
+                  <button type="button" class="suggestion-item" (click)="selectRecipientChannel(channel.id)">
+                    <span class="suggestion-hash">#</span>
+                    <span class="suggestion-name">{{ channel.name }}</span>
+                  </button>
+                }
+                @for (user of recipientUserSuggestions(); track user.id) {
+                  <button type="button" class="contact-suggestion-item" (click)="selectRecipientUser(user.id)">
+                    <span class="contact-suggestion-avatar-wrap">
+                      <img class="contact-suggestion-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+                      <span class="contact-suggestion-status" [class.online]="user.isOnline" [class.offline]="!user.isOnline"></span>
+                    </span>
+                    <span class="contact-suggestion-name">{{ user.name }}</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </header>
+      <div class="main-chat-intro-body" aria-hidden="true"></div>
+    </div>
+  }
+
+  @if (directMessageUser(); as directUser) {
+    <div class="direct-message-summary">
+      <header class="direct-message-header">
+        <span class="direct-message-avatar-wrap direct-message-avatar-wrap-large">
+          <img class="direct-message-avatar" [src]="avatarSvgPath(directUser.id)" [alt]="directUser.name" />
+          <span class="direct-message-avatar-status" [class.online]="directUser.isOnline" aria-hidden="true"></span>
+        </span>
+        <div class="direct-message-header-text">
+          <button type="button" class="direct-message-name-btn" (click)="openMemberProfile(directUser.id)">
+            <span class="direct-message-name">
+              {{ directUser.name }}
+              @if (database.isCurrentUser(directUser.id)) { (Du) }
+            </span>
+          </button>
+        </div>
+      </header>
+    </div>
+  } @else if (!uiState.showMainChatIntro()) {
+    <header class="chat-header">
+      <button type="button" class="channel-title" aria-label="Channel-Details oeffnen" (click)="toggleChannelEdition()">
+        <span class="channel-hash">#</span>
+        <span class="channel-name">{{ database.activeChannel().name }}</span>
+        <span class="channel-arrow-down" aria-hidden="true"></span>
+      </button>
+
+      <div class="members-area" aria-label="Mitglieder">
+        <button type="button" class="members-preview-wrap" aria-label="Mitglieder anzeigen" (click)="membersListOpen.set(true)">
+          <span class="members-avatar-stack">
+            @for (member of database.activeChannelMembers().slice(0, 3); track member.id) {
+              <img [src]="avatarSvgPath(member.id)" [alt]="member.name" class="members-avatar-stack-item" />
+            }
+          </span>
+          <span class="members-count">
+            {{ database.activeChannelMembers().length }}
+          </span>
+        </button>
+        @if (!database.isGuest()) {
+          <button type="button" class="members-button" aria-label="Mitglieder anzeigen" (click)="onMembersButtonClick()">
+            <img src="/assets/icons/person_add.svg" alt="hinzufügen" class="members-icon" />
+          </button>
+        }
+      </div>
+    </header>
+
+    @if (membersListOpen()) {
+      <div class="custom-members-backdrop" (click)="membersListOpen.set(false)">
+        <div class="custom-members-panel" (click)="$event.stopPropagation(); $event.preventDefault()">
+          <header class="custom-members-header">
+            <h2 class="custom-members-title">Mitglieder</h2>
+            <button type="button" class="custom-members-close" (click)="membersListOpen.set(false)" aria-label="Schließen">×</button>
+          </header>
+
+          <div class="custom-members-list-wrapper">
+            <div class="custom-members-list">
+              @for (member of database.activeChannelMembers(); track member.id) {
+                <div class="custom-member-item" (click)="openMemberProfile(member.id)">
+                  <div class="custom-member-avatar-wrap">
+                    <img [src]="avatarSvgPath(member.id)" class="custom-member-avatar" alt="" />
+                    <span class="custom-member-status" [class.online]="member.isOnline"></span>
+                  </div>
+                  <span class="custom-member-name">
+                    {{ member.name }}
+                    @if (database.isCurrentUser(member.id)) { (Du) }
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+
+          @if (!database.isGuest()) {
+            <button type="button" class="custom-members-add-btn" (click)="membersListOpen.set(false); openAddMembersPanel()">
+              <span class="custom-members-add-icon-wrap"><img src="/assets/icons/person_add.svg" alt="" /></span>
+              <span>Mitglieder hinzufügen</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (channelEditionOpen()) {
+      <div class="channel-edition-backdrop" (click)="toggleChannelEdition()">
+        <section class="channel-edition-card" aria-label="Channel Edition" (click)="$event.stopPropagation()">
+          <div class="channel-edition-mobile-head">
+            <div class="channel-edition-mobile-bar">
+              <button type="button" class="channel-edition-mobile-back" aria-label="Zurück" (click)="toggleChannelEdition()">
+                <svg viewBox="0 0 25 25" width="24" height="24" aria-hidden="true"><path d="M9.01058 12.4997C9.01058 12.3608 9.03662 12.2264 9.08871 12.0965C9.14079 11.966 9.21023 11.8573 9.29704 11.7705L14.0887 6.97884C14.2797 6.78787 14.5227 6.69238 14.8179 6.69238C15.113 6.69238 15.3561 6.78787 15.547 6.97884C15.738 7.16981 15.8335 7.41287 15.8335 7.70801C15.8335 8.00315 15.738 8.2462 15.547 8.43718L11.4845 12.4997L15.547 16.5622C15.738 16.7531 15.8335 16.9962 15.8335 17.2913C15.8335 17.5865 15.738 17.8295 15.547 18.0205C15.3561 18.2115 15.113 18.307 14.8179 18.307C14.5227 18.307 14.2797 18.2115 14.0887 18.0205L9.29704 13.2288C9.19287 13.1247 9.11926 13.0118 9.07621 12.8903C9.03246 12.7688 9.01058 12.6386 9.01058 12.4997Z" fill="#444df2"/></svg>
+              </button>
+              <img src="/assets/icons/workspace.svg" alt="" class="channel-edition-mobile-logo" />
+              <span class="channel-edition-mobile-devspace">Devspace</span>
+              <img class="channel-edition-mobile-avatar" [src]="avatarSvgPath(database.currentUser()?.id ?? '')" alt="" />
+            </div>
+            <div class="channel-edition-mobile-row2">
+              <span class="channel-edition-mobile-channel"># {{ database.activeChannel().name }}</span>
+              @if (!database.isGuest()) {
+                <button type="button" class="channel-edition-mobile-addmember" aria-label="Mitglieder hinzufügen" (click)="toggleChannelEdition(); openAddMembersPanel()">
+                  <img src="/assets/icons/person_add.svg" alt="" />
+                </button>
+              }
+            </div>
+          </div>
+
+          <header class="channel-edition-top-row">
+            <div class="channel-edition-top-title"># {{ database.activeChannel().name }}</div>
+            <button type="button" class="channel-edition-close" aria-label="Channel Edition schliessen" (click)="toggleChannelEdition()">x</button>
+          </header>
+
+          <section class="channel-edition-section channel-edition-section-name">
+            <div class="channel-edition-section-row">
+              <span class="channel-edition-label">Channel-Name</span>
+              @if (isActiveChannelCreator()) {
+                @if (channelNameEditMode()) {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name speichern" (click)="saveChannelName()"><span class="channel-edition-action-icon channel-edition-action-icon-save"></span></button>
+                } @else {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Channel-Name bearbeiten" (click)="editChannelName()"><span class="channel-edition-action-icon channel-edition-action-icon-edit"></span></button>
+                }
+              }
+            </div>
+            @if (channelNameEditMode()) {
+              <div class="channel-edition-name-edit-row">
+                <span class="channel-edition-channel-hash">#</span>
+                <input type="text" name="channelNameDraft" class="channel-edition-input" [(ngModel)]="channelNameDraft" />
+              </div>
+            } @else {
+              <div class="channel-edition-value channel-edition-value-channel">
+                <span class="channel-edition-channel-hash">#</span>
+                <span>{{ database.activeChannel().name }}</span>
+              </div>
+            }
+          </section>
+
+          <section class="channel-edition-section channel-edition-section-description">
+            <div class="channel-edition-section-row">
+              <span class="channel-edition-label">Beschreibung</span>
+              @if (isActiveChannelCreator()) {
+                @if (channelDescriptionEditMode()) {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung speichern" (click)="saveChannelDescription()"><span class="channel-edition-action-icon channel-edition-action-icon-save"></span></button>
+                } @else {
+                  <button type="button" class="channel-edition-edit-button" aria-label="Beschreibung bearbeiten" (click)="editChannelDescription()"><span class="channel-edition-action-icon channel-edition-action-icon-edit"></span></button>
+                }
+              }
+            </div>
+            @if (channelDescriptionEditMode()) {
+              <input type="text" name="channelDescriptionDraft" class="channel-edition-input channel-edition-input-description" placeholder="Dein Text hier" [(ngModel)]="channelDescriptionDraft" />
+            } @else {
+              <div class="channel-edition-value channel-edition-description">
+                {{
+                  database.activeChannel().description ||
+                    'Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.'
+                }}
+              </div>
+            }
+            <div class="channel-edition-divider"></div>
+            <section class="channel-edition-created-by">
+              <span class="channel-edition-created-label">Erstellt von</span>
+              <span class="channel-edition-created-user">{{
+                database.userName(database.activeChannel().createdBy)
+              }}</span>
+            </section>
+          </section>
+
+          <section class="channel-edition-section channel-edition-section-members">
+            <h3 class="channel-edition-members-title">Mitglieder</h3>
+            @for (member of database.activeChannelMembers(); track member.id) {
+              <button type="button" class="channel-edition-member-row" (click)="openMemberProfile(member.id)">
+                <div class="channel-edition-member-avatar-wrap">
+                  <img [src]="avatarSvgPath(member.id)" [alt]="member.name" class="channel-edition-member-avatar" />
+                  <span class="channel-edition-member-status" [class.online]="member.isOnline"></span>
+                </div>
+                <span class="channel-edition-member-name">
+                  {{ member.name }}@if (database.isCurrentUser(member.id)) { (Du) }
+                </span>
+              </button>
+            }
+            @if (!database.isGuest()) {
+              <button type="button" class="channel-edition-member-add-btn" (click)="toggleChannelEdition(); openAddMembersPanel()">
+                <img src="/assets/icons/person_add.svg" alt="" />
+                <span>Mitglieder hinzufügen</span>
+              </button>
+            }
+          </section>
+
+          <button type="button" class="channel-edition-leave-button" (click)="handleChannelEditionAction()">{{ channelEditionActionLabel() }}</button>
+        </section>
+      </div>
+    }
+  }
+
+  <div class="chat-body">
+    @if (directMessageUser(); as directUser) {
+        <div class="direct-message-intro" aria-label="Unterhaltungsinfo">
+          <div class="direct-message-info-row">
+            <button type="button" class="dm-intro-avatar-btn" (click)="openMemberProfile(directUser.id)" aria-label="Profil anzeigen">
+              <span class="direct-message-avatar-wrap direct-message-avatar-wrap-medium">
+                <img class="direct-message-avatar" [src]="avatarSvgPath(directUser.id)" [alt]="directUser.name" />
+              </span>
+            </button>
+            <div class="direct-message-info-text">
+              <button type="button" class="dm-intro-name-btn" (click)="openMemberProfile(directUser.id)">
+                <span class="direct-message-info-name">
+                  @{{ directUser.name }}
+                  @if (database.isCurrentUser(directUser.id)) { <span class="dm-du-tag"> (Du)</span> }
+                </span>
+              </button>
+              <p class="direct-message-intro-meta">
+                @if (database.isCurrentUser(directUser.id)) {
+                  <strong>Dieser Raum ist nur für dich da.</strong> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf.
+                } @else {
+                  Diese Unterhaltung findet nur zwischen <span class="dm-at-mention">@{{ directUser.name }}</span> und dir statt.
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="channel-intro">
+          <div class="channel-intro-title">
+            <span class="channel-intro-hash">#</span>
+            <span class="channel-intro-name">{{ database.activeChannel().name }}</span>
+          </div>
+          <p class="channel-intro-text">
+            {{ channelIntroCreatorLabel() }} diesen Channel {{ channelIntroDateLabel() }} erstellt. Das ist der Anfang des Channels
+            <span class="channel-intro-link"># {{ database.activeChannel().name }}</span>.
+          </p>
+        </div>
+      }
+      @for (message of database.channelMessages(); track message.id; let index = $index) {
+        @if (shouldShowDateSeparator(index)) {
+          <div class="time-separator" [class.time-separator-first]="index === 0">
+            <span class="time-line"></span>
+            <span class="time-pill">{{ formatDateSeparator(message.createdAt) }}</span>
+          </div>
+        }
+
+        @let isOwn = database.isCurrentUser(message.authorId);
+        <article
+          class="message"
+          [class.message-right]="isOwn"
+          [class.message-left]="!isOwn"
+          [class.message-editing]="isOwn && editingMessageId() === message.id"
+        >
+          @if (!database.isGuest()) {
+          <div class="message-hover-actions-menu">
+            <button type="button" class="message-hover-action-btn" aria-label="Mit Haken reagieren" (click)="addReaction(message.id, 'check')">
+              <span class="message-hover-action-emoji">✅</span>
+            </button>
+            <button type="button" class="message-hover-action-btn" aria-label="Mit Daumen hoch reagieren" (click)="addReaction(message.id, 'thumbs_up')">
+              <span class="message-hover-action-emoji">👍</span>
+            </button>
+            <button type="button" class="message-hover-action-btn" aria-label="Thread oeffnen" (click)="openMessageThread(message.id)">
+              <img src="/assets/icons/mode_comment.svg" alt="" class="message-hover-action-icon message-hover-action-icon-lg" />
+            </button>
+            <button type="button" class="message-hover-action-btn action-button-emoji" aria-label="Weitere Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-' + message.id)">
+              <img src="/assets/add-reaction.png" alt="" class="message-hover-action-icon" />
+            </button>
+            @if (isOwn) {
+              <button type="button" class="message-hover-action-btn message-menu-toggle" aria-label="Weitere Optionen" (click)="toggleMessageMenu(message.id)">
+                <span class="message-hover-action-dots">⋮</span>
+              </button>
+            }
+            @if (activeEmojiPicker() === 'reaction-' + message.id) {
+              <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
+              <div class="emoji-picker-popover">
+                <emoji-mart
+                  (emojiSelect)="onMessageEmojiSelect($event, 'reaction-' + message.id)"
+                  [enableSearch]="false" [emojiSize]="emojiSize()" [include]="emojiCategories"
+                  [showPreview]="false" [showSingleCategory]="true" [perLine]="emojiPerLine()" [totalFrequentLines]="1"
+                ></emoji-mart>
+              </div>
+            }
+          </div>
+          }
+          @if (isOwn && activeMessageMenuId() === message.id) {
+            <div class="message-edit-menu">
+              <button type="button" class="message-edit-menu-item" (click)="startEditingMessage(message.id, message.body)">Nachricht bearbeiten</button>
+            </div>
+          }
+          @if (isOwn && editingMessageId() === message.id) {
+            <form class="message-edit-box" aria-label="Nachricht bearbeiten" (submit)="saveEditedMessage(message.id); $event.preventDefault()">
+              <textarea name="editMessageDraft" class="message-edit-input" rows="3" [(ngModel)]="editMessageDraft"></textarea>
+              <div class="message-edit-actions">
+                <button type="button" class="message-edit-cancel" (click)="cancelEditingMessage()">Abbrechen</button>
+                <button type="submit" class="message-edit-save">Speichern</button>
+              </div>
+            </form>
+          } @else {
+            <button type="button" class="message-avatar-btn" (click)="openMemberProfile(message.authorId)" aria-label="Profil anzeigen">
+              <img class="avatar message-avatar" [src]="avatarSvgPath(message.authorId)" [alt]="database.userName(message.authorId)" />
+            </button>
+            <div class="message-content">
+              <div class="message-meta">
+                <button type="button" class="message-name-btn" (click)="openMemberProfile(message.authorId)">
+                  <span class="message-name">{{ database.userName(message.authorId) }}</span>
+                </button>
+                <span class="message-time">{{ formatMessageTimestamp(message.createdAt) }}</span>
+              </div>
+              <div class="speech-bubble speech-bubble-left">{{ message.body }}</div>
+              <button type="button" class="message-thread-link" (click)="openMessageThread(message.id)">
+                <span>{{ database.threadReplyCount(message.id) }} Antworten</span>
+                @if (database.threadLastReplyTime(message.id); as lastReplyTime) {
+                  <span class="message-thread-last-reply">Letzte Antwort {{ lastReplyTime }}</span>
+                }
+              </button>
+              @if (message.reactions.length > 0) {
+                <div class="message-reaction-actions" aria-label="Reaktionen">
+                  @for (reaction of message.reactions; track reaction.emoji) {
+                    <div class="reaction-chip-wrap">
+                      <button type="button" class="reaction-chip" aria-label="Reaktion">
+                        <span class="reaction-icon reaction-icon-text">{{ reactionIcon(reaction.emoji) }}</span>
+                        <span>{{ reaction.count }}</span>
+                      </button>
+                      <span class="reaction-hover-bubble thread-reaction-hover-bubble">
+                        <span class="thread-reaction-hover-icon">{{ reactionIcon(reaction.emoji) }}</span>
+                        <span class="thread-reaction-hover-user">{{ reactionHoverUser(reaction) }}</span>
+                        <span class="thread-reaction-hover-text">hat {{ reaction.count }} mal reagiert</span>
+                      </span>
+                    </div>
+                  }
+                  @if (!database.isGuest()) {
+                  <button type="button" class="reaction-add-button" aria-label="Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-row-' + message.id)">
+                    <img src="/assets/icons/add-re.svg" alt="" class="reaction-add-icon" />
+                  </button>
+                  @if (activeEmojiPicker() === 'reaction-row-' + message.id) {
+                    <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
+                    <div class="emoji-picker-popover emoji-picker-popover-reaction-row">
+                      <emoji-mart
+                        (emojiSelect)="onMessageEmojiSelect($event, 'reaction-row-' + message.id)"
+                        [enableSearch]="false" [emojiSize]="36" [include]="emojiCategories"
+                        [showPreview]="false" [showSingleCategory]="true" [perLine]="9" [totalFrequentLines]="1"
+                      ></emoji-mart>
+                    </div>
+                  }
+                  }
+                </div>
+              }
+            </div>
+          }
+        </article>
+      }
+    </div>
+
+    @if (!database.isGuest()) {
+    <form
+      class="message-box composer-box"
+      aria-label="Nachricht schreiben"
+      (submit)="sendChannelMessage(chatMessageDraft); chatMessageDraft = ''; $event.preventDefault()"
+    >
+      @if (chatMessageDraft.startsWith('#') && channelSuggestions().length > 0) {
+        <div class="channel-suggestions-list">
+          @for (channel of channelSuggestions(); track channel.id) {
+            <button type="button" class="suggestion-item" (click)="selectChannelSuggestion(channel.id)">
+              <span class="suggestion-hash">#</span>
+              <span class="suggestion-name">{{ channel.name }}</span>
+            </button>
+          }
+        </div>
+      }
+      @if (showContactSuggestions()) {
+        <div class="contact-suggestions-list">
+          @for (contact of contactSuggestions(); track contact.id) {
+            <button type="button" class="contact-suggestion-item" (click)="selectContactSuggestion(contact.id)">
+              <span class="contact-suggestion-avatar-wrap">
+                <img class="contact-suggestion-avatar" [src]="avatarSvgPath(contact.id)" [alt]="contact.name" />
+                <span class="contact-suggestion-status" [class.online]="contact.isOnline" [class.offline]="!contact.isOnline"></span>
+              </span>
+              <span class="contact-suggestion-name">{{ contact.name }}</span>
+            </button>
+          }
+        </div>
+      }
+      <textarea id="chat-message" #chatMessage name="chatMessage" class="message-input" rows="2"
+        [(ngModel)]="chatMessageDraft"
+        [placeholder]="uiState.showMainChatIntro() ? 'Starte eine neue Nachricht' : uiState.selectedDirectMessageUserId() ? 'Nachricht an ' + (directMessageUser()?.name ?? '') : 'Nachricht an ' + database.activeChannel().name"
+      ></textarea>
+
+      <div class="message-actions">
+        <div class="add-elements">
+          <button type="button" class="action-button action-button-emoji" aria-label="Emoji hinzufuegen" (click)="toggleEmojiPicker('message')"><img src="/assets/icons/emot.svg" alt="" class="action-icon action-icon-small" /></button>
+          @if (activeEmojiPicker() === 'message') {
+            <div class="emoji-picker-overlay" (click)="closeEmojiPicker()"></div>
+            <div class="emoji-picker-popover">
+              <emoji-mart
+                (emojiSelect)="onMessageEmojiSelect($event, 'message')"
+                [enableSearch]="false" [emojiSize]="36" [include]="emojiCategories"
+                [showPreview]="false" [showSingleCategory]="true" [perLine]="9" [totalFrequentLines]="1"
+              ></emoji-mart>
+            </div>
+          }
+          <button type="button" class="action-button" aria-label="Erwaehnung hinzufuegen" (click)="insertContactMentionTrigger()"><img src="/assets/icons/at.svg" alt="" class="action-icon" /></button>
+        </div>
+        <button type="submit" class="send-button" aria-label="Senden"><img src="/assets/icons/send.svg" alt="" class="send-icon" /></button>
+      </div>
+    </form>
+    }
+</div>

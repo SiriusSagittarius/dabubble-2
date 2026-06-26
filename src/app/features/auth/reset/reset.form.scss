@@ -1,0 +1,274 @@
+@use '../../../styles/fluid' as *;
+
+$purple-1: #444DF2;
+$purple-2: #797EF3;
+$light-purple-bg: #ECEEFE;
+$text-gray: #686868;
+$error-pink: #ED1E79;
+
+/* Formular im Fluss (kein absolute) -> skaliert flüssig, nichts kollidiert */
+.login-form,
+.password-form {
+  position: relative;
+  width: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: fluid(431, 1920, 28, 40);
+
+  @media (max-width: 430px) {
+    margin-top: fluid(320, 430, 20, 28);
+  }
+}
+
+.login-form {
+  gap: fluid(431, 1920, 14, 18);
+}
+
+.password-form {
+  gap: fluid(431, 1920, 22, 28);
+
+  @media (max-width: 430px) {
+    gap: 18px;
+  }
+}
+
+.instruction-text {
+  margin: 0 0 fluid(431, 1920, 12, 14) 0;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  color: #000000;
+  font-size: fluid(431, 1920, 16, 18);
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.password-group {
+  position: relative;
+  min-height: 112px;
+  padding-bottom: 26px;
+  gap: 8px;
+
+  @media (max-width: 430px) {
+    min-height: 106px;
+  }
+}
+
+.field-label {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  color: #000000;
+  font-size: fluid(431, 1920, 16, 18);
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 fluid(431, 1920, 24, 32);
+  width: 100%;
+  height: fluid(431, 1920, 50, 60);
+  background: $light-purple-bg;
+  border-radius: 100px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  box-sizing: border-box;
+
+  &:hover {
+    border-color: #000000;
+  }
+
+  &:focus-within {
+    border-color: gray;
+    background-color: #fff;
+  }
+
+  .input-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .form-control {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+    color: $text-gray;
+    outline: none;
+    font-size: fluid(431, 1920, 16, 18);
+
+    &::placeholder {
+      color: rgba($text-gray, 0.6);
+    }
+  }
+
+  .btn-toggle-password {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+    color: $text-gray;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: $purple-1;
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.error-text {
+  position: absolute;
+  bottom: -22px;
+  left: fluid(431, 1920, 20, 32);
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: $error-pink;
+  white-space: nowrap;
+
+  @media (max-width: 430px) {
+    left: 16px;
+    font-size: 12px;
+    white-space: normal;
+  }
+}
+
+/* E-Mail-Schritt: Platz für die Fehlermeldung reservieren, damit sie den Info-Text nicht überdeckt */
+.login-form .input-group {
+  padding-bottom: 22px;
+}
+
+.login-form .error-text {
+  bottom: 0;
+}
+
+.password-error {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  white-space: nowrap;
+
+  @media (max-width: 430px) {
+    white-space: normal;
+  }
+}
+
+.reset-info {
+  margin: fluid(431, 1920, 18, 22) 0 0 0;
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  color: #000000;
+  text-align: center;
+  font-size: fluid(431, 1920, 16, 18);
+
+  @media (max-width: 430px) {
+    font-size: fluid(320, 430, 14, 16);
+  }
+}
+
+.reset-info-hint {
+  margin: fluid(431, 1920, 8, 10) 0 0 0;
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  color: $text-gray;
+  text-align: center;
+  font-size: fluid(431, 1920, 13, 15);
+
+  @media (max-width: 430px) {
+    font-size: fluid(320, 430, 12, 13);
+  }
+}
+
+.action-footer {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: fluid(431, 1920, 28, 40);
+
+  @media (max-width: 430px) {
+    justify-content: center;
+    margin-top: fluid(320, 430, 20, 28);
+  }
+
+  /* Desktop: Button am unteren Kartenrand verankern (passend zur min-height) */
+  @media (min-width: 531px) {
+    margin-top: auto;
+    padding-top: fluid(531, 1920, 16, 32);
+  }
+
+  .btn-primary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 192px;
+    height: 49px;
+    padding: 0 24px;
+    background: $purple-1;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    color: #FFFFFF;
+
+    &:hover:not(:disabled) {
+      background: #000;
+    }
+
+    &:disabled {
+      background: #B4B7C9;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    @media (max-width: 430px) {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+}

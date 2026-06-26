@@ -1,0 +1,401 @@
+<div class="sidebar-card">
+  <div class="workspace-row">
+    <img src="/assets/icons/workspace.svg" alt="" class="workspace-logo" />
+    <div class="workspace-text">
+      <button type="button" class="workspace-name-btn" (click)="openDevspaceSearch()">
+        <span class="workspace-name">Devspace</span>
+      </button>
+    </div>
+    <button type="button" class="workspace-edit-button" aria-label="Neue Nachricht" (click)="openMainChatIntro()">
+      <img src="/assets/icons/edit.svg" alt="" class="workspace-edit-icon" />
+    </button>
+  </div>
+
+  @if (devspaceSearchOpen()) {
+    <div class="devspace-search-box">
+      <div class="devspace-search-header">
+        <span class="devspace-search-title">Search</span>
+        <button type="button" class="devspace-search-close" (click)="closeDevspaceSearch()" aria-label="Schließen">✕</button>
+      </div>
+      <div class="devspace-search-row">
+        <input
+          type="text"
+          placeholder="Devspace durchsuchen"
+          class="devspace-search-input"
+          name="devspaceSearch"
+          [ngModel]="devspaceSearchQuery()"
+          (ngModelChange)="devspaceSearchQuery.set($event)"
+        />
+        <img src="/assets/icons/search-icon.svg" alt="" class="devspace-search-icon" />
+      </div>
+
+      @if (searchShowChannels()) {
+        <nav class="search-result-list">
+          @for (channel of filteredChannels(); track channel.id) {
+            <button type="button" class="search-result-item" (click)="onSelectChannel(channel.id); closeDevspaceSearch()">
+              <span class="search-result-prefix">#</span>
+              <span class="search-result-name">{{ channel.name }}</span>
+            </button>
+          }
+          @if (filteredChannels().length === 0) {
+            <span class="search-result-empty">Keine Channels gefunden</span>
+          }
+        </nav>
+      }
+      @if (searchShowUsers()) {
+        <nav class="search-result-list">
+          @for (user of filteredUsers(); track user.id) {
+            <button type="button" class="search-result-item" (click)="openDirectMessage(user.id); closeDevspaceSearch()">
+              <img class="search-result-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+              <span class="search-result-name">{{ user.name }}</span>
+            </button>
+          }
+          @if (filteredUsers().length === 0) {
+            <span class="search-result-empty">Keine Kontakte gefunden</span>
+          }
+        </nav>
+      }
+
+      @if (searchShowDefault()) {
+        <p class="search-hint"># für Channels &nbsp;·&nbsp; @ für Kontakte</p>
+      }
+    </div>
+  }
+
+  @if (!devspaceSearchOpen()) {
+    <div class="sidebar-searchbar-container">
+      <input
+        type="text"
+        placeholder="Devspace durchsuchen"
+        class="sidebar-searchbar"
+        name="sidebarSearchDraft"
+        (focus)="openDevspaceSearch()"
+      />
+      <img src="/assets/icons/search-icon.svg" alt="" class="sidebar-searchbar-icon" />
+    </div>
+  }
+
+  @if (!devspaceSearchOpen()) {
+
+    <!-- ===== CHANNELS ===== -->
+    <section class="sidebar-section">
+      <div class="channels-header-row" aria-label="Channels">
+        <button
+          type="button"
+          class="channels-toggle-btn"
+          [class.channels-expanded]="channelsExpanded()"
+          aria-label="Channels umschalten"
+          [attr.aria-expanded]="channelsExpanded()"
+          (click)="toggleChannels()"
+        >
+          <app-sidebar-caret-icon variant="channels"/>
+          <svg class="channels-hub-icon" viewBox="45 8 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M51 29C49.9 29 48.9583 28.6083 48.175 27.825C47.3917 27.0417 47 26.1 47 25C47 23.9 47.3917 22.9583 48.175 22.175C48.9583 21.3917 49.9 21 51 21C52.1 21 53.0417 21.3917 53.825 22.175C54.6083 22.9583 55 23.9 55 25C55 26.1 54.6083 27.0417 53.825 27.825C53.0417 28.6083 52.1 29 51 29ZM63 29C61.9 29 60.9583 28.6083 60.175 27.825C59.3917 27.0417 59 26.1 59 25C59 23.9 59.3917 22.9583 60.175 22.175C60.9583 21.3917 61.9 21 63 21C64.1 21 65.0417 21.3917 65.825 22.175C66.6083 22.9583 67 23.9 67 25C67 26.1 66.6083 27.0417 65.825 27.825C65.0417 28.6083 64.1 29 63 29ZM51 27C51.55 27 52.0207 26.8043 52.412 26.413C52.804 26.021 53 25.55 53 25C53 24.45 52.804 23.9793 52.412 23.588C52.0207 23.196 51.55 23 51 23C50.45 23 49.9793 23.196 49.588 23.588C49.196 23.9793 49 24.45 49 25C49 25.55 49.196 26.021 49.588 26.413C49.9793 26.8043 50.45 27 51 27ZM63 27C63.55 27 64.021 26.8043 64.413 26.413C64.8043 26.021 65 25.55 65 25C65 24.45 64.8043 23.9793 64.413 23.588C64.021 23.196 63.55 23 63 23C62.45 23 61.979 23.196 61.587 23.588C61.1957 23.9793 61 24.45 61 25C61 25.55 61.1957 26.021 61.587 26.413C61.979 26.8043 62.45 27 63 27ZM57 19C55.9 19 54.9583 18.6083 54.175 17.825C53.3917 17.0417 53 16.1 53 15C53 13.9 53.3917 12.9583 54.175 12.175C54.9583 11.3917 55.9 11 57 11C58.1 11 59.0417 11.3917 59.825 12.175C60.6083 12.9583 61 13.9 61 15C61 16.1 60.6083 17.0417 59.825 17.825C59.0417 18.6083 58.1 19 57 19ZM57 17C57.55 17 58.021 16.804 58.413 16.412C58.8043 16.0207 59 15.55 59 15C59 14.45 58.8043 13.9793 58.413 13.588C58.021 13.196 57.55 13 57 13C56.45 13 55.9793 13.196 55.588 13.588C55.196 13.9793 55 14.45 55 15C55 15.55 55.196 16.0207 55.588 16.412C55.9793 16.804 56.45 17 57 17Z"/>
+          </svg>
+          <span class="channels-label">Channels</span>
+        </button>
+        @if (!database.isGuest()) {
+          <button type="button" class="channels-add-btn" aria-label="Channel hinzufuegen" (click)="openAddChannelDialog()">+</button>
+        }
+      </div>
+
+      @if (channelsExpanded()) {
+        <!-- Alle öffentlichen Channels -->
+        <nav class="channel-list" aria-label="Alle Channels">
+          <button
+            type="button"
+            class="channel-sublist-toggle"
+            [class.sublist-expanded]="alleChannelsExpanded()"
+            [attr.aria-expanded]="alleChannelsExpanded()"
+            (click)="toggleAlleChannels()"
+          >
+            <svg class="channel-sublist-caret" viewBox="0 5 30 30" width="16" height="16" aria-hidden="true">
+              <path d="M17.875 20.8752L14.625 24.1252C14.2292 24.521 13.7762 24.6093 13.2662 24.3902C12.7554 24.1718 12.5 23.7814 12.5 23.2189V16.7814C12.5 16.2189 12.7554 15.8285 13.2662 15.6102C13.7762 15.391 14.2292 15.4793 14.625 15.8752L17.875 19.1252C18 19.2502 18.0937 19.3856 18.1562 19.5314C18.2187 19.6773 18.25 19.8335 18.25 20.0002C18.25 20.1668 18.2187 20.3231 18.1562 20.4689C18.0937 20.6148 18 20.7502 17.875 20.8752Z"/>
+            </svg>
+            <span class="channel-sublist-label">Alle Channels</span>
+          </button>
+          @if (alleChannelsExpanded()) {
+            @for (channel of database.allPublicChannels(); track channel.id) {
+              @if (joinedChannelIds().has(channel.id)) {
+                <a
+                  href="#"
+                  class="channel-item"
+                  [class.active]="channelIsActive(channel.id)"
+                  (click)="onSelectChannel(channel.id); $event.preventDefault()"
+                >
+                  <span class="channel-item-prefix" aria-hidden="true">#</span>
+                  <span class="channel-item-name">{{ channel.name }}</span>
+                </a>
+              } @else {
+                <div class="channel-item channel-item-available">
+                  <span class="channel-item-prefix" aria-hidden="true">#</span>
+                  <span class="channel-item-name">{{ channel.name }}</span>
+                  <button type="button" class="channel-join-btn" (click)="joinChannel(channel.id)">Beitreten</button>
+                </div>
+              }
+            }
+          }
+        </nav>
+
+        <!-- Meine Channels -->
+        <nav class="channel-list" aria-label="Meine Channels">
+          <button
+            type="button"
+            class="channel-sublist-toggle"
+            [class.sublist-expanded]="meineChannelsExpanded()"
+            [attr.aria-expanded]="meineChannelsExpanded()"
+            (click)="toggleMeineChannels()"
+          >
+            <svg class="channel-sublist-caret" viewBox="0 5 30 30" width="16" height="16" aria-hidden="true">
+              <path d="M17.875 20.8752L14.625 24.1252C14.2292 24.521 13.7762 24.6093 13.2662 24.3902C12.7554 24.1718 12.5 23.7814 12.5 23.2189V16.7814C12.5 16.2189 12.7554 15.8285 13.2662 15.6102C13.7762 15.391 14.2292 15.4793 14.625 15.8752L17.875 19.1252C18 19.2502 18.0937 19.3856 18.1562 19.5314C18.2187 19.6773 18.25 19.8335 18.25 20.0002C18.25 20.1668 18.2187 20.3231 18.1562 20.4689C18.0937 20.6148 18 20.7502 17.875 20.8752Z"/>
+            </svg>
+            <span class="channel-sublist-label">Meine Channels</span>
+          </button>
+          @if (meineChannelsExpanded()) {
+            @for (channel of database.joinedChannels(); track channel.id) {
+              <a
+                href="#"
+                class="channel-item"
+                [class.active]="channelIsActive(channel.id)"
+                (click)="onSelectChannel(channel.id); $event.preventDefault()"
+              >
+                @if (channel.isPrivate) {
+                  <span class="channel-private-icon" aria-label="Privat">🔒</span>
+                } @else {
+                  <span class="channel-item-prefix" aria-hidden="true">#</span>
+                }
+                <span class="channel-item-name">{{ channel.name }}</span>
+              </a>
+            }
+            @if (!database.isGuest()) {
+              <button type="button" class="channel-item channel-item-add" aria-label="Channel hinzufügen" (click)="openAddChannelDialog()">
+                <span class="channel-item-add-icon-circle" aria-hidden="true">
+                  <span class="channel-item-add-plus"></span>
+                </span>
+                <span class="channel-item-add-label">Channel hinzufügen</span>
+              </button>
+            }
+          }
+        </nav>
+      }
+    </section>
+
+    <!-- ===== DIREKTNACHRICHTEN ===== -->
+    <section class="sidebar-section dm-section">
+      <button
+        type="button"
+        class="dm-header-row"
+        [class.dm-expanded]="directMessagesExpanded()"
+        aria-label="Direktnachrichten umschalten"
+        [attr.aria-expanded]="directMessagesExpanded()"
+        aria-controls="dm-list"
+        (click)="toggleDirectMessages()"
+      >
+        <svg class="dm-caret-icon" viewBox="0 5 30 30" width="22" height="22" aria-hidden="true">
+          <path d="M18.125 21.1564L14.7812 24.5002C14.2604 25.021 13.6667 25.146 13 24.8752C12.3333 24.6043 12 24.1043 12 23.3752V16.6252C12 15.896 12.3333 15.396 13 15.1252C13.6667 14.8543 14.2604 14.9793 14.7812 15.5002L18.125 18.8439C18.2917 19.0106 18.4112 19.1927 18.4837 19.3902C18.5571 19.5885 18.5937 19.7918 18.5937 20.0002C18.5937 20.2085 18.5571 20.4118 18.4837 20.6102C18.4112 20.8077 18.2917 20.9898 18.125 21.1564Z"/>
+        </svg>
+        <svg class="dm-person-icon" viewBox="45 8 24 24" width="24" height="24" aria-hidden="true">
+          <path d="M50.85 25.1C51.7 24.45 52.65 23.9373 53.7 23.562C54.75 23.1873 55.85 23 57 23C58.15 23 59.25 23.1873 60.3 23.562C61.35 23.9373 62.3 24.45 63.15 25.1C63.7333 24.4167 64.1877 23.6417 64.513 22.775C64.8377 21.9083 65 20.9833 65 20C65 17.7833 64.221 15.8957 62.663 14.337C61.1043 12.779 59.2167 12 57 12C54.7833 12 52.896 12.779 51.338 14.337C49.7793 15.8957 49 17.7833 49 20C49 20.9833 49.1627 21.9083 49.488 22.775C49.8127 23.6417 50.2667 24.4167 50.85 25.1ZM57 21C56.0167 21 55.1873 20.6627 54.512 19.988C53.8373 19.3127 53.5 18.4833 53.5 17.5C53.5 16.5167 53.8373 15.6873 54.512 15.012C55.1873 14.3373 56.0167 14 57 14C57.9833 14 58.8127 14.3373 59.488 15.012C60.1627 15.6873 60.5 16.5167 60.5 17.5C60.5 18.4833 60.1627 19.3127 59.488 19.988C58.8127 20.6627 57.9833 21 57 21ZM57 30C55.6167 30 54.3167 29.7373 53.1 29.212C51.8833 28.6873 50.825 27.975 49.925 27.075C49.025 26.175 48.3127 25.1167 47.788 23.9C47.2627 22.6833 47 21.3833 47 20C47 18.6167 47.2627 17.3167 47.788 16.1C48.3127 14.8833 49.025 13.825 49.925 12.925C50.825 12.025 51.8833 11.3123 53.1 10.787C54.3167 10.2623 55.6167 10 57 10C58.3833 10 59.6833 10.2623 60.9 10.787C62.1167 11.3123 63.175 12.025 64.075 12.925C64.975 13.825 65.6873 14.8833 66.212 16.1C66.7373 17.3167 67 18.6167 67 20C67 21.3833 66.7373 22.6833 66.212 23.9C65.6873 25.1167 64.975 26.175 64.075 27.075C63.175 27.975 62.1167 28.6873 60.9 29.212C59.6833 29.7373 58.3833 30 57 30ZM57 28C57.8833 28 58.7167 27.871 59.5 27.613C60.2833 27.3543 61 26.9833 61.65 26.5C61 26.0167 60.2833 25.6457 59.5 25.387C58.7167 25.129 57.8833 25 57 25C56.1167 25 55.2833 25.129 54.5 25.387C53.7167 25.6457 53 26.0167 52.35 26.5C53 26.9833 53.7167 27.3543 54.5 27.613C55.2833 27.871 56.1167 28 57 28ZM57 19C57.4333 19 57.7917 18.8583 58.075 18.575C58.3583 18.2917 58.5 17.9333 58.5 17.5C58.5 17.0667 58.3583 16.7083 58.075 16.425C57.7917 16.1417 57.4333 16 57 16C56.5667 16 56.2083 16.1417 55.925 16.425C55.6417 16.7083 55.5 17.0667 55.5 17.5C55.5 17.9333 55.6417 18.2917 55.925 18.575C56.2083 18.8583 56.5667 19 57 19Z"/>
+        </svg>
+        <span class="dm-header-title">Direktnachrichten</span>
+      </button>
+
+      <nav
+        id="dm-list"
+        class="dm-list"
+        [class.dm-list-collapsed]="!directMessagesExpanded()"
+        aria-label="Direktnachrichten"
+      >
+        @for (member of directMessageList(); track member.id) {
+          <app-sidebar-dm-list-item
+            [member]="member"
+            (onClick)="openDirectMessage($event)"
+          />
+        }
+      </nav>
+    </section>
+
+    <!-- ===== KONTAKTE ===== -->
+    <section class="sidebar-section">
+      <div class="kontakte-header-outer">
+        <button
+          type="button"
+          class="kontakte-header-row"
+          [class.kontakte-expanded]="kontakteExpanded()"
+          aria-label="Kontakte umschalten"
+          [attr.aria-expanded]="kontakteExpanded()"
+          (click)="toggleKontakte()"
+        >
+          <svg class="kontakte-caret-icon" viewBox="0 5 30 30" width="22" height="22" aria-hidden="true">
+            <path d="M17.875 20.8752L14.625 24.1252C14.2292 24.521 13.7762 24.6093 13.2662 24.3902C12.7554 24.1718 12.5 23.7814 12.5 23.2189V16.7814C12.5 16.2189 12.7554 15.8285 13.2662 15.6102C13.7762 15.391 14.2292 15.4793 14.625 15.8752L17.875 19.1252C18 19.2502 18.0937 19.3856 18.1562 19.5314C18.2187 19.6773 18.25 19.8335 18.25 20.0002C18.25 20.1668 18.2187 20.3231 18.1562 20.4689C18.0937 20.6148 18 20.7502 17.875 20.8752Z"/>
+          </svg>
+          <svg class="kontakte-person-icon" viewBox="45 8 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M57 22C55.9 22 54.9583 21.6083 54.175 20.825C53.3917 20.0417 53 19.1 53 18C53 16.9 53.3917 15.9583 54.175 15.175C54.9583 14.3917 55.9 14 57 14C58.1 14 59.0417 14.3917 59.825 15.175C60.6083 15.9583 61 16.9 61 18C61 19.1 60.6083 20.0417 59.825 20.825C59.0417 21.6083 58.1 22 57 22ZM47 30V27.2C47 26.6333 47.146 26.1123 47.438 25.637C47.7293 25.1623 48.1167 24.8 48.6 24.55C49.6333 24.0333 50.6833 23.6457 51.75 23.387C52.8167 23.129 53.9 23 55 23H55.275C55.1917 23.3333 55.1123 23.671 55.037 24.013C54.9623 24.3543 54.9083 24.7 54.875 25.05C54.2583 25.05 53.65 25.121 53.05 25.263C52.45 25.4043 51.8583 25.5917 51.275 25.825C51.025 25.9083 50.8333 26.0373 50.7 26.212C50.5667 26.3873 50.5 26.5833 50.5 26.8V27.5H55.05C55.15 27.8667 55.271 28.229 55.413 28.587C55.5543 28.9457 55.7083 29.2833 55.875 29.6L55.775 30H47ZM63.5 31L63.2 29.3C63.0167 29.2167 62.8417 29.1207 62.675 29.012C62.5083 28.904 62.35 28.7833 62.2 28.65L60.6 29.25L59.1 26.75L60.45 25.75C60.4333 25.6333 60.425 25.5207 60.425 25.412C60.425 25.304 60.425 25.1917 60.425 25.075C60.425 24.975 60.425 24.871 60.425 24.763C60.425 24.6543 60.4333 24.5417 60.45 24.425L59.1 23.425L60.6 20.925L62.2 21.525C62.35 21.3917 62.5083 21.271 62.675 21.163C62.8417 21.0543 63.0167 20.9583 63.2 20.875L63.5 19.175H66.5L66.8 20.875C66.9833 20.9583 67.1583 21.0543 67.325 21.163C67.4917 21.271 67.65 21.3917 67.8 21.525L69.4 20.925L70.9 23.425L69.55 24.425C69.5667 24.5417 69.575 24.6543 69.575 24.763C69.575 24.871 69.575 24.975 69.575 25.075C69.575 25.1917 69.575 25.3 69.575 25.4C69.575 25.5 69.5667 25.6083 69.55 25.725L70.9 26.725L69.4 29.225L67.8 28.625C67.65 28.7583 67.4917 28.879 67.325 28.987C67.1583 29.0957 66.9833 29.1917 66.8 29.275L66.5 30.975L63.5 31ZM65 27.075C65.5833 27.075 66.0833 26.8667 66.5 26.45C66.9167 26.0333 67.125 25.5333 67.125 24.95C67.125 24.3667 66.9167 23.8667 66.5 23.45C66.0833 23.0333 65.5833 22.825 65 22.825C64.4167 22.825 63.9167 23.0333 63.5 23.45C63.0833 23.8667 62.875 24.3667 62.875 24.95C62.875 25.5333 63.0833 26.0333 63.5 26.45C63.9167 26.8667 64.4167 27.075 65 27.075Z"/>
+          </svg>
+          <span class="kontakte-header-title">Kontakte</span>
+        </button>
+        @if (!database.isGuest()) {
+          <button type="button" class="kontakte-header-action" title="Importieren" aria-label="Kontakte importieren" (click)="importContacts()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 8l5 5-1.41 1.41L13 11.83V21h-2v-9.17l-2.59 2.58L7 13l5-5zm-7-2h14V4H5v2z"/></svg>
+          </button>
+          <button type="button" class="kontakte-header-action" title="Exportieren" aria-label="Kontakte exportieren" (click)="exportContacts()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 16l-5-5 1.41-1.41L11 13.17V4h2v9.17l2.59-2.58L17 11l-5 5zm-7 2h14v2H5v-2z"/></svg>
+          </button>
+          <button type="button" class="kontakte-header-action kontakte-header-add" title="Kontakt hinzufügen" aria-label="Neuen Kontakt hinzufügen" (click)="openAddContact()">+</button>
+        }
+      </div>
+
+      @if (addContactOpen()) {
+        <form class="kontakte-add-form" novalidate (submit)="submitAddContact(); $event.preventDefault()">
+          <div class="kontakte-add-form-row">
+            <input class="kontakte-add-input" type="text" placeholder="Vorname *" [ngModel]="addContactFirstName()" (ngModelChange)="addContactFirstName.set($event)" name="firstName" required />
+            <input class="kontakte-add-input" type="text" placeholder="Nachname" [ngModel]="addContactLastName()" (ngModelChange)="addContactLastName.set($event)" name="lastName" />
+          </div>
+          <input class="kontakte-add-input" type="email" placeholder="E-Mail *" [ngModel]="addContactEmail()" (ngModelChange)="addContactEmail.set($event)" name="email" required />
+          <div class="kontakte-add-form-actions">
+            <button type="button" class="kontakte-add-cancel" (click)="closeAddContact()">Abbrechen</button>
+            <button type="submit" class="kontakte-add-submit" [disabled]="!addContactFirstName().trim() || !addContactEmail().trim()">Hinzufügen</button>
+          </div>
+        </form>
+      }
+
+      @if (kontakteExpanded()) {
+        <!-- Suche nach öffentlichen Kontakten -->
+        @if (!database.isGuest()) {
+          <div class="kontakte-search-row">
+            <input
+              type="text"
+              class="kontakte-search-input"
+              placeholder="Öffentliche Kontakte suchen…"
+              name="kontakteSearch"
+              [ngModel]="kontakteSearchQuery()"
+              (ngModelChange)="kontakteSearchQuery.set($event)"
+            />
+          </div>
+          @if (kontakteSearchQuery().trim()) {
+            <ul class="kontakte-search-results" aria-label="Öffentliche Kontakte">
+              @for (user of contactSearchResults(); track user.id) {
+                <li class="kontakte-search-item">
+                  <button type="button" class="kontakte-search-info" (click)="openUserProfile(user.id)">
+                    <img class="kontakte-contact-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+                    <span class="kontakte-contact-name">{{ user.name }}</span>
+                  </button>
+                  <button type="button" class="kontakte-search-add" (click)="addPublicContact(user.id)">Hinzufügen</button>
+                </li>
+              }
+              @if (contactSearchResults().length === 0) {
+                <li class="kontakte-empty-hint">Keine öffentlichen Kontakte gefunden</li>
+              }
+            </ul>
+          }
+        }
+
+        <!-- Eigene Kontaktliste -->
+        <nav class="kontakte-sublist" aria-label="Meine Kontakte">
+          <button
+            type="button"
+            class="channel-sublist-toggle"
+            [class.sublist-expanded]="privateContactsExpanded()"
+            [attr.aria-expanded]="privateContactsExpanded()"
+            (click)="togglePrivateContacts()"
+          >
+            <svg class="channel-sublist-caret" viewBox="0 5 30 30" width="16" height="16" aria-hidden="true">
+              <path d="M17.875 20.8752L14.625 24.1252C14.2292 24.521 13.7762 24.6093 13.2662 24.3902C12.7554 24.1718 12.5 23.7814 12.5 23.2189V16.7814C12.5 16.2189 12.7554 15.8285 13.2662 15.6102C13.7762 15.391 14.2292 15.4793 14.625 15.8752L17.875 19.1252C18 19.2502 18.0937 19.3856 18.1562 19.5314C18.2187 19.6773 18.25 19.8335 18.25 20.0002C18.25 20.1668 18.2187 20.3231 18.1562 20.4689C18.0937 20.6148 18 20.7502 17.875 20.8752Z"/>
+            </svg>
+            <span class="channel-sublist-label">Kontakte</span>
+          </button>
+          @if (privateContactsExpanded()) {
+            <ul class="kontakte-contacts-list" aria-label="Meine Kontakte">
+              @for (user of database.contactUsers(); track user.id) {
+                <li class="kontakte-contact-item" [class.kontakte-contact-item-open]="openContactMenuId() === user.id">
+                  <button type="button" class="kontakte-contact-info-btn" (click)="toggleContactMenu(user.id)">
+                    <img class="kontakte-contact-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+                    <span class="kontakte-contact-name">{{ user.name }}</span>
+                  </button>
+                  @if (openContactMenuId() === user.id) {
+                    <div class="kontakte-context-menu" role="menu">
+                      @if (!database.isGuest()) {
+                        <button type="button" class="kontakte-context-item" (click)="contactAddToChannel(user.id)">Hinzufügen</button>
+                      }
+                      <button type="button" class="kontakte-context-item" (click)="contactMessage(user.id)">Nachricht</button>
+                      <button type="button" class="kontakte-context-item" (click)="contactProfile(user.id)">Profil</button>
+                      @if (!database.isGuest()) {
+                        <button
+                          type="button"
+                          class="kontakte-context-item kontakte-context-delete"
+                          [class.armed]="deleteArmedId() === user.id"
+                          (click)="contactDelete(user.id)"
+                          (pointerdown)="onDeletePressStart(user.id)"
+                          (pointerup)="onDeletePressEnd()"
+                          (pointerleave)="onDeletePressEnd()"
+                        >
+                          {{ deleteArmedId() === user.id ? 'Endgültig löschen?' : 'Löschen' }}
+                        </button>
+                      }
+                    </div>
+                  }
+                </li>
+              }
+              @if (database.contactUsers().length === 0) {
+                <li class="kontakte-empty-hint">Noch keine Kontakte</li>
+              }
+            </ul>
+          }
+        </nav>
+
+        <!-- Team: Mitglieder des aktuell gewählten Channels -->
+        <nav class="kontakte-sublist" aria-label="Team">
+          <button
+            type="button"
+            class="channel-sublist-toggle"
+            [class.sublist-expanded]="teamExpanded()"
+            [attr.aria-expanded]="teamExpanded()"
+            (click)="toggleTeam()"
+          >
+            <svg class="channel-sublist-caret" viewBox="0 5 30 30" width="16" height="16" aria-hidden="true">
+              <path d="M17.875 20.8752L14.625 24.1252C14.2292 24.521 13.7762 24.6093 13.2662 24.3902C12.7554 24.1718 12.5 23.7814 12.5 23.2189V16.7814C12.5 16.2189 12.7554 15.8285 13.2662 15.6102C13.7762 15.391 14.2292 15.4793 14.625 15.8752L17.875 19.1252C18 19.2502 18.0937 19.3856 18.1562 19.5314C18.2187 19.6773 18.25 19.8335 18.25 20.0002C18.25 20.1668 18.2187 20.3231 18.1562 20.4689C18.0937 20.6148 18 20.7502 17.875 20.8752Z"/>
+            </svg>
+            <span class="channel-sublist-label">Team</span>
+            @if (database.activeChannel().name) {
+              <span class="kontakte-team-channel"># {{ database.activeChannel().name }}</span>
+            }
+          </button>
+          @if (teamExpanded()) {
+            <nav class="dm-list" aria-label="Team-Mitglieder">
+              @for (member of database.activeChannelMembers(); track member.id) {
+                <app-sidebar-dm-list-item
+                  [member]="member"
+                  (onClick)="openDirectMessage($event)"
+                />
+              }
+              @if (database.activeChannelMembers().length === 0) {
+                <p class="channel-empty-hint">Kein Channel ausgewählt</p>
+              }
+            </nav>
+          }
+        </nav>
+      }
+    </section>
+
+    <!-- ===== HILFE ===== -->
+    <section class="sidebar-section">
+      <button
+        type="button"
+        class="hilfe-header-row"
+        [class.hilfe-active]="uiState.showHelp() || database.onboardingActive()"
+        aria-label="Hilfe öffnen"
+        (click)="openHelp()"
+      >
+        <svg class="hilfe-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+        </svg>
+        <span class="hilfe-title">Hilfe</span>
+      </button>
+    </section>
+
+  }
+
+  <button type="button" class="sidebar-fab" aria-label="Neue Nachricht" (click)="openMainChatIntro()">
+    <img src="/assets/icons/edit_square.svg" alt="" />
+  </button>
+</div>

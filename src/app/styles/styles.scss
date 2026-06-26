@@ -1,0 +1,55 @@
+@use 'fluid' as *;
+
+/* You can add global styles to this file, and also import other style files */
+
+/* Auth-Logo: Der Avatar-Schritt ("Wähle deinen Avatar") läuft auf /signup,
+   soll das Logo aber – wie login – "oben" zeigen. Das Logo liegt in der
+   auth-shell, .avatar-step im signup-Component; wegen ViewEncapsulation kann
+   die Shell das nicht selbst per :has() erkennen. Deshalb hier global (ungescoped):
+   Logo zurück auf die obere Basisposition, sobald der Avatar-Schritt sichtbar ist. */
+@media (max-width: 530px) {
+  .auth-shell:has(.avatar-step) .auth-logo--signup {
+    top: fluid(320, 1920, 58.95, 75);
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+
+  width: 100%;
+  max-width: 1920px;
+
+  height: 100dvh;
+  max-height: 1080px;
+  margin: 0 auto;
+
+  overflow: hidden;
+}
+
+/* Emoji-Mart Kategorienleiste scrollbar auf Mobilgeraeten:
+   picker.css setzt overflow: hidden auf .emoji-mart-anchors, wodurch bei
+   8 Kategorien auf schmalen Screens (~339px) nur 4 sichtbar sind.
+   Hier global nach picker.css geladen, um overflow-x zu ueberschreiben. */
+@media (max-width: 520px) {
+  .emoji-picker-popover .emoji-mart-anchors {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .emoji-picker-popover .emoji-mart-anchors::-webkit-scrollbar {
+    display: none;
+  }
+
+  .emoji-picker-popover .emoji-mart-anchor {
+    flex: 0 0 44px !important;
+    min-width: 44px !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,50 @@
+<main class="page">
+  <app-header [showDevspace]="sidebarCollapsed()" (backToSidebar)="openSidebar()"></app-header>
+
+  <div
+    class="main-layout"
+    [class.sidebar-collapsed]="sidebarCollapsed()"
+    [class.thread-collapsed]="threadCollapsed()"
+  >
+    <aside class="sidebar-wrapper" [class.collapsed]="sidebarCollapsed()" aria-label="Seitenmenü">
+      <app-sidebar (itemSelected)="onSidebarItemSelected()"></app-sidebar>
+    </aside>
+
+    <section
+      class="chat-wrapper"
+      [class.center-panel-direct-message]="!!uiState.selectedDirectMessageUserId()"
+      aria-label="Hauptbereich"
+    >
+      @if (helpVisible()) {
+        <app-help></app-help>
+      } @else {
+        <app-chat-area (threadOpen)="openThread()" (backToSidebar)="openSidebar()"></app-chat-area>
+      }
+    </section>
+
+    <aside
+      class="thread-wrapper"
+      [class.collapsed]="threadCollapsed() || helpVisible()"
+      [class.right-panel-main-chat-hidden]="uiState.showMainChatIntro() || helpVisible()"
+      aria-label="Thread oder Informationen"
+    >
+      @if (uiState.membersPanelOpen()) {
+        <app-channel-details (close)="onChannelDetailsClose()"></app-channel-details>
+      } @else {
+        <app-thread-panel (close)="closeThread()"></app-thread-panel>
+      }
+    </aside>
+  </div>
+
+  <button
+    type="button"
+    class="workspace-menu-close-button"
+    [class.collapsed]="sidebarCollapsed()"
+    aria-label="Workspace-Menü umschalten"
+    (click)="toggleSidebar()"
+  >
+    <img src="../../assets/icons/menu.svg" class="menu-icon" alt="Menü-Icon">
+  </button>
+
+  <app-modals-container></app-modals-container>
+</main>

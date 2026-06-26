@@ -1,0 +1,271 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  --panel-gap: 20px;
+}
+
+.page {
+  position: relative;
+  min-height: 100dvh;
+  height: 100dvh;
+  background: #eceefe;
+  overflow-y: auto;
+  overflow-anchor: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.page::-webkit-scrollbar {
+  display: none;
+}
+
+.workspace-search-results,
+.chat-body,
+.thread-body,
+.add-channel-dialog,
+.dm-list,
+.channel-list,
+.add-members-panel-body,
+.members-panel-list,
+.add-members-suggestions-list,
+.contact-suggestions-list {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.main-layout {
+  position: absolute;
+  top: 115px;
+  left: 20px;
+  right: 20px;
+  bottom: 30px;
+  display: grid;
+  gap: 20px;
+  /* Sidebar(366) + Chat(min460, ≥Thread) + Thread(max485, min320) */
+  grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) minmax(320px, 485px);
+  box-sizing: border-box;
+  transition: grid-template-columns 0.3s ease-in-out;
+
+  &.sidebar-collapsed {
+    grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
+  }
+
+  &.thread-collapsed {
+    grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) 0px;
+  }
+
+  &.sidebar-collapsed.thread-collapsed {
+    grid-template-columns: 0px minmax(0px, 1fr) 0px;
+  }
+}
+
+/* 961px–1350px: max 2 Spalten — Sidebar fällt weg wenn Thread offen */
+@media (min-width: 961px) and (max-width: 1350px) {
+  /* Thread offen: Sidebar weg, Chat + Thread */
+  .main-layout:not(.thread-collapsed) {
+    grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
+  }
+
+  /* Thread zu: Sidebar + Chat */
+  .main-layout.thread-collapsed {
+    grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) 0px;
+  }
+
+  /* Sidebar manuell collapsed + Thread zu: nur Chat */
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    grid-template-columns: 0px minmax(0px, 1fr) 0px;
+  }
+
+  /* Sidebar manuell collapsed + Thread offen: Chat + Thread */
+  .main-layout.sidebar-collapsed:not(.thread-collapsed) {
+    grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
+  }
+}
+
+@media (max-width: 1425px) {
+  .main-layout {
+    top: 115px;
+  }
+}
+
+@media (max-width: 960px) {
+  /* Basis: top setzen, Rand wie Header (20px) */
+  .main-layout,
+  .main-layout.thread-collapsed,
+  .main-layout.sidebar-collapsed,
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    top: 138px;
+    left: 20px;
+    right: 20px;
+    gap: 0;
+  }
+
+  /* Sidebar offen, Thread zu: nur Sidebar */
+  .main-layout.thread-collapsed:not(.sidebar-collapsed) {
+    grid-template-columns: minmax(0px, 1fr) 0px 0px;
+  }
+
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    grid-template-columns: 0px minmax(0px, 1fr) 0px;
+  }
+
+  /* Thread offen + Sidebar zu: nur Thread */
+  .main-layout.sidebar-collapsed:not(.thread-collapsed) {
+    grid-template-columns: 0px 0px minmax(0px, 1fr);
+  }
+
+  /* Thread offen + Sidebar offen: nur Thread */
+  .main-layout:not(.thread-collapsed):not(.sidebar-collapsed) {
+    grid-template-columns: 0px 0px minmax(0px, 1fr);
+  }
+
+  .sidebar-wrapper,
+  .chat-wrapper,
+  .thread-wrapper {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 490px) {
+  .main-layout,
+  .main-layout.thread-collapsed,
+  .main-layout.sidebar-collapsed,
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    left: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 430px) {
+  .main-layout,
+  .main-layout.thread-collapsed,
+  .main-layout.sidebar-collapsed,
+  .main-layout.sidebar-collapsed.thread-collapsed {
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .chat-wrapper {
+    overflow: hidden;
+  }
+}
+
+.sidebar-wrapper {
+  height: 100%;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+
+  &.collapsed {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.chat-wrapper {
+  height: 100%;
+  min-width: 0;
+}
+
+.thread-wrapper {
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+
+  &.collapsed {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.right-panel-main-chat-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(120%);
+  }
+}
+
+.workspace-menu-close-button {
+  position: absolute;
+  left: 0px;
+  top: 581px;
+  bottom: 0;
+  width: 40px;
+  height: 320px;
+  border-radius: 0px 30px 30px 0px;
+  background: #FFFFFF;
+  cursor: pointer;
+  z-index: 100;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 10px 0 40px rgba(32, 36, 78, 0.08);
+  transition: all 0.3s ease;
+
+  .menu-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 10px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  &::after {
+    position: absolute;
+    bottom: 15px;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    padding: 0px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  &:hover .menu-icon {
+    filter: invert(10%) sepia(85%) saturate(5427%) hue-rotate(240deg) brightness(80%) contrast(105%);
+  }
+  
+
+  /* Zustand: Offen */
+  &:not(.collapsed)::after {
+    content: 'Workspace-Menü schließen';
+    color: #000;
+  }
+  &:not(.collapsed):hover::after {
+    color: #081190;
+    font-weight: 700;
+  }
+
+  /* Zustand: Geschlossen */
+  &.collapsed::after {
+    content: 'Workspace-Menü öffnen';
+    color: #000;
+  }
+  &.collapsed:hover::after {
+    color: #081190;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 430px) {
+  /* Side-Tab ausblenden – Sidebar via Header-Back-Button erreichbar */
+  .workspace-menu-close-button {
+    display: none;
+  }
+}
+
+.center-panel-direct-message {
+  .channel-edition-backdrop,
+  .members-panel-backdrop,
+  .add-members-panel-backdrop {
+    display: none;
+  }
+}
