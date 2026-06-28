@@ -189,7 +189,10 @@ export class ChatArea extends ChatAreaBase {
   }
 
   protected onMembersButtonClick(): void {
-    if (typeof window !== 'undefined' && window.innerWidth <= 430) {
+    // Ab <=1480px ist die Mitglieder-Vorschau (Avatare) ausgeblendet; dann
+    // uebernimmt dieser Button deren Funktion und oeffnet die Mitgliederliste.
+    // (Mitglieder hinzufuegen bleibt ueber den Button innerhalb der Liste.)
+    if (typeof window !== 'undefined' && window.innerWidth <= 1480) {
       this.membersListOpen.set(true);
       return;
     }
@@ -224,8 +227,8 @@ export class ChatArea extends ChatAreaBase {
     // Quick-Navigation: nur wenn '#' das erste Zeichen ist.
     if (!draft.startsWith('#')) return [];
     const query = draft.slice(1).trim().toLowerCase();
-    // Es duerfen nur oeffentliche Channels vorgeschlagen werden.
-    return this.database.allPublicChannels().filter((c) => c.name.toLowerCase().includes(query));
+    // Nur Channels, in denen der Nutzer Mitglied oder Ersteller ist.
+    return this.database.joinedChannels().filter((c) => c.name.toLowerCase().includes(query));
   }
 
   protected recipientChannelSuggestions() {
@@ -280,13 +283,14 @@ export class ChatArea extends ChatAreaBase {
     const currentId = this.database.currentUser()?.id;
 
     // In einem Channel duerfen ausschliesslich Mitglieder dieses Channels
-    // vorgeschlagen werden. In DM / "neue Nachricht" weiterhin eigene Kontakte
-    // oder oeffentliche Profile.
+    // vorgeschlagen werden. In DM / "neue Nachricht" nur eigene Kontakte und
+    // Mitglieder aus Channels, in denen der Nutzer selbst Mitglied ist.
     const inChannel = !this.directMessageUser() && !this.uiState.showMainChatIntro();
     let base = this.database.activeChannelMembers();
     if (!inChannel) {
-      const myContactIds = new Set(this.database.contactUsers().map((u) => u.id));
-      base = this.database.users().filter((u) => myContactIds.has(u.id) || (u.isPublic ?? true));
+      const allowedIds = new Set(this.database.contactUsers().map((u) => u.id));
+      this.database.joinedChannels().forEach((c) => c.memberIds.forEach((id) => allowedIds.add(id)));
+      base = this.database.users().filter((u) => allowedIds.has(u.id));
     }
 
     return base

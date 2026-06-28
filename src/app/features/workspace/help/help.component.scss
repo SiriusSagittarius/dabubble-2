@@ -75,6 +75,66 @@
   color: #686868;
 }
 
+.help-guest-banner {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding: 20px 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #444df2 0%, #797ef3 100%);
+  color: #fff;
+}
+
+.help-guest-banner-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.help-guest-banner-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.help-guest-banner-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.help-guest-banner-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.help-guest-banner-text strong {
+  color: #fff;
+}
+
+.help-guest-register-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+  border: 2px solid #fff;
+  border-radius: 25px;
+  background: transparent;
+  color: #fff;
+  padding: 10px 22px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.help-guest-register-btn:hover {
+  background: #fff;
+  color: #444df2;
+}
+
 .help-onboarding-note {
   margin: 8px 0 24px;
   padding: 16px 20px;

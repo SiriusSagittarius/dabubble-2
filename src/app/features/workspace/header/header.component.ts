@@ -48,10 +48,45 @@ export class HeaderComponent {
     return !channel.isPrivate || (!!currentUserId && channel.memberIds.includes(currentUserId));
   }
 
-  protected workspaceSearchChannels() {
-    const query = this.workspaceSearchDraft.trim().toLowerCase();
-    if (!query) return [];
+  // Suchmodus anhand des Praefix: '@' grenzt auf Profile ein, '#' auf Channels,
+  // sonst wird wie gewohnt alles durchsucht.
+  private searchMode(): 'mention' | 'channel' | 'all' {
+    const raw = this.workspaceSearchDraft.trim();
+    if (raw.startsWith('@')) return 'mention';
+    if (raw.startsWith('#')) return 'channel';
+    return 'all';
+  }
 
+  // Suchbegriff ohne fuehrendes '@'/'#'.
+  private searchQuery(): string {
+    const raw = this.workspaceSearchDraft.trim();
+    const sliced = this.searchMode() === 'all' ? raw : raw.slice(1);
+    return sliced.trim().toLowerCase();
+  }
+
+  // IDs aller Nutzer, mit denen der aktuelle Nutzer mindestens einen Channel
+  // teilt (beigetreten oder selbst erstellt) – Basis der '@'-Erwaehnungssuche.
+  private channelCoMemberIds(): Set<string> {
+    const ids = new Set<string>();
+    this.database
+      .joinedChannels()
+      .forEach((channel) => channel.memberIds.forEach((id) => ids.add(id)));
+    return ids;
+  }
+
+  protected workspaceSearchChannels() {
+    const mode = this.searchMode();
+    if (mode === 'mention') return [];
+    const query = this.searchQuery();
+
+    // '#': nur Channels, in denen der Nutzer Mitglied oder Ersteller ist.
+    if (mode === 'channel') {
+      return this.database
+        .joinedChannels()
+        .filter((channel) => !query || channel.name.toLowerCase().includes(query));
+    }
+
+    if (!query) return [];
     return this.database
       .channels()
       .filter(
@@ -63,9 +98,26 @@ export class HeaderComponent {
   }
 
   protected workspaceSearchUsers() {
-    const query = this.workspaceSearchDraft.trim().toLowerCase();
-    if (!query) return [];
+    const mode = this.searchMode();
+    if (mode === 'channel') return [];
+    const query = this.searchQuery();
 
+    // '@': nur Nutzer, mit denen man mindestens einen Channel teilt.
+    if (mode === 'mention') {
+      const currentUserId = this.database.currentUser()?.id;
+      const coMemberIds = this.channelCoMemberIds();
+      return this.database
+        .users()
+        .filter((user) => user.id !== currentUserId && coMemberIds.has(user.id))
+        .filter(
+          (user) =>
+            !query ||
+            user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query),
+        );
+    }
+
+    if (!query) return [];
     return this.database
       .users()
       .filter(
@@ -75,7 +127,9 @@ export class HeaderComponent {
   }
 
   protected workspaceSearchMessages() {
-    const query = this.workspaceSearchDraft.trim().toLowerCase();
+    // Bei '@'/'#' bleibt die Suche auf Profile bzw. Channels beschraenkt.
+    if (this.searchMode() !== 'all') return [];
+    const query = this.searchQuery();
     if (!query) return [];
 
     return this.database.messages().filter((message) => {

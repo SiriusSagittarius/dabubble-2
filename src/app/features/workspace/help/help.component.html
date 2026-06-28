@@ -4,6 +4,20 @@
       <button type="button" class="help-close" aria-label="Hilfe schließen" (click)="close()">✕</button>
     }
 
+    @if (database.isGuest()) {
+      <div class="help-guest-banner" role="note" aria-label="Gastmodus – eingeschränkte Nutzung">
+        <span class="help-guest-banner-icon" aria-hidden="true">👤</span>
+        <div class="help-guest-banner-body">
+          <strong class="help-guest-banner-title">Du nutzt DABubble als Gast</strong>
+          <p class="help-guest-banner-text">
+            Alle Daten in dieser Sitzung sind <strong>temporär</strong> — Nachrichten, Channels und Kontakte werden <strong>nicht gespeichert</strong> und gehen beim Abmelden verloren.
+            Um alle Funktionen dauerhaft zu nutzen, erstelle ein kostenloses Konto.
+          </p>
+          <button type="button" class="help-guest-register-btn" (click)="goToRegister()">Jetzt kostenlos registrieren</button>
+        </div>
+      </div>
+    }
+
     <header class="help-header">
       <img src="/assets/icons/workspace.svg" alt="" class="help-logo" />
       <h1 class="help-title">Willkommen bei DABubble</h1>
@@ -56,21 +70,21 @@
         <span class="help-feature-icon">👥</span>
         <div class="help-feature-body">
           <span class="help-feature-name">Kontakte</span>
-          <span class="help-feature-text">Finde öffentliche Kontakte über die Suche und füge sie deiner Liste hinzu. Import/Export von Kontaktlisten möglich.</span>
+          <span class="help-feature-text">Finde öffentliche Kontakte über die Suche und füge sie deiner Liste hinzu.</span>
         </div>
       </li>
       <li class="help-feature">
         <span class="help-feature-icon">🎨</span>
         <div class="help-feature-body">
           <span class="help-feature-name">Profil-Kategorien</span>
-          <span class="help-feature-text">Erstelle bunte Profil-Kategorien wie Skills, Interessen, Links und mehr. Zeige, was du kannst und was du suchst!</span>
+          <span class="help-feature-text">Erstelle bunte Profil-Kategorien wie Skills, Interessen, Links und mehr.</span>
         </div>
       </li>
       <li class="help-feature">
         <span class="help-feature-icon">📤</span>
         <div class="help-feature-body">
-          <span class="help-feature-name">Import & Export</span>
-          <span class="help-feature-text">Kontakte importieren und exportieren – in der Kontakte-Sektion oben rechts findest du die Buttons.</span>
+          <span class="help-feature-name">Import &amp; Export</span>
+          <span class="help-feature-text">Kontakte importieren und exportieren – in der Kontakte-Sektion oben rechts.</span>
         </div>
       </li>
     </ul>
@@ -80,7 +94,7 @@
       <li><span class="help-step-num">1</span><span>Erstelle einen Channel – oder tritt links einem bestehenden bei.</span></li>
       <li><span class="help-step-num">2</span><span>Lade Mitglieder ein oder füge Kontakte über die Kontakte-Suche hinzu.</span></li>
       <li><span class="help-step-num">3</span><span>Schreibe deine erste Nachricht, starte Threads und reagiere mit Emojis.</span></li>
-      <li><span class="help-step-num">4</span><span>Personalisiere dein Profil – klick auf deinen Avatar und erstelle Profil-Kategorien!</span></li>
+      <li><span class="help-step-num">4</span><span>Personalisiere dein Profil – klick auf deinen Avatar und erstelle Profil-Kategorien.</span></li>
       <li><span class="help-step-num">5</span><span>Verwalte Kontakte – nutze Import/Export um deine Kontaktliste zu sichern.</span></li>
     </ol>
 

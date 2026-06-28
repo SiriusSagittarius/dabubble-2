@@ -24,20 +24,13 @@
   margin: 0 35px;
 }
 
-/* Scrollender Bereich INNERHALB einer Channel-Gruppe (ohne den Kopf). */
+/* Wrapper um Sublist-Komponenten — kein eigenes Scrollen,
+   da jede Sublist (.channel-sublist-nested) selbst scrollt. */
 .channel-list-scroll {
   min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  overflow-y: auto;
-  max-height: 200px;
-  padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: #c7cbfa transparent;
-  &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: #c7cbfa; border-radius: 2px; }
 }
 
 .channel-item,
@@ -221,16 +214,31 @@
 }
 
 /* Genestete Unterliste (öffentlich/privat innerhalb Abonniert/Eigen).
-   Liegt bereits im 35px-eingerueckten .channel-list -> nur kleiner Links-Versatz. */
+   Scrollt selbst, damit der Toggle-Button sticky direkt im Scroll-Container liegt. */
 .channel-sublist-nested {
   margin-left: 15px;
   margin-right: 0;
-  max-height: none;
-  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  max-height: 200px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #c7cbfa transparent;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #c7cbfa; border-radius: 2px; }
 }
 
 .channel-sublist-toggle-nested {
   padding-left: 4px;
+  /* Label (Öffentlich/Privat) bleibt beim Scrollen oben stehen,
+     nur die Channel-Items darunter scrollen. */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
 }
 
 .channel-sublist-toggle-nested .channel-sublist-label {

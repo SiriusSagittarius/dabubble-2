@@ -1,23 +1,12 @@
 /* ==========================================
    RESPONSIVE: HEADER (Mobile/Tablet)
    ========================================== */
-/* Logo-/Profil-Abstand nur auf grossem Desktop (>1480px) */
-@media (max-width: 1480px) {
-  .header .logo-container {
-    padding-left: 0;
-  }
-
-  :host ::ng-deep app-profile {
-    padding-right: 0;
-  }
-}
-
 @media (max-width: 1425px) {
   .header.header {
     height: 115px;
     grid-template-columns: auto 1fr auto;
     grid-auto-flow: column;
-    padding: 0 20px;
+    padding: 0 0 0 20px;
   }
 
   .header .searchbar-container {
@@ -45,13 +34,23 @@
 @media (max-width: 960px) {
   .header.header {
     height: 80px;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "logo . profile";
+    grid-template-columns: auto auto;
+    grid-template-areas: "logo profile";
     grid-auto-flow: column;
+    justify-content: space-between;
+    padding: 0 0 0 15px;
   }
 
   .header .logo-container {
     grid-area: logo;
+    width: auto;
+    padding-left: 0;
+  }
+
+  /* Logo auf 50px verkleinern -> zentriert im 80px-Header = 15px oben/unten */
+  .header .logo {
+    width: auto;
+    height: 50px;
   }
 
   .header .searchbar-container,
@@ -72,8 +71,15 @@
     min-height: 48px;
   }
 
-  ::ng-deep app-profile {
+  :host ::ng-deep app-profile {
     grid-area: profile;
+    padding-right: 15px;
+  }
+
+  /* Avatar auf 50px verkleinern -> zentriert im 80px-Header = 15px oben/unten */
+  ::ng-deep app-profile .profile-image.profile-image {
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -82,7 +88,6 @@
 @media (max-width: 490px) {
   .header.header {
     gap: 8px;
-    grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
   .header .logo-container {
@@ -140,9 +145,9 @@
   }
 
   .header.header {
-    grid-template-columns: 130px minmax(0, 1fr) auto;
     gap: 8px;
-    padding:0px 5px;
+    padding: 15px 0 0 15px;
+    align-items: start;
   }
   .devspace-logo {
     width: 50px;
@@ -176,5 +181,13 @@
   ::ng-deep app-profile .profile-dropdown {
     right: -8px;
     max-width: 200px;
+  }
+}
+
+/* Header-Inhalt ab 961px oben bei y=25 ausrichten (statt vertikal zentriert) */
+@media (min-width: 961px) {
+  .header.header {
+    align-items: start;
+    padding-top: 25px;
   }
 }

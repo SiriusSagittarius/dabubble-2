@@ -5,6 +5,7 @@
   position: relative;
 }
 
+
 .sidebar-card {
   max-width: 430px;
   height: 100%;
@@ -140,6 +141,7 @@
   overflow: hidden;
 }
 
+
 .channels-header-row {
   display: flex;
   align-items: center;
@@ -155,12 +157,14 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  padding: 6px 0;
+  padding: 6px 10px;
+  border-radius: 8px;
   font: inherit;
   text-align: left;
   min-width: 0;
-  margin-left: 10px;
+  transition: background 0.15s;
 }
+.channels-toggle-btn:hover { background: #eceefe; }
 
 .channels-caret-icon,
 .channels-hub-icon {
