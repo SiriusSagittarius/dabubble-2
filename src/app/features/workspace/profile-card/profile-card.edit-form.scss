@@ -1,0 +1,247 @@
+/* Fortsetzung von profile-card.details-form.scss — wegen 400-Zeilen-Regel ausgelagert. */
+/* ---- Edit form ---- */
+.edit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-gray);
+}
+
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+}
+
+.form-input.invalid {
+  border-color: #e53e3e;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.45;
+  font-family: var(--font-family);
+}
+
+.char-counter {
+  align-self: flex-end;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0aec0;
+}
+
+.field-error {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 600;
+  color: #e53e3e;
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.checkbox-text {
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checkbox-hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: #686868;
+}
+
+.switch-label {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch-label input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: 0.4s;
+}
+
+.switch-label input:checked + .switch-slider {
+  background-color: var(--green-active);
+}
+
+.switch-label input:checked + .switch-slider::before {
+  transform: translateX(24px);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.btn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-primary:focus-visible:not(:disabled) {
+  background-color: var(--primary-dark);
+  outline: none;
+}
+
+.btn-secondary {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background-color: #e2e8f0;
+  outline: none;
+}
+
+.btn-edit-categories {
+  width: 100%;
+  height: 49px;
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+
+  img {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) saturate(100%) invert(31%) sepia(69%) saturate(1376%) hue-rotate(246deg) brightness(103%) contrast(104%);
+  }
+
+  &:hover {
+    background: var(--primary-color);
+    color: #fff;
+
+    img {
+      filter: brightness(0) saturate(100%) invert(100%);
+    }
+  }
+}
+
+.categories-edit-section-wrapper {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.categories-section-title {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-black);
+}
+
+.btn-full-width {
+  width: 100%;
+}
+
+@media (max-width: 430px) {
+  .profile-name {
+    font-size: 22px;
+  }
+
+  .status-text {
+    font-size: 16px;
+  }
+
+  .btn-edit-categories {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .categories-section-title {
+    font-size: 16px;
+  }
+}

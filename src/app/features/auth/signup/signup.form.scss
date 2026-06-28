@@ -212,13 +212,9 @@
 
       &:has(.link:hover),
       &:has(.link:focus-visible) {
-        .custom-checkbox:not(.checked) {
+        .custom-checkbox {
           background-color: $light-purple-bg;
-          border-color: $purple-1;
-        }
-
-        .custom-checkbox.checked {
-          border-color: $purple-1;
+          color: $purple-1;
         }
       }
     }
@@ -227,26 +223,32 @@
       display: none;
     }
 
+    // Icon-basierte Checkbox (Material check_box / check_box_outline_blank).
+    // Form (leer/abgehakt) kommt aus dem SVG im Template, Farbe + Hover-Kreis
+    // hier per CSS.
     .custom-checkbox {
       width: 24px;
       height: 24px;
-      border: 2px solid $purple-2;
-      border-radius: 4px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #FFFFFF;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
+      background: transparent;
+      color: $purple-2;
+      transition: background-color 0.2s ease, color 0.2s ease;
       flex-shrink: 0;
 
-      &.checked {
-        background-color: $purple-2;
-        border-color: $purple-2;
+      // Hover (abgehakt & nicht): kraeftiger Farbton + heller Kreis-Hintergrund.
+      &:hover {
+        background-color: $light-purple-bg;
+        color: $purple-1;
       }
 
-      .check-icon {
-        width: 16px;
-        height: 16px;
+      .checkbox-icon {
+        width: 24px;
+        height: 24px;
+        display: block;
+        fill: currentColor;
       }
     }
 

@@ -1,0 +1,133 @@
+/* Fortsetzung von chat-area.channel.scss — wegen 400-Zeilen-Regel ausgelagert. */
+/* ==========================================
+   RESPONSIVE ≤430px
+   ========================================== */
+@media (max-width: 430px) {
+  .center-card {
+    border-radius: 0;
+  }
+
+  .channel-title {
+    gap: 6px;
+    margin-left: 0;
+    padding: 4px 6px;
+  }
+
+  .channel-hash,
+  .channel-name {
+    font-size: 20px;
+  }
+
+  .channel-arrow-down {
+    width: 10px;
+    height: 10px;
+  }
+
+  .members-area {
+    gap: 0;
+  }
+
+  .members-preview-wrap {
+    display: none;
+  }
+
+  .members-button {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+  }
+
+  .members-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .message {
+    margin: 0 -16px;
+    padding: 8px 16px;
+  }
+
+  .message-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .message-right {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+
+  .message-right .message-avatar {
+    order: 2;
+  }
+
+  .message-right .message-content {
+    align-items: flex-end;
+  }
+
+  .message-right .message-meta {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  .message-right .speech-bubble {
+    background: #535af1;
+    color: #fff;
+  }
+
+  .message-right:hover .speech-bubble {
+    background: #444df2;
+    color: #fff;
+  }
+
+  .message-avatar {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+  }
+
+  .message-name {
+    font-size: 14px;
+    margin-top: 0;
+  }
+
+  .message-time {
+    font-size: 11px;
+  }
+
+  .speech-bubble {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 10px 14px;
+  }
+
+  .message-thread-link {
+    font-size: 13px;
+  }
+
+  .time-pill {
+    font-size: 12px;
+    height: 28px;
+    padding: 0 12px;
+  }
+
+  .direct-message-header {
+    height: 60px;
+    padding: 0 20px;
+    gap: 12px;
+  }
+
+  .direct-message-avatar-wrap-large {
+    width: 38px;
+    height: 38px;
+  }
+
+  .direct-message-avatar-wrap-large .direct-message-avatar {
+    width: 38px;
+    height: 38px;
+  }
+
+  .direct-message-name {
+    font-size: 16px;
+  }
+}

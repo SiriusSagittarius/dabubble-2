@@ -14,10 +14,12 @@ import { ChatAreaBase } from './chat-area.base';
   styleUrls: [
     './chat-area.base.scss',
     './chat-area.channel.scss',
+    './chat-area.channel-2.scss',
     './chat-area.messages.scss',
     './chat-area.header-extra.scss',
     './chat-area.editing-reactions.scss',
     './chat-area.emoji-edit.scss',
+    './chat-area.emoji-edit-2.scss',
     './chat-area.members.scss',
   ],
 })
@@ -264,15 +266,23 @@ export class ChatArea extends ChatAreaBase {
 
   protected contactSuggestions() {
     const draft = this.chatMessageDraft.trimStart();
-    // Quick-Navigation: nur wenn '@' das erste Zeichen ist.
+    // Erwaehnung/Quick-Navigation: nur wenn '@' das erste Zeichen ist.
     if (!draft.startsWith('@')) return [];
     const query = draft.slice(1).trim().toLowerCase();
     const currentId = this.database.currentUser()?.id;
-    const myContactIds = new Set(this.database.contactUsers().map((u) => u.id));
-    // Es duerfen nur eigene Kontakte ODER oeffentliche Profile vorgeschlagen werden.
-    return this.database
-      .users()
-      .filter((u) => u.id !== currentId && (myContactIds.has(u.id) || (u.isPublic ?? true)))
+
+    // In einem Channel duerfen ausschliesslich Mitglieder dieses Channels
+    // vorgeschlagen werden. In DM / "neue Nachricht" weiterhin eigene Kontakte
+    // oder oeffentliche Profile.
+    const inChannel = !this.directMessageUser() && !this.uiState.showMainChatIntro();
+    let base = this.database.activeChannelMembers();
+    if (!inChannel) {
+      const myContactIds = new Set(this.database.contactUsers().map((u) => u.id));
+      base = this.database.users().filter((u) => myContactIds.has(u.id) || (u.isPublic ?? true));
+    }
+
+    return base
+      .filter((u) => u.id !== currentId)
       .filter(
         (u) =>
           !query || u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query),

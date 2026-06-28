@@ -204,7 +204,7 @@ $light-purple-bg: #ECEEFE;
     border: 1px solid #adb0d9;
     border-radius: 25px;
     background: transparent;
-    color: $purple-1;
+    color: $purple-2;
     font-family: 'Nunito', sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -214,10 +214,16 @@ $light-purple-bg: #ECEEFE;
 
     &:hover,
     &:focus-visible {
+      background: transparent;
+      border-color: #adb0d9;
+      color: $purple-1;
+      outline: none;
+    }
+
+    &:active {
       background: $purple-1;
       border-color: $purple-1;
       color: #ffffff;
-      outline: none;
     }
   }
 }

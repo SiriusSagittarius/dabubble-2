@@ -7,6 +7,7 @@
           <span class="main-chat-recipient-label">An:</span>
           <div class="main-chat-recipient-input-wrap">
             <input type="text" class="main-chat-recipient-input" placeholder="#channel, @jemand oder E-Mail Adresse"
+              aria-label="Empfänger: Channel, Person oder E-Mail-Adresse"
               [ngModel]="uiState.newMessageRecipient()" (ngModelChange)="uiState.newMessageRecipient.set($event)" />
             @if (showRecipientSuggestions()) {
               <div class="recipient-suggestions-list">
@@ -154,7 +155,7 @@
             @if (channelNameEditMode()) {
               <div class="channel-edition-name-edit-row">
                 <span class="channel-edition-channel-hash">#</span>
-                <input type="text" name="channelNameDraft" class="channel-edition-input" [(ngModel)]="channelNameDraft" />
+                <input type="text" name="channelNameDraft" class="channel-edition-input" aria-label="Channel-Name" [(ngModel)]="channelNameDraft" />
               </div>
             } @else {
               <div class="channel-edition-value channel-edition-value-channel">
@@ -176,7 +177,7 @@
               }
             </div>
             @if (channelDescriptionEditMode()) {
-              <input type="text" name="channelDescriptionDraft" class="channel-edition-input channel-edition-input-description" placeholder="Dein Text hier" [(ngModel)]="channelDescriptionDraft" />
+              <input type="text" name="channelDescriptionDraft" class="channel-edition-input channel-edition-input-description" placeholder="Dein Text hier" aria-label="Channel-Beschreibung" [(ngModel)]="channelDescriptionDraft" />
             } @else {
               <div class="channel-edition-value channel-edition-description">
                 {{
@@ -312,7 +313,7 @@
           }
           @if (isOwn && editingMessageId() === message.id) {
             <form class="message-edit-box" aria-label="Nachricht bearbeiten" (submit)="saveEditedMessage(message.id); $event.preventDefault()">
-              <textarea name="editMessageDraft" class="message-edit-input" rows="3" [(ngModel)]="editMessageDraft"></textarea>
+              <textarea name="editMessageDraft" class="message-edit-input" rows="3" aria-label="Nachricht bearbeiten" [(ngModel)]="editMessageDraft"></textarea>
               <div class="message-edit-actions">
                 <button type="button" class="message-edit-cancel" (click)="cancelEditingMessage()">Abbrechen</button>
                 <button type="submit" class="message-edit-save">Speichern</button>
@@ -406,6 +407,7 @@
       <textarea id="chat-message" #chatMessage name="chatMessage" class="message-input" rows="2"
         [(ngModel)]="chatMessageDraft"
         [placeholder]="uiState.showMainChatIntro() ? 'Starte eine neue Nachricht' : uiState.selectedDirectMessageUserId() ? 'Nachricht an ' + (directMessageUser()?.name ?? '') : 'Nachricht an ' + database.activeChannel().name"
+        [attr.aria-label]="uiState.showMainChatIntro() ? 'Starte eine neue Nachricht' : uiState.selectedDirectMessageUserId() ? 'Nachricht an ' + (directMessageUser()?.name ?? '') : 'Nachricht an ' + database.activeChannel().name"
       ></textarea>
 
       <div class="message-actions">

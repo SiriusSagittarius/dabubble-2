@@ -145,7 +145,7 @@
       &:hover,
       &:focus-visible {
         background: rgba($light-purple-bg, 0.3);
-        border-color: $purple-1;
+        border-color: $lines-color;
         outline: none;
       }
     }
@@ -352,11 +352,7 @@
       }
     }
 
-    /* ≤530px: Die auth-shell ist jetzt der gemeinsame Flow-/Scroll-Container
-       (Logo -> Karte -> "Neu bei DABubble" -> Links). Der Wrapper darf deshalb
-       NICHT mehr selbst die volle Höhe einnehmen oder mit festen top/bottom-
-       Paddings den Platz fürs Logo/CTA reservieren — sonst überlagern sich die
-       Elemente. Karte einfach im Fluss zentrieren, Höhe = Inhalt. */
+
     @media (max-width: 530px) {
       .login-wrapper {
         align-items: center;
@@ -371,5 +367,6 @@
         top: 0;
         width: 100%;
         max-width: 398px;
+        margin: 0 auto;
       }
     }

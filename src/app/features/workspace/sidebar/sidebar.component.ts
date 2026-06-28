@@ -12,7 +12,13 @@ import { SidebarDmListItemComponent } from './sidebar-dm-list-item.component';
   standalone: true,
   imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.channels.scss', './sidebar.dm.scss', './sidebar.kontakte.scss'],
+  styleUrls: [
+    './sidebar.channels.scss',
+    './sidebar.channels-2.scss',
+    './sidebar.dm.scss',
+    './sidebar.kontakte.scss',
+    './sidebar.kontakte-2.scss',
+  ],
 })
 export class Sidebar {
   @Output() itemSelected = new EventEmitter<void>();
@@ -25,7 +31,7 @@ export class Sidebar {
   protected readonly directMessagesExpanded = signal(false);
   protected readonly kontakteExpanded = signal(false);
   protected readonly privateContactsExpanded = signal(true);
-  protected readonly teamExpanded = signal(true);
+  protected readonly teamExpanded = signal(false);
   protected readonly meineChannelsExpanded = signal(true);
   protected readonly alleChannelsExpanded = signal(false);
   protected readonly devspaceSearchOpen = signal(false);
@@ -149,12 +155,30 @@ export class Sidebar {
     this.kontakteExpanded.set(next);
   }
 
+  // Kontakte-Bereich als Akkordeon: Suche, Kontakte und Team – es ist immer nur
+  // eines offen. Oeffnen einer Liste schliesst die andere und leert die Suche.
   protected togglePrivateContacts(): void {
-    this.privateContactsExpanded.update((open) => !open);
+    const next = !this.privateContactsExpanded();
+    if (next) {
+      this.teamExpanded.set(false);
+      this.kontakteSearchQuery.set('');
+    }
+    this.privateContactsExpanded.set(next);
   }
 
   protected toggleTeam(): void {
-    this.teamExpanded.update((open) => !open);
+    const next = !this.teamExpanded();
+    if (next) {
+      this.privateContactsExpanded.set(false);
+      this.kontakteSearchQuery.set('');
+    }
+    this.teamExpanded.set(next);
+  }
+
+  // Suche aktiv -> Kontakte- und Team-Liste schliessen.
+  protected onKontakteSearchFocus(): void {
+    this.privateContactsExpanded.set(false);
+    this.teamExpanded.set(false);
   }
 
   // Alle/Meine Channels: nur eines von beiden offen

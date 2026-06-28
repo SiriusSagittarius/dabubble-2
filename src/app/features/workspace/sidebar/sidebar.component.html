@@ -22,7 +22,7 @@
           type="text"
           placeholder="Devspace durchsuchen"
           class="devspace-search-input"
-          name="devspaceSearch"
+          name="devspaceSearch" aria-label="Devspace durchsuchen"
           [ngModel]="devspaceSearchQuery()"
           (ngModelChange)="devspaceSearchQuery.set($event)"
         />
@@ -67,7 +67,7 @@
       <input
         type="text"
         placeholder="Devspace durchsuchen"
-        class="sidebar-searchbar"
+        class="sidebar-searchbar" aria-label="Devspace durchsuchen"
         name="sidebarSearchDraft"
         (focus)="openDevspaceSearch()"
       />
@@ -248,10 +248,10 @@
       @if (addContactOpen()) {
         <form class="kontakte-add-form" novalidate (submit)="submitAddContact(); $event.preventDefault()">
           <div class="kontakte-add-form-row">
-            <input class="kontakte-add-input" type="text" placeholder="Vorname *" [ngModel]="addContactFirstName()" (ngModelChange)="addContactFirstName.set($event)" name="firstName" required />
-            <input class="kontakte-add-input" type="text" placeholder="Nachname" [ngModel]="addContactLastName()" (ngModelChange)="addContactLastName.set($event)" name="lastName" />
+            <input class="kontakte-add-input" type="text" placeholder="Vorname *" aria-label="Vorname" [ngModel]="addContactFirstName()" (ngModelChange)="addContactFirstName.set($event)" name="firstName" required />
+            <input class="kontakte-add-input" type="text" placeholder="Nachname" aria-label="Nachname" [ngModel]="addContactLastName()" (ngModelChange)="addContactLastName.set($event)" name="lastName" />
           </div>
-          <input class="kontakte-add-input" type="email" placeholder="E-Mail *" [ngModel]="addContactEmail()" (ngModelChange)="addContactEmail.set($event)" name="email" required />
+          <input class="kontakte-add-input" type="email" placeholder="E-Mail *" aria-label="E-Mail-Adresse" [ngModel]="addContactEmail()" (ngModelChange)="addContactEmail.set($event)" name="email" required />
           <div class="kontakte-add-form-actions">
             <button type="button" class="kontakte-add-cancel" (click)="closeAddContact()">Abbrechen</button>
             <button type="submit" class="kontakte-add-submit" [disabled]="!addContactFirstName().trim() || !addContactEmail().trim()">Hinzufügen</button>
@@ -267,9 +267,10 @@
               type="text"
               class="kontakte-search-input"
               placeholder="Öffentliche Kontakte suchen…"
-              name="kontakteSearch"
+              name="kontakteSearch" aria-label="Öffentliche Kontakte suchen"
               [ngModel]="kontakteSearchQuery()"
               (ngModelChange)="kontakteSearchQuery.set($event)"
+              (focus)="onKontakteSearchFocus()"
             />
           </div>
           @if (kontakteSearchQuery().trim()) {

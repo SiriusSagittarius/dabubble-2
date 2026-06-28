@@ -17,6 +17,7 @@
       placeholder="Devspace durchsuchen"
       class="searchbar"
       name="workspaceSearchDraft"
+      aria-label="Devspace durchsuchen"
       [(ngModel)]="workspaceSearchDraft"
     />
     <img src="/assets/icons/search-icon.svg" alt="" class="searchbar-icon" />
@@ -86,7 +87,7 @@
 
 <div class="mobile-search-box">
   <img src="/assets/icons/search-icon.svg" alt="" class="mobile-search-box-icon" />
-  <input type="text" placeholder="Suche" class="mobile-search-box-input" />
+  <input type="text" placeholder="Suche" class="mobile-search-box-input" aria-label="Suche" />
   <button type="button" class="mobile-search-box-close" aria-label="Suche schließen">✕</button>
 </div>
 
@@ -97,6 +98,7 @@
       placeholder="Devspace durchsuchen"
       class="searchbar"
       name="workspaceSearchDraftMobile"
+      aria-label="Devspace durchsuchen"
       [(ngModel)]="workspaceSearchDraft"
     />
     <img src="/assets/icons/search-icon.svg" alt="" class="searchbar-icon" />

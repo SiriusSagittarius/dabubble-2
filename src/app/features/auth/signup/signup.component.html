@@ -13,7 +13,7 @@
         <!-- Header-Bereich (Frame 199): Zurück-Button auf einer Linie mit dem Titel -->
         <div class="login-header">
           <div class="login-header-bar">
-            <button type="button" class="btn-back" (click)="goBack()" title="Zurück">
+            <button type="button" class="btn-back" (click)="goBack()" title="Zurück" aria-label="Zurück">
               <svg class="icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
@@ -35,7 +35,7 @@
           <div class="avatar-step">
             <div class="avatar-preview-box">
               <label class="avatar-preview-upload" title="Eigenes Bild hochladen">
-                <input type="file" accept="image/*" class="avatar-upload-input" (change)="onCustomAvatarSelected($event)" />
+                <input type="file" accept="image/*" class="avatar-upload-input" (change)="onCustomAvatarSelected($event)" aria-label="Eigenes Profilbild hochladen" />
                 <div
                   class="avatar-preview-image"
                   role="img"
@@ -81,6 +81,7 @@
                   role="switch"
                   [class.is-public]="isProfilePublic()"
                   [attr.aria-checked]="isProfilePublic()"
+                  [attr.aria-label]="isProfilePublic() ? 'Profil öffentlich – im Devspace auffindbar' : 'Profil privat – nicht gelistet'"
                   (click)="toggleProfileVisibility()">
                   <span class="visibility-switch-knob"></span>
                 </button>
@@ -121,6 +122,7 @@
                   formControlName="name"
                   placeholder="Name und Nachname"
                   class="form-control"
+                  aria-label="Name und Nachname"
                 />
               </div>
               @if (isFieldInvalid('name')) {
@@ -139,6 +141,7 @@
                   formControlName="email"
                   placeholder="beispielname@email.com"
                   class="form-control"
+                  aria-label="E-Mail-Adresse"
                 />
               </div>
               @if (isFieldInvalid('email')) {
@@ -157,8 +160,9 @@
                   formControlName="password"
                   placeholder="Passwort"
                   class="form-control"
+                  aria-label="Passwort"
                 />
-                <button type="button" class="btn-toggle-password" (click)="togglePassword()">
+                <button type="button" class="btn-toggle-password" (click)="togglePassword()" [attr.aria-label]="showPassword() ? 'Passwort verbergen' : 'Passwort anzeigen'">
                   @if (showPassword()) {
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
@@ -192,8 +196,12 @@
               <label class="checkbox-label" (click)="toggleTerms()">
                 <span class="custom-checkbox" [class.checked]="registerForm.get('acceptTerms')?.value" [class.has-error]="isFieldInvalid('acceptTerms')">
                   @if (registerForm.get('acceptTerms')?.value) {
-                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    <svg class="checkbox-icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M10.6 13.4L8.45 11.25C8.26667 11.0667 8.03333 10.975 7.75 10.975C7.46667 10.975 7.23333 11.0667 7.05 11.25C6.86667 11.4333 6.775 11.6667 6.775 11.95C6.775 12.2333 6.86667 12.4667 7.05 12.65L9.9 15.5C10.1 15.7 10.3333 15.8 10.6 15.8C10.8667 15.8 11.1 15.7 11.3 15.5L16.95 9.85C17.1333 9.66667 17.225 9.43333 17.225 9.15C17.225 8.86667 17.1333 8.63333 16.95 8.45C16.7667 8.26667 16.5333 8.175 16.25 8.175C15.9667 8.175 15.7333 8.26667 15.55 8.45L10.6 13.4ZM5 21C4.45 21 3.97917 20.8042 3.5875 20.4125C3.19583 20.0208 3 19.55 3 19V5C3 4.45 3.19583 3.97917 3.5875 3.5875C3.97917 3.19583 4.45 3 5 3H19C19.55 3 20.0208 3.19583 20.4125 3.5875C20.8042 3.97917 21 4.45 21 5V19C21 19.55 20.8042 20.0208 20.4125 20.4125C20.0208 20.8042 19.55 21 19 21H5ZM5 19H19V5H5V19Z" />
+                    </svg>
+                  } @else {
+                    <svg class="checkbox-icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 21C4.45 21 3.97917 20.8042 3.5875 20.4125C3.19583 20.0208 3 19.55 3 19V5C3 4.45 3.19583 3.97917 3.5875 3.5875C3.97917 3.19583 4.45 3 5 3H19C19.55 3 20.0208 3.19583 20.4125 3.5875C20.8042 3.97917 21 4.45 21 5V19C21 19.55 20.8042 20.0208 20.4125 20.4125C20.0208 20.8042 19.55 21 19 21H5ZM5 19H19V5H5V19Z" />
                     </svg>
                   }
                 </span>

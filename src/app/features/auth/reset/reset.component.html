@@ -16,7 +16,7 @@
   }
 
   <div class="login-container">
-    <button type="button" class="btn-back" (click)="goBack()" title="Zurück">
+    <button type="button" class="btn-back" (click)="goBack()" title="Zurück" aria-label="Zurück">
       <svg class="icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
@@ -41,8 +41,9 @@
               formControlName="password"
               placeholder="Neues Passwort eingeben"
               class="form-control"
+              aria-label="Neues Passwort"
             />
-            <button type="button" class="btn-toggle-password" (click)="toggleNewPassword()">
+            <button type="button" class="btn-toggle-password" (click)="toggleNewPassword()" [attr.aria-label]="showNewPassword() ? 'Passwort verbergen' : 'Passwort anzeigen'">
               @if (showNewPassword()) {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
@@ -70,8 +71,9 @@
               formControlName="confirmPassword"
               placeholder="Passwort wiederholen"
               class="form-control"
+              aria-label="Passwort bestätigen"
             />
-            <button type="button" class="btn-toggle-password" (click)="toggleConfirmPassword()">
+            <button type="button" class="btn-toggle-password" (click)="toggleConfirmPassword()" [attr.aria-label]="showConfirmPassword() ? 'Passwort verbergen' : 'Passwort anzeigen'">
               @if (showConfirmPassword()) {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
@@ -104,6 +106,7 @@
               formControlName="email"
               placeholder="beispielname@email.com"
               class="form-control"
+              aria-label="E-Mail-Adresse"
             />
           </div>
 

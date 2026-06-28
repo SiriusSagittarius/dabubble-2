@@ -65,7 +65,7 @@
               </button>
             </div>
           }
-          <input type="text" #addMemberInput class="add-members-panel-input" placeholder="Name eingeben" [(ngModel)]="addMembersName" (focus)="showAddMembersSuggestions.set(true)" (blur)="hideSuggestionsWithDelay()" />
+          <input type="text" #addMemberInput class="add-members-panel-input" placeholder="Name eingeben" aria-label="Mitglied suchen" [(ngModel)]="addMembersName" (focus)="showAddMembersSuggestions.set(true)" (blur)="hideSuggestionsWithDelay()" />
           @if (showAddMembersSuggestions() && addMembersSuggestions().length > 0) {
             <div class="add-members-suggestions-list">
               @for (user of addMembersSuggestions(); track user.id) {
@@ -103,7 +103,7 @@
         @if (channelNameEditMode) {
           <div class="channel-edition-name-edit-row">
             <span class="channel-edition-channel-hash">#</span>
-            <input type="text" class="channel-edition-input" [(ngModel)]="channelNameDraft" />
+            <input type="text" class="channel-edition-input" aria-label="Channel-Name" [(ngModel)]="channelNameDraft" />
           </div>
         } @else {
           <div class="channel-edition-value channel-edition-value-channel">
@@ -123,7 +123,7 @@
           }
         </div>
         @if (channelDescriptionEditMode) {
-          <input type="text" class="channel-edition-input channel-edition-input-description" placeholder="Dein Text hier" [(ngModel)]="channelDescriptionDraft" />
+          <input type="text" class="channel-edition-input channel-edition-input-description" placeholder="Dein Text hier" aria-label="Channel-Beschreibung" [(ngModel)]="channelDescriptionDraft" />
         } @else {
           <div class="channel-edition-value channel-edition-description">
             {{ database.activeChannel().description || 'Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.' }}
@@ -291,7 +291,7 @@
                   </button>
                 </div>
               }
-              <input type="text" name="memberSearch" class="add-members-panel-input" placeholder="Name eingeben" [(ngModel)]="addMembersName" (focus)="showAddMembersSuggestions.set(true)" (blur)="hideSuggestionsWithDelay()" />
+              <input type="text" name="memberSearch" class="add-members-panel-input" placeholder="Name eingeben" aria-label="Mitglied suchen" [(ngModel)]="addMembersName" (focus)="showAddMembersSuggestions.set(true)" (blur)="hideSuggestionsWithDelay()" />
               @if (showAddMembersSuggestions() && addMembersSuggestions().length > 0) {
                 <div class="add-members-suggestions-list">
                   @for (user of addMembersSuggestions(); track user.id) {

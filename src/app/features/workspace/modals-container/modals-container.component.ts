@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild, inject, signal, HostListener, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MockDatabaseService } from '../../../core/database/mock-database.service';
 import { MockUser } from '../../../core/database/mock-database.models';
 import { ProfileDialogService } from '../../../core/services/profile-dialog.service';
 import { UiStateService } from '../../../core/services/ui-state.service';
 import { ProfileCardComponent } from '../profile-card/profile-card.component';
+import { ModalsContainerAvatarBase } from './modals-container.avatar.base';
 
 @Component({
   selector: 'app-modals-container',
@@ -19,8 +19,7 @@ import { ProfileCardComponent } from '../profile-card/profile-card.component';
     './modals-container.channel-edition.scss',
   ],
 })
-export class ModalsContainer {
-  protected readonly database = inject(MockDatabaseService);
+export class ModalsContainer extends ModalsContainerAvatarBase {
   private readonly profileDialog = inject(ProfileDialogService);
   protected readonly uiState = inject(UiStateService);
   protected profileDialogOpen = false;
@@ -49,6 +48,7 @@ export class ModalsContainer {
   @ViewChild('addMemberInput') private addMemberInput?: ElementRef<HTMLInputElement>;
 
   constructor() {
+    super();
     effect(() => {
       const userId = this.profileDialog.profileUserId();
 
@@ -321,76 +321,12 @@ export class ModalsContainer {
       .filter((u): u is NonNullable<typeof u> => !!u);
   }
 
-  protected profileSpriteBackgroundPosition(userId: string, scale: number): string {
-    const avatarId = this.userAvatarId(userId);
-    if (avatarId === null) {
-      return 'center';
-    }
-
-    const row = Math.floor((avatarId - 1) / 6);
-    const col = (avatarId - 1) % 6;
-
-    const x = col * 80 * scale;
-    const y = row * 84 * scale;
-
-    switch (avatarId) {
-      case 1:
-        return `-${x}px -${y}px`;
-      case 2:
-        return `-${84 * scale}px -${y}px`;
-      case 3:
-        return `-${164 * scale}px -${y}px`;
-      case 4:
-        return `-${244 * scale}px -${y}px`;
-      case 5:
-        return `-${324 * scale}px -${y}px`;
-      case 6:
-        return `-${404 * scale}px -${y}px`;
-      default:
-        return 'center';
-    }
-  }
-
-  protected profileSpriteBackgroundSize(scale: number): string {
-    return `${472 * scale}px ${167 * scale}px`;
-  }
   protected saveProfileEdit(): void {
     const user = this.profileUser();
     if (user && this.profileEditName.trim()) {
       this.database.updateCurrentUserName(this.profileEditName);
       this.profileEditMode = false;
     }
-  }
-  protected avatarSvgPath(userId: string): string {
-    const avatarImage = this.database.findUser(userId)?.avatarImage;
-    if (avatarImage) return avatarImage;
-
-    const avatarId = this.userAvatarId(userId);
-    if (!avatarId) {
-      return '/assets/icons/1.svg';
-    }
-
-    return `/assets/icons/${avatarId}.svg`;
-  }
-
-  private userAvatarId(userId: string): number | null {
-    const user = this.database.findUser(userId);
-    if (!user) {
-      return null;
-    }
-
-    if (typeof user.avatarId === 'number') {
-      return user.avatarId;
-    }
-
-    if (typeof user.avatarId === 'string') {
-      const num = parseInt(user.avatarId, 10);
-      if (!isNaN(num)) return num;
-    }
-
-    const classMatch = user.avatarClass?.match(/avatar-(\d)/);
-    if (classMatch) return Number(classMatch[1]);
-    return null;
   }
   protected closeMembersPanel(): void { this.uiState.closeMembersPanel(); }
   protected closeAddMembersPanel(): void { this.uiState.closeAddMembersPanel(); }
@@ -408,16 +344,6 @@ export class ModalsContainer {
     this.profileDialog.open(userId);
   }
 
-
-  protected contactAvatarBackgroundImage(userId: string): string {
-    return `url('/assets/sprites.png')`; // Pfad anpassen, falls nötig
-  }
-  protected contactAvatarBackgroundPosition(userId: string): string {
-    return this.profileSpriteBackgroundPosition(userId, 1);
-  }
-  protected contactAvatarBackgroundSize(userId: string): string {
-    return this.profileSpriteBackgroundSize(1);
-  }
 
   protected profileAvatarSrc(): string {
     const user = this.profileUser();

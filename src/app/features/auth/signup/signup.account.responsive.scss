@@ -116,9 +116,6 @@
   }
 }
 
-/* =========================================================
-   AVATAR-SCHRITT — Flow-Layout, flüssig 1920px → 431px
-   ========================================================= */
 .login-container:has(.avatar-step) {
   display: flex;
   flex-direction: column;
