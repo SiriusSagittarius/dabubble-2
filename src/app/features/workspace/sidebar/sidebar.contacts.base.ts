@@ -108,17 +108,22 @@ export abstract class SidebarContactsBase {
 
   // ===== Kontakt-Kontextmenue =====
   protected readonly openContactMenuId = signal<string | null>(null);
+  // Getrennte "scharf schalten"-Zustaende fuer die zwei Loeschaktionen, damit sie
+  // sich nicht gegenseitig beeinflussen (Chat loeschen vs. Kontakt entfernen).
   protected readonly deleteArmedId = signal<string | null>(null);
+  protected readonly removeArmedId = signal<string | null>(null);
   private deletePressTimer: ReturnType<typeof setTimeout> | null = null;
 
   protected toggleContactMenu(userId: string): void {
     this.openContactMenuId.update((id) => (id === userId ? null : userId));
     this.deleteArmedId.set(null);
+    this.removeArmedId.set(null);
   }
 
   protected closeContactMenu(): void {
     this.openContactMenuId.set(null);
     this.deleteArmedId.set(null);
+    this.removeArmedId.set(null);
   }
 
   protected contactMessage(userId: string): void {
@@ -141,10 +146,24 @@ export abstract class SidebarContactsBase {
       this.closeContactMenu();
     } else {
       this.deleteArmedId.set(userId);
+      this.removeArmedId.set(null);
     }
   }
 
-  // Langes Druecken schaltet das Loeschen ebenfalls scharf.
+  // Zweistufiges Entfernen des Nutzers aus der EIGENEN Kontaktliste (loescht den
+  // Nutzer nicht global, nur aus den eigenen contactUserIds + Firebase-Sync).
+  protected contactRemove(userId: string): void {
+    if (this.removeArmedId() === userId) {
+      this.database.removeContact(userId);
+      this.removeArmedId.set(null);
+      this.closeContactMenu();
+    } else {
+      this.removeArmedId.set(userId);
+      this.deleteArmedId.set(null);
+    }
+  }
+
+  // Langes Druecken schaltet das Chat-Loeschen ebenfalls scharf.
   protected onDeletePressStart(userId: string): void {
     this.clearDeletePressTimer();
     this.deletePressTimer = setTimeout(() => this.deleteArmedId.set(userId), 600);

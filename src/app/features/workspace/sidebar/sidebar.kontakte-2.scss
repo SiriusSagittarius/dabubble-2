@@ -47,6 +47,27 @@
   margin-left: 4px;
 }
 
+.kontakte-context-delete {
+  color: #e53935;
+
+  &:hover {
+    background: #fde8e8;
+    color: #e53935;
+  }
+
+  /* "Scharf geschalteter" Zustand: zweiter Klick loescht wirklich. */
+  &.armed {
+    background: #e53935;
+    color: #fff;
+    font-weight: 700;
+
+    &:hover {
+      background: #c62828;
+      color: #fff;
+    }
+  }
+}
+
 .kontakte-context-block {
   color: #e53935;
 

@@ -330,7 +330,15 @@
                           (pointerup)="onDeletePressEnd()"
                           (pointerleave)="onDeletePressEnd()"
                         >
-                          {{ deleteArmedId() === user.id ? 'Endgültig löschen?' : 'Löschen' }}
+                          {{ deleteArmedId() === user.id ? 'Chat wirklich löschen?' : 'Chat löschen' }}
+                        </button>
+                        <button
+                          type="button"
+                          class="kontakte-context-item kontakte-context-delete"
+                          [class.armed]="removeArmedId() === user.id"
+                          (click)="contactRemove(user.id)"
+                        >
+                          {{ removeArmedId() === user.id ? 'Aus Kontakten entfernen?' : 'Kontakt entfernen' }}
                         </button>
                       }
                     </div>
