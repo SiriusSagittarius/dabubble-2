@@ -95,6 +95,11 @@ export class MockDatabaseStore {
     return this.state().users.filter(u => ids.includes(u.id));
   });
 
+  /** Rohe Kontakt-IDs des aktuellen Nutzers (fuer Firebase-Sync). */
+  contactUserIds(): string[] {
+    return this.state().contactUserIds ?? [];
+  }
+
   readonly joinedChannels = computed(() => {
     const userId = this.state().currentUserId;
     return this.state().channels.filter(c => c.memberIds.includes(userId));

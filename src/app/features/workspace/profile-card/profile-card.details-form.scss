@@ -122,6 +122,54 @@
   overflow-wrap: anywhere;
 }
 
+.profile-links-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 30px;
+}
+
+.profile-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: 18px;
+  text-decoration: none;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #555;
+  transition: opacity 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.profile-link-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.profile-link-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  svg { display: block; }
+}
+
+/* Plattform-Farben */
+.profile-link-btn--facebook  { background: #1877f2; }
+.profile-link-btn--instagram { background: radial-gradient(circle at 30% 110%, #ffdb8b 0%, #ee653d 25%, #d42e81 50%, #a237b6 75%, #3e5bc6 100%); }
+.profile-link-btn--linkedin  { background: #0a66c2; }
+.profile-link-btn--youtube   { background: #ff0000; }
+.profile-link-btn--homepage  { background: #444df2; }
+.profile-link-btn--portfolio { background: #6366f1; }
+.profile-link-btn--github    { background: #24292e; }
+.profile-link-btn--whatsapp  { background: #25d366; }
+.profile-link-btn--phone     { background: #34a853; }
+.profile-link-btn--email     { background: #ea4335; }
+
 .profile-message-action {
   margin-top: 24px;
   display: flex;

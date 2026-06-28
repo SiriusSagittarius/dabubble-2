@@ -48,6 +48,7 @@ export class FirebaseUserSyncService {
           bio: null,
           links: null,
           profileCategories: null,
+          contactUserIds: null,
         };
       }).filter((e): e is NonNullable<typeof e> => !!e);
       this.database.syncUsersFromFirestore(profiles, null);
@@ -155,6 +156,10 @@ export class FirebaseUserSyncService {
                   }))
                   .filter((cat) => cat.id.length > 0)
               : null;
+            const rawContactIds = d['contactUserIds'];
+            const contactUserIds = Array.isArray(rawContactIds)
+              ? (rawContactIds as unknown[]).map((id) => String(id)).filter((id) => id.length > 0)
+              : null;
             return {
               uid,
               email: email as string,
@@ -166,6 +171,7 @@ export class FirebaseUserSyncService {
               bio: (d['bio'] as string | null | undefined) ?? null,
               links,
               profileCategories,
+              contactUserIds,
             };
           })
           .filter(
@@ -186,6 +192,7 @@ export class FirebaseUserSyncService {
                 color: string;
                 entries: Array<{ value: string; emoji: string }>;
               }> | null;
+              contactUserIds: string[] | null;
             } => !!e,
           );
         this.database.syncUsersFromFirestore(profiles, user.uid);

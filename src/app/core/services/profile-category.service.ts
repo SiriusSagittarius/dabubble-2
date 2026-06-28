@@ -98,7 +98,8 @@ export class ProfileCategoryService {
 
   private async syncToFirebase(): Promise<void> {
     const user = this.database.currentUser();
-    if (!user) return;
+    // Gaeste schreiben nicht nach Firebase (nur temporaer in der Sitzung).
+    if (!user || this.database.isGuest()) return;
 
     this.isSyncing.set(true);
     try {

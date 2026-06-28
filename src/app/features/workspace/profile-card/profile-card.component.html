@@ -20,19 +20,24 @@
 
       <div class="avatar-section">
         <div class="avatar-backdrop">
-          <img class="avatar-image" [src]="profileAvatarSrc()" [alt]="profileUser()?.name ?? 'Profilbild'" />
+          <img class="avatar-image" [src]="profileAvatarSrc()" [alt]="profileUser()?.name ?? 'Profilbild'" width="168" height="168" />
           @if (isEditing()) {
-            <label class="avatar-upload-overlay" title="Profilbild ändern">
-              <input type="file" accept="image/*" class="avatar-upload-input" (change)="onAvatarFileSelected($event)" aria-label="Profilbild ändern" />
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <label class="avatar-upload-overlay" title="Profilbild ändern" aria-label="Profilbild ändern">
+              <input type="file" accept="image/*" class="avatar-upload-input" (change)="onAvatarFileSelected($event)" aria-label="Profilbild hochladen" />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 7h3l2-3h8l2 3h3v13H3z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
+              <span class="avatar-upload-label">Bild wählen</span>
             </label>
           }
         </div>
+        @if (isEditing() && editAvatarImage()) {
+          <p class="avatar-compress-hint">Bild wird komprimiert und gespeichert.</p>
+        }
       </div>
 
+      <!-- ====== ANSICHT ====== -->
       @if (!isEditing()) {
         <section class="profile-details">
           <div class="profile-name-row">
@@ -74,24 +79,37 @@
             </div>
           }
 
-          @if (isCurrentProfileUser()) {
+          @if (profileLinks().length > 0) {
             <div class="info-section">
               <div class="info-title">
-                <span>Sichtbarkeit</span>
+                <span>Links &amp; Kontakt</span>
               </div>
+              <div class="profile-links-grid">
+                @for (link of profileLinks(); track link.label) {
+                  <a
+                    [href]="link.href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="profile-link-btn"
+                    [class]="'profile-link-btn profile-link-btn--' + link.key"
+                    [attr.aria-label]="link.label"
+                    [title]="link.label"
+                  >
+                    <span class="profile-link-icon" aria-hidden="true" [innerHTML]="link.svgIcon"></span>
+                    <span class="profile-link-label">{{ link.label }}</span>
+                  </a>
+                }
+              </div>
+            </div>
+          }
+
+          @if (isCurrentProfileUser()) {
+            <div class="info-section">
+              <div class="info-title"><span>Sichtbarkeit</span></div>
               <p class="profile-email">
                 {{ (profileUser()?.isPublic ?? true) ? 'Öffentlich – im Devspace auffindbar' : 'Privat – nicht gelistet' }}
               </p>
             </div>
-          }
-
-          <app-profile-categories-display [categories]="profileCategories()" />
-
-          @if (isCurrentProfileUser()) {
-            <button type="button" class="btn-edit-categories" (click)="toggleCategoryEdit()">
-              <img src="/assets/icons/edit.svg" alt="" />
-              <span>Kategorien bearbeiten</span>
-            </button>
           }
 
           @if (!isCurrentProfileUser()) {
@@ -103,6 +121,8 @@
             </div>
           }
         </section>
+
+      <!-- ====== BEARBEITEN ====== -->
       } @else {
         <form class="edit-form" [formGroup]="editForm" (ngSubmit)="saveChanges()">
           <div class="form-group">
@@ -143,9 +163,32 @@
               formControlName="bio"
               rows="3"
               [attr.maxlength]="bioMaxLength"
-              placeholder="Erzähl etwas über dich – Rolle, Interessen, Schwerpunkte …"
+              placeholder="Erzähl etwas über dich – Rolle, Interessen, was du suchst …"
             ></textarea>
             <small class="char-counter">{{ bioMaxLength - editForm.controls.bio.value.length }} Zeichen übrig</small>
+          </div>
+
+          <!-- ---- Links & Kontakt ---- -->
+          <div class="form-group">
+            <span class="links-section-label">Links &amp; Kontakt</span>
+            <p class="links-section-hint">Trag nur die URL / Nummer / E-Mail ein – der Button erscheint automatisch im Profil.</p>
+            <div class="links-templates">
+              @for (tpl of linkTemplates; track tpl.key) {
+                <div class="link-template-row">
+                  <span class="link-template-icon" aria-hidden="true" [innerHTML]="tpl.svgIcon"></span>
+                  <label [for]="'link-' + tpl.key" class="link-template-label">{{ tpl.label }}</label>
+                  <input
+                    [id]="'link-' + tpl.key"
+                    type="text"
+                    class="form-input link-template-input"
+                    [placeholder]="tpl.placeholder"
+                    [attr.aria-label]="tpl.label"
+                    [value]="getLinkValue(tpl.key)"
+                    (input)="setLinkValue(tpl.key, $event)"
+                  />
+                </div>
+              }
+            </div>
           </div>
 
           <div class="form-group checkbox-group">
@@ -176,20 +219,6 @@
             <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Speichern</button>
           </div>
         </form>
-
-        @if (showCategoryEdit()) {
-          <div class="categories-edit-section-wrapper">
-            <h3 class="categories-section-title">Deine Kategorien</h3>
-            <app-profile-categories-edit
-              [categories]="profileCategories()"
-              (categoriesChange)="saveCategoryChanges($event)"
-              (onAddCategory)="onAddCategory($event)"
-            />
-            <button type="button" class="btn btn-secondary btn-full-width" (click)="showCategoryEdit.set(false)">
-              Fertig
-            </button>
-          </div>
-        }
       }
     </section>
   </div>

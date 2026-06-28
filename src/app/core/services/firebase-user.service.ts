@@ -13,6 +13,7 @@ export interface FirebaseUserProfile {
   bio?: string | null;
   links?: Array<{ label: string; url: string }> | null;
   profileCategories?: ProfileCategory[] | null;
+  contactUserIds?: string[] | null;
 }
 
 // Firestore-Dokumente sind auf 1 MB begrenzt. Sehr grosse Custom-Bilder (Data-URLs)
@@ -58,9 +59,28 @@ export class FirebaseUserService {
     if (Array.isArray(profile.profileCategories)) {
       data['profileCategories'] = profile.profileCategories;
     }
+    if (Array.isArray(profile.contactUserIds)) {
+      data['contactUserIds'] = profile.contactUserIds;
+    }
 
     await runInInjectionContext(this.injector, () =>
       setDoc(doc(this.firestore, 'users', uid), data, { merge: true }),
+    );
+  }
+
+  /**
+   * Schreibt die Kontaktliste (IDs) des aktuellen Nutzers in sein eigenes
+   * users/{uid}-Dokument. Gaeste haben keinen Firebase-Auth-User -> kein
+   * Schreibvorgang (Kontakte bleiben dann nur lokal in der Sitzung).
+   */
+  async updateContactIds(contactUserIds: string[]): Promise<void> {
+    const uid = this.auth.currentUser?.uid;
+    if (!uid) {
+      return;
+    }
+
+    await runInInjectionContext(this.injector, () =>
+      setDoc(doc(this.firestore, 'users', uid), { contactUserIds }, { merge: true }),
     );
   }
 }

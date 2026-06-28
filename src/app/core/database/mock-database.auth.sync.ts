@@ -20,6 +20,8 @@ export interface FirestoreUserEntry {
     color: string;
     entries: Array<{ value: string; emoji: string }>;
   }> | null;
+  /** Eigene Kontaktliste (nur im Doc des aktuellen Nutzers relevant). */
+  contactUserIds?: string[] | null;
 }
 
 /**
@@ -132,10 +134,27 @@ export function applyFirestoreUserSync(
         ? currentUserUid
         : state.currentUserId;
 
+    // Kontaktliste des aktuellen Nutzers aus seinem eigenen Firestore-Doc
+    // uebernehmen (gespeicherte Kontakte ueber Geraete hinweg). Nur IDs, die zu
+    // einem bekannten Nutzer aufloesbar sind, werden uebernommen; lokal manuell
+    // angelegte Kontakte (ohne eigenes Doc) bleiben ueber den bestehenden State
+    // erhalten und werden hinzugefuegt.
+    let nextContactUserIds = state.contactUserIds;
+    const currentEntry = users.find((entry) => entry.uid === nextCurrentUserId);
+    if (currentEntry && Array.isArray(currentEntry.contactUserIds)) {
+      const knownIds = new Set(nextUsers.map((user) => user.id));
+      const fromFirestore = currentEntry.contactUserIds.filter((id) => knownIds.has(id));
+      const localOnly = (state.contactUserIds ?? []).filter(
+        (id) => knownIds.has(id) && !fromFirestore.includes(id),
+      );
+      nextContactUserIds = Array.from(new Set([...fromFirestore, ...localOnly]));
+    }
+
     return {
       ...state,
       users: nextUsers,
       currentUserId: nextCurrentUserId,
+      contactUserIds: nextContactUserIds,
     };
   });
 }

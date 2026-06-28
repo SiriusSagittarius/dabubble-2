@@ -4,6 +4,7 @@ import { MockDatabaseAuthService } from './mock-database.auth.service';
 import { MockDatabaseChannelService } from './mock-database.channel.service';
 import { MockDatabaseMessageService } from './mock-database.message.service';
 import { MockDatabaseStore } from './mock-database.store';
+import { FirebaseUserService } from '../services/firebase-user.service';
 import {
   MockChannel,
   MockLoginResult,
@@ -19,6 +20,12 @@ export class MockDatabaseService {
   private readonly authService = inject(MockDatabaseAuthService);
   private readonly channelService = inject(MockDatabaseChannelService);
   private readonly messageService = inject(MockDatabaseMessageService);
+  private readonly firebaseUsers = inject(FirebaseUserService);
+
+  /** Aktuelle Kontakt-IDs des Nutzers nach Firebase (eigenes User-Doc) spiegeln. */
+  private syncContactIdsToFirebase(): void {
+    void this.firebaseUsers.updateContactIds(this.store.contactUserIds());
+  }
 
   readonly users = this.store.users;
   readonly channels = this.store.channels;
@@ -59,6 +66,7 @@ export class MockDatabaseService {
       bio?: string | null;
       links?: Array<{ label: string; url: string }> | null;
       profileCategories?: ProfileCategory[] | null;
+      contactUserIds?: string[] | null;
     }>,
     currentUserUid: string | null,
   ): void {
@@ -165,7 +173,11 @@ export class MockDatabaseService {
     if (this.isGuest()) {
       return null;
     }
-    return this.authService.addContact(name, email, phone);
+    const contact = this.authService.addContact(name, email, phone);
+    if (contact) {
+      this.syncContactIdsToFirebase();
+    }
+    return contact;
   }
 
   removeContact(userId: string): void {
@@ -173,6 +185,7 @@ export class MockDatabaseService {
       return;
     }
     this.authService.removeContact(userId);
+    this.syncContactIdsToFirebase();
   }
 
   deleteDirectConversation(otherUserId: string): boolean {
@@ -187,6 +200,7 @@ export class MockDatabaseService {
       return;
     }
     this.authService.addExistingContact(userId);
+    this.syncContactIdsToFirebase();
   }
 
   updateContactName(userId: string, name: string): void {
