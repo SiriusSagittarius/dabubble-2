@@ -5,12 +5,14 @@ import { SidebarCaretIconComponent } from './sidebar-caret-icon.component';
 import { SidebarDmListItemComponent } from './sidebar-dm-list-item.component';
 import { SidebarChannelSublistComponent } from './sidebar-channel-sublist.component';
 import { SidebarDevspaceSearchComponent } from './sidebar-devspace-search.component';
+import { SidebarDeleteAccountComponent } from './sidebar-delete-account.component';
+import { SidebarHelpButtonComponent } from './sidebar-help-button.component';
 import { SidebarContactsBase } from './sidebar.contacts.base';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent, SidebarChannelSublistComponent, SidebarDevspaceSearchComponent],
+  imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent, SidebarChannelSublistComponent, SidebarDevspaceSearchComponent, SidebarDeleteAccountComponent, SidebarHelpButtonComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: [
     './sidebar.channels.scss',
@@ -18,6 +20,7 @@ import { SidebarContactsBase } from './sidebar.contacts.base';
     './sidebar.dm.scss',
     './sidebar.kontakte.scss',
     './sidebar.kontakte-2.scss',
+    './sidebar.danger.scss',
   ],
 })
 export class Sidebar extends SidebarContactsBase {
@@ -226,10 +229,5 @@ export class Sidebar extends SidebarContactsBase {
     event.preventDefault();
     event.stopPropagation();
     this.database.leaveChannel(channelId);
-  }
-
-  protected openHelp(): void {
-    this.uiState.openHelp();
-    this.itemSelected.emit();
   }
 }

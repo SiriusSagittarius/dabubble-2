@@ -4,7 +4,7 @@ import { MockDatabaseAuthService } from './mock-database.auth.service';
 import { MockDatabaseChannelService } from './mock-database.channel.service';
 import { MockDatabaseMessageService } from './mock-database.message.service';
 import { MockDatabaseStore } from './mock-database.store';
-import { FirebaseUserService } from '../services/firebase-user.service';
+import { FirebaseUserService, DeleteAccountResult } from '../services/firebase-user.service';
 import {
   MockChannel,
   MockLoginResult,
@@ -134,6 +134,24 @@ export class MockDatabaseService {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  /**
+   * Löscht das Konto des aktuell angemeldeten Nutzers dauerhaft aus Firebase
+   * (Firestore-Profil + Auth-Account) und entfernt ihn anschließend aus dem
+   * lokalen Store. Bei Erfolg ist die Session danach beendet.
+   * Für Gäste nicht erlaubt.
+   */
+  async deleteCurrentAccount(): Promise<DeleteAccountResult> {
+    if (this.isGuest()) {
+      return { ok: false, reason: 'no-user', message: 'Gäste haben kein dauerhaftes Konto.' };
+    }
+
+    const result = await this.firebaseUsers.deleteAccount();
+    if (result.ok) {
+      this.store.deleteCurrentAccountLocal();
+    }
+    return result;
   }
 
   isGuestSession(): boolean {

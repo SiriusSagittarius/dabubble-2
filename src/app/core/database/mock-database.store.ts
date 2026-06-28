@@ -237,6 +237,26 @@ export class MockDatabaseStore {
     this.persistState(nextState);
   }
 
+  /**
+   * Entfernt den aktuell angemeldeten Nutzer komplett aus dem Store und
+   * beendet die Session. Pendant zum Löschen aus Firebase.
+   */
+  deleteCurrentAccountLocal(): void {
+    const currentUserId = this.state().currentUserId;
+    if (!currentUserId) {
+      return;
+    }
+
+    this.deleteUserEverywhere(currentUserId);
+    this.patchState((state) => ({
+      ...state,
+      currentUserId: '',
+      isGuestSession: false,
+      selectedChannelId: '',
+      selectedThreadId: '',
+    }));
+  }
+
   deleteUserEverywhere(userId: string): void {
     this.patchState((state) => {
       const deletedMessageIds = new Set(

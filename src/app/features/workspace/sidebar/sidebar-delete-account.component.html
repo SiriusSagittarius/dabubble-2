@@ -1,0 +1,45 @@
+@if (!isGuest()) {
+  <section class="sidebar-section danger-section">
+    @if (!armed()) {
+      <button
+        type="button"
+        class="delete-account-row"
+        aria-label="Konto löschen"
+        (click)="arm()"
+      >
+        <svg class="delete-account-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+        </svg>
+        <span class="delete-account-title">Konto löschen</span>
+      </button>
+    } @else {
+      <div class="delete-account-confirm" role="alertdialog" aria-label="Konto wirklich löschen">
+        <p class="delete-account-warning">
+          Dein Konto wird <strong>dauerhaft</strong> aus der Datenbank gelöscht –
+          Profil, Nachrichten und Kontakte. Das kann nicht rückgängig gemacht werden.
+        </p>
+        @if (error()) {
+          <p class="delete-account-error" role="alert">{{ error() }}</p>
+        }
+        <div class="delete-account-actions">
+          <button
+            type="button"
+            class="delete-account-cancel"
+            [disabled]="busy()"
+            (click)="cancel()"
+          >
+            Abbrechen
+          </button>
+          <button
+            type="button"
+            class="delete-account-confirm-btn"
+            [disabled]="busy()"
+            (click)="confirm()"
+          >
+            {{ busy() ? 'Wird gelöscht…' : 'Endgültig löschen' }}
+          </button>
+        </div>
+      </div>
+    }
+  </section>
+}
