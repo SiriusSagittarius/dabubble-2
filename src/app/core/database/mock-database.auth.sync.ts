@@ -2,7 +2,6 @@ import { MockUser } from './mock-database.models';
 import { MockDatabaseStore } from './mock-database.store';
 import { avatarClassForId, isOnlineFromLastActive } from './mock-database.utils';
 
-/** Form eines aus Firestore gelesenen Nutzer-Eintrags. */
 export interface FirestoreUserEntry {
   uid: string;
   email: string;
@@ -20,15 +19,10 @@ export interface FirestoreUserEntry {
     color: string;
     entries: Array<{ value: string; emoji: string }>;
   }> | null;
-  /** Eigene Kontaktliste (nur im Doc des aktuellen Nutzers relevant). */
+
   contactUserIds?: string[] | null;
 }
 
-/**
- * Spiegelt die aus Firestore gelesenen Nutzer in den lokalen Store. Ausgelagert
- * aus dem MockDatabaseAuthService wegen der 400-Zeilen-Regel. Arbeitet nur ueber
- * den uebergebenen Store, haelt aktuellen Nutzer und Gast erhalten.
- */
 export function applyFirestoreUserSync(
   store: MockDatabaseStore,
   users: FirestoreUserEntry[],
@@ -70,7 +64,6 @@ export function applyFirestoreUserSync(
           merged.profileCategories = entry.profileCategories;
         }
 
-        // Gespeicherten Avatar aus Firestore uebernehmen (gewinnt ueber lokal).
         if (hasImage) {
           merged.avatarImage = entry.avatarImage as string;
           delete merged.avatarId;
@@ -112,7 +105,6 @@ export function applyFirestoreUserSync(
       return newUser;
     });
 
-    // Aktuellen User immer erhalten, auch wenn er nicht in Firestore steht
     const currentStateUser = state.users.find((u) => u.id === state.currentUserId);
     if (currentStateUser) {
       const alreadyInNext =
@@ -123,7 +115,6 @@ export function applyFirestoreUserSync(
       }
     }
 
-    // Gast-User erhalten, da er nicht in Firestore existiert
     const guestUsers = state.users.filter(
       (u) => u.isGuest && !nextUsers.some((nu) => nu.id === u.id),
     );
@@ -134,11 +125,6 @@ export function applyFirestoreUserSync(
         ? currentUserUid
         : state.currentUserId;
 
-    // Kontaktliste des aktuellen Nutzers aus seinem eigenen Firestore-Doc
-    // uebernehmen (gespeicherte Kontakte ueber Geraete hinweg). Nur IDs, die zu
-    // einem bekannten Nutzer aufloesbar sind, werden uebernommen; lokal manuell
-    // angelegte Kontakte (ohne eigenes Doc) bleiben ueber den bestehenden State
-    // erhalten und werden hinzugefuegt.
     let nextContactUserIds = state.contactUserIds;
     const currentEntry = users.find((entry) => entry.uid === nextCurrentUserId);
     if (currentEntry && Array.isArray(currentEntry.contactUserIds)) {

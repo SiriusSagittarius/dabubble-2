@@ -3,28 +3,19 @@ import { MockDatabaseService } from '../../../core/database/mock-database.servic
 import { UiStateService } from '../../../core/services/ui-state.service';
 import { ProfileDialogService } from '../../../core/services/profile-dialog.service';
 
-/**
- * Basisklasse fuer den Kontakte-Teil der Sidebar. Ausgelagert aus
- * sidebar.component.ts wegen der 400-Zeilen-Regel (Vorbild: chat-area.base.ts).
- * Buendelt Kontakt-Suche, Hinzufuegen-Formular, Kontextmenue, Loeschen sowie
- * Import/Export. Die Sidebar erbt hiervon.
- */
 @Directive()
 export abstract class SidebarContactsBase {
   protected readonly database = inject(MockDatabaseService);
   protected readonly uiState = inject(UiStateService);
   protected readonly profileDialog = inject(ProfileDialogService);
 
-  /** Muss von der Sidebar bereitgestellt werden (Schliessen der mobilen Sidebar). */
   protected abstract emitItemSelected(): void;
 
-  // ===== Kontakte-Akkordeon =====
   protected readonly kontakteExpanded = signal(false);
   protected readonly privateContactsExpanded = signal(true);
   protected readonly teamExpanded = signal(false);
   protected readonly kontakteSearchQuery = signal('');
 
-  // ===== Add-Contact-Formular =====
   protected readonly addContactOpen = signal(false);
   protected readonly addContactFirstName = signal('');
   protected readonly addContactLastName = signal('');
@@ -41,7 +32,6 @@ export abstract class SidebarContactsBase {
     return ids;
   });
 
-  // Kontakte-Liste: eigene Kontakte + Channel-Mitglieder; bei Suche auch öffentliche
   protected readonly visibleContacts = computed(() => {
     const currentUserId = this.database.currentUser()?.id;
     const contactIds = this._contactIds();
@@ -56,7 +46,6 @@ export abstract class SidebarContactsBase {
     });
   });
 
-  // Suche nach oeffentlichen Kontakten, die noch nicht in der eigenen Liste sind.
   protected readonly contactSearchResults = computed(() => {
     const q = this.kontakteSearchQuery().toLowerCase().trim();
     if (!q) return [];
@@ -71,8 +60,6 @@ export abstract class SidebarContactsBase {
     );
   });
 
-  // Kontakte-Bereich als Akkordeon: Suche, Kontakte und Team – es ist immer nur
-  // eines offen. Oeffnen einer Liste schliesst die andere und leert die Suche.
   protected togglePrivateContacts(): void {
     const next = !this.privateContactsExpanded();
     if (next) {
@@ -91,7 +78,6 @@ export abstract class SidebarContactsBase {
     this.teamExpanded.set(next);
   }
 
-  // Suche aktiv -> Kontakte- und Team-Liste schliessen.
   protected onKontakteSearchFocus(): void {
     this.privateContactsExpanded.set(false);
     this.teamExpanded.set(false);
@@ -101,15 +87,12 @@ export abstract class SidebarContactsBase {
     this.profileDialog.open(userId);
   }
 
-  // Oeffentlichen Kontakt in die eigene private Kontaktliste uebernehmen.
   protected addPublicContact(userId: string): void {
     this.database.addExistingContact(userId);
   }
 
-  // ===== Kontakt-Kontextmenue =====
   protected readonly openContactMenuId = signal<string | null>(null);
-  // Getrennte "scharf schalten"-Zustaende fuer die zwei Loeschaktionen, damit sie
-  // sich nicht gegenseitig beeinflussen (Chat loeschen vs. Kontakt entfernen).
+
   protected readonly deleteArmedId = signal<string | null>(null);
   protected readonly removeArmedId = signal<string | null>(null);
   private deletePressTimer: ReturnType<typeof setTimeout> | null = null;
@@ -137,8 +120,6 @@ export abstract class SidebarContactsBase {
     this.closeContactMenu();
   }
 
-  // Zweistufiges Loeschen: erster Klick "scharf schalten", zweiter Klick loescht
-  // nur die DM-Unterhaltung mit diesem Nutzer, nicht den Kontakt selbst.
   protected contactDelete(userId: string): void {
     if (this.deleteArmedId() === userId) {
       this.database.deleteDirectConversation(userId);
@@ -150,8 +131,6 @@ export abstract class SidebarContactsBase {
     }
   }
 
-  // Zweistufiges Entfernen des Nutzers aus der EIGENEN Kontaktliste (loescht den
-  // Nutzer nicht global, nur aus den eigenen contactUserIds + Firebase-Sync).
   protected contactRemove(userId: string): void {
     if (this.removeArmedId() === userId) {
       this.database.removeContact(userId);
@@ -163,7 +142,6 @@ export abstract class SidebarContactsBase {
     }
   }
 
-  // Langes Druecken schaltet das Chat-Loeschen ebenfalls scharf.
   protected onDeletePressStart(userId: string): void {
     this.clearDeletePressTimer();
     this.deletePressTimer = setTimeout(() => this.deleteArmedId.set(userId), 600);

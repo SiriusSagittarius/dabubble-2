@@ -1,5 +1,5 @@
-/* Fortsetzung von sidebar.kontakte.scss — wegen 400-Zeilen-Regel ausgelagert. */
-/* Kontextmenue (Hinzufuegen / Nachricht / Profil / Loeschen) */
+
+
 .kontakte-context-menu {
   flex-basis: 100%;
   width: 100%;
@@ -55,7 +55,6 @@
     color: #e53935;
   }
 
-  /* "Scharf geschalteter" Zustand: zweiter Klick loescht wirklich. */
   &.armed {
     background: #e53935;
     color: #fff;
@@ -162,7 +161,6 @@
   }
 }
 
-/* Verfügbare Channels */
 .channel-sublist-header {
   font-size: 13px;
   font-weight: 700;

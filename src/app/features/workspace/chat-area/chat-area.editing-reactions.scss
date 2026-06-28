@@ -1,6 +1,4 @@
-/* ==========================================
-   NACHRICHTEN EDITIEREN & OPTIONEN (Aus Part 8)
-   ========================================== */
+
 .message-edit-menu {
   position: absolute;
   top: 26px;
@@ -36,7 +34,6 @@
   color: #535af1;
   outline: none;
 }
-
 
 .message-right .message-edit-menu {
   background: #fff;
@@ -133,10 +130,6 @@
   outline: none;
 }
 
-
-/* ==========================================
-   REAKTIONEN & REACTION CHIPS (Aus Part 8 & 9)
-   ========================================== */
 .message-reaction-bar {
   position: relative;
   width: fit-content;
@@ -202,7 +195,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 24px; 
+  width: 24px;
   height: 24px;
 }
 
@@ -263,10 +256,6 @@
   opacity: 1;
 }
 
-
-/* ==========================================
-   AUTOCOMPLETE VORSCHLÄGE (@ und #) (Aus Part 9)
-   ========================================== */
 .channel-suggestions-list {
   position: absolute;
   left: 0;
@@ -389,5 +378,4 @@
   color: #000;
   line-height: 1.2;
 }
-
 

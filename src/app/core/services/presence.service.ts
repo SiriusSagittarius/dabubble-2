@@ -7,12 +7,6 @@ import { MockDatabaseService } from '../database/mock-database.service';
 const HEARTBEAT_INTERVAL_MS = 30_000;
 const PRESENCE_REFRESH_MS = 20_000;
 
-/**
- * Online-Praesenz ueber Firestore: Solange die App eines eingeloggten Nutzers
- * offen (und sichtbar) ist, wird regelmaessig `lastActive` in sein User-Dokument
- * geschrieben. Andere Geraete lesen das per onSnapshot und zeigen "online", wenn
- * der letzte Heartbeat frisch genug ist (siehe ONLINE_THRESHOLD_MS).
- */
 @Injectable({ providedIn: 'root' })
 export class PresenceService {
   private readonly auth = inject(Auth);
@@ -38,12 +32,8 @@ export class PresenceService {
       }
     });
 
-    // Lokale Neubewertung: setzt entfernte Nutzer offline, deren letzter Heartbeat
-    // zu alt ist. Noetig, weil ein einfach geschlossenes Geraet kein neues
-    // Snapshot mehr ausloest.
     this.refreshTimer = setInterval(() => this.database.refreshPresence(), PRESENCE_REFRESH_MS);
 
-    // Beim Zurueckkehren in den Tab sofort einen Heartbeat senden.
     this.activityHandler = () => {
       if (document.visibilityState === 'visible') {
         void this.writeHeartbeat();
@@ -77,7 +67,7 @@ export class PresenceService {
         setDoc(doc(this.firestore, 'users', uid), { lastActive: serverTimestamp() }, { merge: true }),
       );
     } catch {
-      // Netzwerk-/Rechtefehler hier bewusst ignorieren – Praesenz ist best-effort.
+
     }
   }
 }

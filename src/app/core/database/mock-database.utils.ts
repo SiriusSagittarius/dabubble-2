@@ -22,9 +22,6 @@ export function dmChannelId(userIdA: string, userIdB: string): string {
   return `dm-${[userIdA, userIdB].sort().join('-')}`;
 }
 
-// Praesenz: Ein User gilt als online, wenn sein letzter Heartbeat (lastActive)
-// weniger als 70s zurueckliegt (Heartbeat-Intervall ~30s -> ein Beat darf
-// ausfallen, ohne dass jemand faelschlich offline erscheint).
 export const ONLINE_THRESHOLD_MS = 70_000;
 
 export function isOnlineFromLastActive(lastActiveAt: number | null | undefined, now: number = Date.now()): boolean {

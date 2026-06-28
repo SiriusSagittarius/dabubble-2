@@ -19,7 +19,6 @@ export class HeaderComponent {
   protected readonly database = inject(MockDatabaseService);
   protected readonly uiState = inject(UiStateService);
 
-  // Devspace-Logo + Back nur, wenn der Profil-Avatar 50px ist (<= 430px)
   protected readonly isMobile = signal(this.computeMobile());
 
   workspaceSearchDraft = '';
@@ -40,7 +39,6 @@ export class HeaderComponent {
     return this.workspaceSearchDraft.trim().length > 0;
   }
 
-  // Private Channels nur fuer Mitglieder sichtbar (Suche darf nichts leaken).
   private isChannelVisible(channelId: string): boolean {
     const channel = this.database.channels().find((entry) => entry.id === channelId);
     if (!channel) return false;
@@ -48,8 +46,6 @@ export class HeaderComponent {
     return !channel.isPrivate || (!!currentUserId && channel.memberIds.includes(currentUserId));
   }
 
-  // Suchmodus anhand des Praefix: '@' grenzt auf Profile ein, '#' auf Channels,
-  // sonst wird wie gewohnt alles durchsucht.
   private searchMode(): 'mention' | 'channel' | 'all' {
     const raw = this.workspaceSearchDraft.trim();
     if (raw.startsWith('@')) return 'mention';
@@ -57,15 +53,12 @@ export class HeaderComponent {
     return 'all';
   }
 
-  // Suchbegriff ohne fuehrendes '@'/'#'.
   private searchQuery(): string {
     const raw = this.workspaceSearchDraft.trim();
     const sliced = this.searchMode() === 'all' ? raw : raw.slice(1);
     return sliced.trim().toLowerCase();
   }
 
-  // IDs aller Nutzer, mit denen der aktuelle Nutzer mindestens einen Channel
-  // teilt (beigetreten oder selbst erstellt) – Basis der '@'-Erwaehnungssuche.
   private channelCoMemberIds(): Set<string> {
     const ids = new Set<string>();
     this.database
@@ -79,7 +72,6 @@ export class HeaderComponent {
     if (mode === 'mention') return [];
     const query = this.searchQuery();
 
-    // '#': nur Channels, in denen der Nutzer Mitglied oder Ersteller ist.
     if (mode === 'channel') {
       return this.database
         .joinedChannels()
@@ -102,7 +94,6 @@ export class HeaderComponent {
     if (mode === 'channel') return [];
     const query = this.searchQuery();
 
-    // '@': nur Nutzer, mit denen man mindestens einen Channel teilt.
     if (mode === 'mention') {
       const currentUserId = this.database.currentUser()?.id;
       const coMemberIds = this.channelCoMemberIds();
@@ -127,7 +118,7 @@ export class HeaderComponent {
   }
 
   protected workspaceSearchMessages() {
-    // Bei '@'/'#' bleibt die Suche auf Profile bzw. Channels beschraenkt.
+
     if (this.searchMode() !== 'all') return [];
     const query = this.searchQuery();
     if (!query) return [];

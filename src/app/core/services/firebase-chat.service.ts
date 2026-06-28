@@ -18,7 +18,6 @@ export class FirebaseChatService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
-  /** Fuehrt eine Firestore-Operation im Angular Injection-Context aus. */
   private inContext<T>(operation: () => T): T {
     return runInInjectionContext(this.injector, operation);
   }
@@ -59,8 +58,6 @@ export class FirebaseChatService {
       return;
     }
 
-    // Dokument-ID = lokale Channel-ID, damit der Snapshot-Sync denselben Channel
-    // zurueckspielt (kein Duplikat).
     await this.inContext(() =>
       setDoc(
         doc(this.firestore, 'channels', channel.id),

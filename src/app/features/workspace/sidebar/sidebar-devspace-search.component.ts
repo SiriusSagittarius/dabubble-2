@@ -4,11 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { MockChannel, MockUser } from '../../../core/database/mock-database.models';
 import { MockDatabaseService } from '../../../core/database/mock-database.service';
 
-/**
- * Devspace-Suchoverlay der Sidebar. Ausgelagert aus sidebar.component.html wegen
- * der 400-Zeilen-Regel (Vorbild: profile-categories-edit.component.ts). Zeigt je
- * nach Praefix (# / @) Channel- oder Nutzer-Treffer und meldet Aktionen zurueck.
- */
 @Component({
   selector: 'app-sidebar-devspace-search',
   standalone: true,

@@ -1,11 +1,6 @@
 import { inject } from '@angular/core';
 import { MockDatabaseService } from '../../../core/database/mock-database.service';
 
-/**
- * Gemeinsame Anzeige-/Format-/Avatar-Helfer fuer ChatArea und untergeordnete
- * Nachrichten-Komponenten. Enthaelt nur Logik, die ausschliesslich auf der
- * Datenbank bzw. reinen Eingabewerten basiert (kein Komponenten-State).
- */
 export abstract class ChatAreaBase {
   protected readonly database = inject(MockDatabaseService);
 

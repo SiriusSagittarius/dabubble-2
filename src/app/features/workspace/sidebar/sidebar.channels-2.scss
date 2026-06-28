@@ -1,4 +1,4 @@
-/* Fortsetzung von sidebar.channels.scss — wegen 400-Zeilen-Regel ausgelagert. */
+
 .dm-list {
   min-height: 0;
   display: flex;
@@ -15,7 +15,6 @@
   &::-webkit-scrollbar-thumb { background: #c7cbfa; border-radius: 2px; }
 }
 
-/* Channel-Gruppe: Kopf (Toggle) bleibt stehen, nur die Items scrollen. */
 .channel-list {
   min-height: 0;
   display: flex;
@@ -24,8 +23,6 @@
   margin: 0 35px;
 }
 
-/* Wrapper um Sublist-Komponenten — kein eigenes Scrollen,
-   da jede Sublist (.channel-sublist-nested) selbst scrollt. */
 .channel-list-scroll {
   min-height: 0;
   display: flex;
@@ -200,7 +197,6 @@
 .channel-sublist-toggle:hover .channel-sublist-label { color: #444df2; }
 .channel-sublist-toggle.sublist-expanded .channel-sublist-caret { transform: rotate(90deg); }
 
-/* Zaehler-Badge im Unterlisten-Kopf (z. B. Anzahl aller Channels). */
 .channel-sublist-count {
   margin-left: auto;
   font-size: 12px;
@@ -213,8 +209,6 @@
   text-align: center;
 }
 
-/* Genestete Unterliste (öffentlich/privat innerhalb Abonniert/Eigen).
-   Scrollt selbst, damit der Toggle-Button sticky direkt im Scroll-Container liegt. */
 .channel-sublist-nested {
   margin-left: 15px;
   margin-right: 0;
@@ -233,8 +227,7 @@
 
 .channel-sublist-toggle-nested {
   padding-left: 4px;
-  /* Label (Öffentlich/Privat) bleibt beim Scrollen oben stehen,
-     nur die Channel-Items darunter scrollen. */
+
   position: sticky;
   top: 0;
   z-index: 1;
@@ -247,7 +240,6 @@
   letter-spacing: 0;
 }
 
-/* "Alle Channels"-Eintrag: anklickbarer Link + Beitreten/Verlassen-Button. */
 .channel-item-available {
   justify-content: flex-start;
   gap: 6px;
@@ -292,7 +284,6 @@
   color: #fff;
 }
 
-/* Hinweis statt Button bei selbst erstellten Channels (nicht verlassbar). */
 .channel-owner-tag {
   margin-left: auto;
   font-size: 12px;
@@ -312,7 +303,7 @@
   .channels-toggle-btn {
     margin-left: 10px;
   }
-  
+
   .workspace-row {
     display: none;
   }

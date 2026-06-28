@@ -189,9 +189,7 @@ export class ChatArea extends ChatAreaBase {
   }
 
   protected onMembersButtonClick(): void {
-    // Ab <=1480px ist die Mitglieder-Vorschau (Avatare) ausgeblendet; dann
-    // uebernimmt dieser Button deren Funktion und oeffnet die Mitgliederliste.
-    // (Mitglieder hinzufuegen bleibt ueber den Button innerhalb der Liste.)
+
     if (typeof window !== 'undefined' && window.innerWidth <= 1480) {
       this.membersListOpen.set(true);
       return;
@@ -224,10 +222,10 @@ export class ChatArea extends ChatAreaBase {
 
   protected channelSuggestions() {
     const draft = this.chatMessageDraft;
-    // Quick-Navigation: nur wenn '#' das erste Zeichen ist.
+
     if (!draft.startsWith('#')) return [];
     const query = draft.slice(1).trim().toLowerCase();
-    // Nur Channels, in denen der Nutzer Mitglied oder Ersteller ist.
+
     return this.database.joinedChannels().filter((c) => c.name.toLowerCase().includes(query));
   }
 
@@ -236,7 +234,7 @@ export class ChatArea extends ChatAreaBase {
     if (!draft.startsWith('#') && !draft.includes('#')) return [];
     const hashIndex = draft.lastIndexOf('#');
     const query = draft.slice(hashIndex + 1).trim().toLowerCase();
-    // Nur Channels vorschlagen, in denen der Nutzer Mitglied ist.
+
     return this.database.joinedChannels().filter((c) => c.name.toLowerCase().includes(query));
   }
 
@@ -249,7 +247,7 @@ export class ChatArea extends ChatAreaBase {
     const memberIds = new Set(
       this.database.joinedChannels().flatMap((c) => c.memberIds)
     );
-    // Nur eigene Kontakte und Mitglieder aus eigenen Channels vorschlagen.
+
     return this.database.users().filter((u) => {
       if (u.id === currentId) return false;
       if (!contactIds.has(u.id) && !memberIds.has(u.id)) return false;
@@ -277,14 +275,11 @@ export class ChatArea extends ChatAreaBase {
 
   protected contactSuggestions() {
     const draft = this.chatMessageDraft.trimStart();
-    // Erwaehnung/Quick-Navigation: nur wenn '@' das erste Zeichen ist.
+
     if (!draft.startsWith('@')) return [];
     const query = draft.slice(1).trim().toLowerCase();
     const currentId = this.database.currentUser()?.id;
 
-    // In einem Channel duerfen ausschliesslich Mitglieder dieses Channels
-    // vorgeschlagen werden. In DM / "neue Nachricht" nur eigene Kontakte und
-    // Mitglieder aus Channels, in denen der Nutzer selbst Mitglied ist.
     const inChannel = !this.directMessageUser() && !this.uiState.showMainChatIntro();
     let base = this.database.activeChannelMembers();
     if (!inChannel) {
@@ -307,14 +302,14 @@ export class ChatArea extends ChatAreaBase {
   }
 
   protected selectChannelSuggestion(channelId: string): void {
-    // Channel anzeigen statt Text einzufuegen.
+
     this.database.selectChannel(channelId);
     this.uiState.openChannel();
     this.chatMessageDraft = '';
   }
 
   protected selectContactSuggestion(userId: string): void {
-    // Direktnachricht-Bildschirm fuer den Kontakt oeffnen.
+
     this.uiState.openDirectMessage(userId);
     this.chatMessageDraft = '';
   }

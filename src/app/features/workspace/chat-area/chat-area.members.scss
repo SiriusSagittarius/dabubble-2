@@ -1,6 +1,4 @@
-/* ==========================================
-   EMOJI MART DEEP CORRECTIONS FOR THREAD (Aus Part 10)
-   ========================================== */
+
 :host ::ng-deep .emoji-picker-popover-thread .emoji-mart-category-list li {
   margin: 2px;
 }
@@ -70,7 +68,6 @@
   background: #cfd4ff !important;
   border-radius: 12px;
 }
-
 
 .custom-members-backdrop {
   position: fixed;
@@ -166,7 +163,6 @@
   color: #000;
 }
 
-/* Channel-Edition Mitglieder (nur Mobile) */
 .channel-edition-section-members {
   display: none;
 }

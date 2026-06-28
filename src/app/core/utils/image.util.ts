@@ -1,9 +1,4 @@
-/**
- * Liest eine Bilddatei, skaliert sie auf maximal `maxSize` px (laengste Kante)
- * herunter und gibt sie als komprimiertes JPEG-Data-URL zurueck. So bleiben
- * Profilfotos klein genug (~20–60 KB), um ohne Firebase Storage direkt in
- * Firestore (1-MB-Limit) gespeichert und ueberall synchronisiert zu werden.
- */
+
 export function compressImageFile(file: File, maxSize = 256, quality = 0.8): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

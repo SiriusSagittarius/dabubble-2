@@ -8,18 +8,18 @@
 }
 .header {
   height: 115px;
-  
+
   display: grid;
   align-items: center;
   box-sizing: border-box;
-  gap: 20px; 
+  gap: 20px;
   padding: 0 20px;
   grid-template-columns:
     366px
     1fr
     485px;
   grid-auto-flow: column;
-  
+
   overflow: visible;
 }
 ::ng-deep app-profile {
@@ -73,7 +73,6 @@
   color: #1f1f1f;
   margin-left: 8px;
 }
-
 
 .searchbar-container {
   position: relative;
@@ -239,8 +238,6 @@
   flex-basis: 28px;
 }
 
-
-
 @media (max-width: 1100px) {
   .header {
     gap: 16px;
@@ -248,8 +245,6 @@
 }
 
 @media (max-width: 760px) {
-
-
 
   .searchbar {
     min-height: 46px;

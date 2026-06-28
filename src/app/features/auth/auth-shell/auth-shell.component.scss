@@ -150,12 +150,8 @@ $light-purple-bg: #ECEEFE;
   height: 100%;
 }
 
-
-
-
 @media (max-width: 530px) {
-  /* Logo zentriert + feste Höhe (56px). Standard = "oben" (login, Avatar-Step):
-     top stammt aus der Basisregel fluid(320,1920,58.95,75). */
+
   .auth-logo {
     position: absolute;
     left: 50%;
@@ -164,11 +160,6 @@ $light-purple-bg: #ECEEFE;
     width: auto;
   }
 
-  /* Signup-Formular ("Konto erstellen"): Logo "weiter unten" (top 199px).
-     Karte beginnt 40px darunter (199 + 56 + 40 = 295).
-     Den Avatar-Schritt (Logo wieder "oben") kann diese Komponente per :has()
-     nicht erkennen (ViewEncapsulation scoped .avatar-step aus dem signup-
-     Component aus) -> Override liegt global in styles/styles.scss. */
   .auth-logo--signup {
     top: 199px;
   }
@@ -228,16 +219,6 @@ $light-purple-bg: #ECEEFE;
   }
 }
 
-/* ============================================================
-   MOBILE (≤530px): Auth-Layout als EIN durchgehender Flow-/Scroll-
-   Container statt absolut positionierter Overlays.
-   Logo, Karte, "Neu bei DABubble" und die Rechtslinks stehen im
-   normalen Fluss untereinander und scrollen gemeinsam -> sie können
-   sich bei KEINER Viewport-Höhe mehr überlagern (Fix für schmale/hohe
-   Geräte wie das Galaxy Note 8). position:static macht zusätzlich alle
-   hartkodierten top/bottom-Offsets der Overlays wirkungslos.
-   Desktop (>530px) bleibt unverändert.
-   ============================================================ */
 @media (max-width: 530px) {
   .auth-shell {
     height: 100dvh;
@@ -251,7 +232,6 @@ $light-purple-bg: #ECEEFE;
     padding: 28px 16px;
   }
 
-  /* Absolute Overlays -> Flow-Geschwister. Reihenfolge via order. */
   .auth-logo {
     position: static;
     order: 1;

@@ -1,11 +1,6 @@
 import { inject } from '@angular/core';
 import { MockDatabaseService } from '../../../core/database/mock-database.service';
 
-/**
- * Avatar-/Sprite-Hilfsmethoden fuer den Modals-Container. Ausgelagert wegen der
- * 400-Zeilen-Regel; basiert ausschliesslich auf der Datenbank bzw. reinen
- * Eingabewerten (kein Komponenten-State).
- */
 export abstract class ModalsContainerAvatarBase {
   protected readonly database = inject(MockDatabaseService);
 

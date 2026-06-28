@@ -6,7 +6,6 @@ $light-purple-bg: #ECEEFE;
 $text-gray: #686868;
 $error-pink: #ED1E79;
 
-/* Formular im Fluss (kein absolute) -> skaliert flüssig, nichts kollidiert */
 .login-form,
 .password-form {
   position: relative;
@@ -161,7 +160,6 @@ $error-pink: #ED1E79;
   }
 }
 
-/* E-Mail-Schritt: Platz für die Fehlermeldung reservieren, damit sie den Info-Text nicht überdeckt */
 .login-form .input-group {
   padding-bottom: 22px;
 }
@@ -227,7 +225,6 @@ $error-pink: #ED1E79;
     margin-top: fluid(320, 430, 20, 28);
   }
 
-  /* Desktop: Button am unteren Kartenrand verankern (passend zur min-height) */
   @media (min-width: 531px) {
     margin-top: auto;
     padding-top: fluid(531, 1920, 16, 32);

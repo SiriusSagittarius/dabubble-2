@@ -41,7 +41,6 @@
 
   @if (!devspaceSearchOpen()) {
 
-    <!-- ===== CHANNELS ===== -->
     <section class="sidebar-section">
       <div class="channels-header-row" aria-label="Channels">
         <button
@@ -62,7 +61,7 @@
       </div>
 
       @if (channelsExpanded()) {
-        <!-- ===== 1. ALLE CHANNELS (alle öffentlichen, Beitreten/Verlassen) ===== -->
+
         <nav class="channel-list" aria-label="Alle Channels">
           <button
             type="button"
@@ -105,7 +104,6 @@
           }
         </nav>
 
-        <!-- ===== 2. ABONNIERTE CHANNELS (beigetreten, nicht selbst erstellt) ===== -->
         <nav class="channel-list" aria-label="Abonnierte Channels">
           <button
             type="button"
@@ -139,7 +137,6 @@
           }
         </nav>
 
-        <!-- ===== 3. EIGENE CHANNELS (selbst erstellt) ===== -->
         <nav class="channel-list" aria-label="Eigene Channels">
           <button
             type="button"
@@ -173,7 +170,6 @@
           }
         </nav>
 
-        <!-- ===== 4. CHANNEL HINZUFÜGEN (immer sichtbar) ===== -->
         <button type="button" class="channel-item channel-item-add" aria-label="Channel hinzufügen" (click)="openAddChannelDialog()">
           <span class="channel-item-add-icon-circle" aria-hidden="true">
             <span class="channel-item-add-plus"></span>
@@ -183,7 +179,6 @@
       }
     </section>
 
-    <!-- ===== DIREKTNACHRICHTEN ===== -->
     <section class="sidebar-section dm-section">
       <button
         type="button"
@@ -218,7 +213,6 @@
       </nav>
     </section>
 
-    <!-- ===== KONTAKTE ===== -->
     <section class="sidebar-section">
       <div class="kontakte-header-outer">
         <button
@@ -263,7 +257,7 @@
       }
 
       @if (kontakteExpanded()) {
-        <!-- Suche nach Kontakten (für alle Nutzer inkl. Gäste) -->
+
         <div class="kontakte-search-row">
           <input
             type="text"
@@ -294,7 +288,6 @@
           </ul>
         }
 
-        <!-- Eigene Kontaktliste -->
         <nav class="kontakte-sublist" aria-label="Meine Kontakte">
           <button
             type="button"
@@ -352,7 +345,6 @@
           }
         </nav>
 
-        <!-- Team: Mitglieder des aktuell gewählten Channels -->
         <nav class="kontakte-sublist" aria-label="Team">
           <button
             type="button"
@@ -386,7 +378,6 @@
       }
     </section>
 
-    <!-- ===== HILFE ===== -->
     <section class="sidebar-section">
       <button
         type="button"

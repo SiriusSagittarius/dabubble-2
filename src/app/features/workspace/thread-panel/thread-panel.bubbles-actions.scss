@@ -1,6 +1,4 @@
-/* ==========================================
-   SPEECH BUBBLES IN THREADS (Aus Part 12)
-   ========================================== */
+
 .thread-bubble {
   margin: 0;
   box-sizing: border-box;
@@ -112,10 +110,6 @@
   flex: 1;
 }
 
-
-/* ==========================================
-   HOVER ACTIONS & REAKTIONEN IM THREAD (Aus Part 11 & 12)
-   ========================================== */
 .thread-edit-box {
   position: absolute;
   left: -3px;
@@ -291,9 +285,6 @@
   outline: none;
 }
 
-/* ==========================================
-   RESPONSIVE: SPEECH BUBBLES AB 1480px
-   ========================================== */
 @media (max-width: 1480px) {
   .thread-bubble {
     text-align: left;
@@ -303,7 +294,6 @@
     text-align: right;
   }
 
-  /* Emoji-Add-Button im Thread ein Stueck hoeher setzen */
   .thread-reaction-add {
     top: -6px;
   }

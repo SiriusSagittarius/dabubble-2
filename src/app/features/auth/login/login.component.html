@@ -6,7 +6,6 @@
         </a>
       </div>
 
-
       @if (showIntro()) {
         <div class="login-intro" [class.login-intro--leave]="introLeaving()" aria-hidden="true">
           <div class="login-intro-stage">
@@ -38,7 +37,7 @@
             </div>
           </div>
         }
-        
+
         <div class="login-content">
           <div class="login-header">
             <h1 class="title">Anmeldung</h1>
@@ -48,7 +47,7 @@
           </div>
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
-            
+
             <div class="input-group">
               <div class="input-wrapper" [class.has-error]="isFieldInvalid('email')">
 
@@ -65,7 +64,6 @@
                 *Diese E-Mail-Adresse ist leider ungültig.
               </p>
             </div>
-
 
             <div class="input-group">
               <div class="input-wrapper" [class.has-error]="isFieldInvalid('password') || authError()">
@@ -97,7 +95,6 @@
               </p>
             </div>
 
-            
             <div class="forgot-password-container">
               <a class="btn-forgot-password" routerLink="/reset">
                 Passwort vergessen?
@@ -105,13 +102,11 @@
             </div>
           </form>
 
-   
           <div class="separator-container">
             <div class="separator-line"></div>
             <span class="separator-text">ODER</span>
           </div>
 
-       
           <div class="google-container">
             <app-google-login
               (loginSuccess)="handleGoogleLogin($event)"
@@ -120,7 +115,6 @@
           </div>
         </div>
 
-      
         <div class="action-footer">
           <button type="button" class="btn-primary" (click)="onSubmit()">
             Anmelden

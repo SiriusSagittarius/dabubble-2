@@ -8,7 +8,7 @@ export class UiStateService {
   readonly addMembersPanelOpen = signal(false);
   readonly addChannelDialogOpen = signal(false);
   readonly newMessageRecipient = signal('');
-  // Manuell geoeffnete Hilfe-/Onboarding-Ansicht (ueber den Sidebar-Reiter "Hilfe").
+
   readonly showHelp = signal(false);
 
   openHelp(): void {

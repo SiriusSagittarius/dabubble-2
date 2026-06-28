@@ -149,7 +149,6 @@
   }
 }
 
-/* Ergebnisliste der oeffentlichen Kontakt-Suche */
 .kontakte-search-results {
   list-style: none;
   margin: 0 35px 8px;
@@ -209,7 +208,6 @@
   &:hover { background: #444df2; color: #fff; }
 }
 
-/* Hilfe-Reiter (wie eine Sektions-Ueberschrift) */
 .hilfe-header-row {
   width: 100%;
   border: 0;
@@ -257,7 +255,6 @@
   list-style: none;
 }
 
-/* Zwei Unterlisten in der Kontakte-Sektion: eigene Kontakte + Team */
 .kontakte-sublist {
   display: flex;
   flex-direction: column;
@@ -278,7 +275,6 @@
   min-width: 0;
 }
 
-/* Kontakte-Liste */
 .kontakte-contacts-list {
   list-style: none;
   margin: 0 35px;

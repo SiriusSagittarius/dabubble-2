@@ -86,7 +86,6 @@
   border-color: #3138e0;
 }
 
-
 :host ::ng-deep .emoji-picker-popover .emoji-mart-anchor-selected svg {
   fill: #fff !important;
 }
@@ -121,9 +120,7 @@
 
 @media (max-width: 520px) {
   .emoji-picker-popover {
-    /* Basis-Zentrierung (top/left 50% + translate) zurücksetzen, sonst schiebt
-       das verbleibende transform den Picker um die halbe Höhe nach oben in den
-       Header. Stattdessen unten rechts über dem Eingabefeld verankern. */
+
     top: auto !important;
     left: auto !important;
     right: 0 !important;
@@ -141,8 +138,7 @@
 .channel-edition-backdrop {
   position: fixed;
   inset: 0;
-  /* Über dem Header (z-index 100), damit die Karte als echtes Modal ganz oben
-     liegt und nicht vom Header/Workspace ueberlagert wird (Desktop + Mobil). */
+
   z-index: 200;
   background: rgba(0, 0, 0, 0.18);
   display: flex;

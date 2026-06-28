@@ -7,10 +7,8 @@
         </div>
       }
 
-      <!-- Hauptcontainer: Frame 79 (Registrierung) -->
       <div class="login-container">
 
-        <!-- Header-Bereich (Frame 199): Zurück-Button auf einer Linie mit dem Titel -->
         <div class="login-header">
           <div class="login-header-bar">
             <button type="button" class="btn-back" (click)="goBack()" title="Zurück" aria-label="Zurück">
@@ -73,7 +71,6 @@
                 }
               </div>
 
-              <!-- Profil-Sichtbarkeit: öffentlich (im Devspace auffindbar) oder privat -->
               <div class="visibility-row">
                 <button
                   type="button"
@@ -99,7 +96,6 @@
             </div>
           </div>
 
-          <!-- Aktionsknopf -->
           <div class="action-footer">
             <button type="button" class="btn-primary" (click)="onSubmit()">
               Weiter
@@ -108,10 +104,9 @@
         }
 
         @if (!isAvatarStep()) {
-          <!-- Formular-Bereich (Frame 192) -->
+
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
 
-            <!-- 1. Name Input Container -->
             <div class="input-group" style="top: 0px;">
               <div class="input-wrapper" [class.has-error]="isFieldInvalid('name')">
                 <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -130,7 +125,6 @@
               }
             </div>
 
-            <!-- 2. E-Mail Input Container -->
             <div class="input-group" style="top: 100px;">
               <div class="input-wrapper" [class.has-error]="isFieldInvalid('email')">
                 <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -149,7 +143,6 @@
               }
             </div>
 
-            <!-- 3. Passwort Input Container -->
             <div class="input-group" style="top: 200px;">
               <div class="input-wrapper" [class.has-error]="isFieldInvalid('password')">
                 <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -188,7 +181,7 @@
           </form>
 
           <div class="bottom-row">
-            <!-- 4. Datenschutzerklärung Checkbox (Frame 79 / Frame 201) -->
+
             <p class="policy-error-text" [class.policy-error-text--visible]="isFieldInvalid('acceptTerms')">
               *Bitte stimme der Datenschutzerklärung zu.
             </p>
@@ -211,7 +204,6 @@
               </label>
             </div>
 
-            <!-- Aktionsknopf -->
             <div class="action-footer">
               <button type="button" class="btn-primary" (click)="onSubmit()">
                 Weiter

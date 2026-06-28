@@ -1,6 +1,4 @@
-/* ==========================================
-   MAIN CHAT HEADER & VERLAUF (Aus Part 6)
-   ========================================== */
+
 .chat-header {
   position: absolute;
   inset: 0 0 auto 0;
@@ -191,10 +189,6 @@
   color: #000;
 }
 
-
-/* ==========================================
-   NACHRICHTEN-BOXEN & HOVER MENÜS (Aus Part 7)
-   ========================================== */
 .message-box {
   position: absolute;
   bottom: 30px;
@@ -206,8 +200,6 @@
   border-radius: 20px;
   transition: background-color 0.15s ease;
 }
-
-
 
 .composer-box .message-box-avatar-wrapper {
   position: relative;
@@ -266,7 +258,6 @@
   word-break: break-word;
 }
 
-/* Eigene Nachrichten (Rechtsbündig) */
 .composer-box.message-box-current-user {
   flex-direction: row-reverse;
 }
@@ -285,7 +276,6 @@
   border-radius: 24px 0 24px 24px;
 }
 
-/* Schwebendes Aktionsmenü bei Hover */
 .message-hover-actions-menu {
   position: absolute;
   top: -20px;

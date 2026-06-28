@@ -29,11 +29,11 @@ export class Sidebar extends SidebarContactsBase {
 
   protected readonly channelsExpanded = signal(true);
   protected readonly directMessagesExpanded = signal(false);
-  // Drei Hauptgruppen im Channels-Reiter (Akkordeon: immer nur eine offen)
+
   protected readonly alleChannelsExpanded = signal(false);
   protected readonly subscribedChannelsExpanded = signal(false);
   protected readonly ownChannelsExpanded = signal(true);
-  // Unterkategorien oeffentlich/privat (Akkordeon: nur eine offen pro Gruppe)
+
   protected readonly subscribedPublicExpanded = signal(true);
   protected readonly subscribedPrivateExpanded = signal(false);
   protected readonly ownPublicExpanded = signal(true);
@@ -51,7 +51,6 @@ export class Sidebar extends SidebarContactsBase {
     !this.searchShowChannels() && !this.searchShowUsers()
   );
 
-  // Nur beigetretene / erstellte Channels durchsuchbar
   protected readonly filteredChannels = computed(() => {
     const q = this.devspaceSearchQuery().slice(1).toLowerCase();
     return this.database.joinedChannels().filter(c =>
@@ -59,7 +58,6 @@ export class Sidebar extends SidebarContactsBase {
     );
   });
 
-  // Nur User die mit dem aktuellen User in mindestens einem Channel sind
   protected readonly filteredUsers = computed(() => {
     const q = this.devspaceSearchQuery().slice(1).toLowerCase();
     const currentUserId = this.database.currentUser()?.id;
@@ -74,9 +72,6 @@ export class Sidebar extends SidebarContactsBase {
     new Set(this.database.joinedChannels().map(c => c.id))
   );
 
-  // ===== Channel-Kategorien =====
-  // Eigene Channels: vom aktuellen Nutzer erstellt. Erscheinen NUR hier, nicht
-  // zusaetzlich unter "Abonnierte", um Duplikate zu vermeiden.
   private readonly _ownChannels = computed(() => {
     const userId = this.database.currentUser()?.id;
     if (!userId) return [];
@@ -91,7 +86,6 @@ export class Sidebar extends SidebarContactsBase {
     this._ownChannels().filter(c => c.isPrivate)
   );
 
-  // Abonnierte Channels: beigetreten, aber NICHT selbst erstellt.
   private readonly _subscribedChannels = computed(() => {
     const userId = this.database.currentUser()?.id;
     if (!userId) return [];
@@ -106,8 +100,6 @@ export class Sidebar extends SidebarContactsBase {
     this._subscribedChannels().filter(c => c.isPrivate)
   );
 
-  // DM-Liste: bereits gefuehrte Gespraeche + das gerade geoeffnete (auch wenn
-  // dort noch keine Nachricht steht), damit es sofort sichtbar ist.
   protected readonly directMessageList = computed(() => {
     const partners = this.database.directMessagePartners();
     const openId = this.uiState.selectedDirectMessageUserId();
@@ -122,8 +114,6 @@ export class Sidebar extends SidebarContactsBase {
     return this.database.selectedChannelId() === channelId;
   }
 
-  // Vom aktuellen Nutzer erstellter Channel? Solche koennen nicht verlassen
-  // werden, daher zeigt "Alle Channels" dort statt Verlassen einen Hinweis.
   protected isOwnChannel(channel: { createdBy: string }): boolean {
     return channel.createdBy === this.database.currentUser()?.id;
   }
@@ -149,8 +139,6 @@ export class Sidebar extends SidebarContactsBase {
     this.kontakteExpanded.set(next);
   }
 
-  // Hauptgruppen als Akkordeon: Oeffnen einer Gruppe schliesst die anderen,
-  // sodass immer nur eine der drei Channel-Gruppen offen ist.
   protected toggleAlleChannels(): void {
     const next = !this.alleChannelsExpanded();
     this.subscribedChannelsExpanded.set(false);
@@ -172,7 +160,6 @@ export class Sidebar extends SidebarContactsBase {
     this.ownChannelsExpanded.set(next);
   }
 
-  // Unterkategorien oeffentlich/privat als Akkordeon: immer nur eine offen.
   protected toggleSubscribedPublic(): void {
     const next = !this.subscribedPublicExpanded();
     this.subscribedPrivateExpanded.set(false);
@@ -235,8 +222,6 @@ export class Sidebar extends SidebarContactsBase {
     this.onSelectChannel(channelId);
   }
 
-  // Channel verlassen. Stoppt das Klick-Event, damit nicht zugleich der Channel
-  // ausgewaehlt wird.
   protected leaveChannel(channelId: string, event: Event): void {
     event.preventDefault();
     event.stopPropagation();

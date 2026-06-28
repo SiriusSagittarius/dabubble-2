@@ -37,7 +37,6 @@
         }
       </div>
 
-      <!-- ====== ANSICHT ====== -->
       @if (!isEditing()) {
         <section class="profile-details">
           <div class="profile-name-row">
@@ -122,7 +121,6 @@
           }
         </section>
 
-      <!-- ====== BEARBEITEN ====== -->
       } @else {
         <form class="edit-form" [formGroup]="editForm" (ngSubmit)="saveChanges()">
           <div class="form-group">
@@ -168,7 +166,6 @@
             <small class="char-counter">{{ bioMaxLength - editForm.controls.bio.value.length }} Zeichen übrig</small>
           </div>
 
-          <!-- ---- Links & Kontakt ---- -->
           <div class="form-group">
             <span class="links-section-label">Links &amp; Kontakt</span>
             <p class="links-section-hint">Trag nur die URL / Nummer / E-Mail ein – der Button erscheint automatisch im Profil.</p>

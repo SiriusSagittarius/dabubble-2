@@ -53,8 +53,7 @@ export class Profile {
   protected async logout(): Promise<void> {
     this.profileMenuOpen.set(false);
     this.profileDialog.close();
-    // Firebase-Session beenden, sonst meldet onAuthStateChanged den alten Nutzer
-    // gleich wieder an und der Firestore-Sync ueberschreibt z.B. eine Gast-Session.
+
     try {
       await runInInjectionContext(this.injector, () => signOut(this.auth));
     } catch (error) {

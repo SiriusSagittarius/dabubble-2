@@ -22,7 +22,6 @@ export class MockDatabaseService {
   private readonly messageService = inject(MockDatabaseMessageService);
   private readonly firebaseUsers = inject(FirebaseUserService);
 
-  /** Aktuelle Kontakt-IDs des Nutzers nach Firebase (eigenes User-Doc) spiegeln. */
   private syncContactIdsToFirebase(): void {
     void this.firebaseUsers.updateContactIds(this.store.contactUserIds());
   }
@@ -277,7 +276,7 @@ export class MockDatabaseService {
   }
 
   createThreadFromMessage(messageId: string): MockThread | null {
-    // Gaeste duerfen bestehende Threads oeffnen/lesen, aber keine neuen anlegen.
+
     if (this.isGuest()) {
       return this.messageService.threadForMessage(messageId);
     }

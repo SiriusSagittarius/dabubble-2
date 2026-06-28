@@ -7,8 +7,6 @@ import { cloneState, dmChannelId, formatTime, isOnlineFromLastActive } from './m
 
 const STORAGE_KEY = 'dabubble.mock-database.v1';
 
-// Platzhalter-Channel, damit Templates gefahrlos auf .name/.id usw. zugreifen
-// koennen, wenn (noch) kein Channel existiert (z. B. leere Firestore-Daten).
 const EMPTY_CHANNEL: MockChannel = {
   id: '',
   name: '',
@@ -38,8 +36,6 @@ export class MockDatabaseStore {
   readonly isGuest = computed(() => this.state().isGuestSession ?? false);
   readonly contacts = computed(() => this.state().users);
 
-  // Kontakte, die der aktuelle Nutzer sehen darf. Gaeste sehen nur Mitglieder
-  // der Channels, denen sie beigetreten sind; alle anderen sehen alle Nutzer.
   readonly visibleContacts = computed(() => {
     const users = this.state().users;
     if (!this.isGuest()) {
@@ -69,10 +65,6 @@ export class MockDatabaseStore {
     return [currentUser, ...users.filter((user) => user.id !== currentUser.id)];
   });
 
-  // Tatsaechlich gefuehrte Direktnachrichten: Nutzer, mit denen der aktuelle
-  // User schon einen DM-Verlauf hat (unabhaengig von Channel-Mitgliedschaften).
-  // Dadurch bleibt die DM-Liste leer, solange keine DM geschrieben wurde, und
-  // wird durch Channel-Beitritt/-Verlassen nicht beeinflusst.
   readonly directMessagePartners = computed(() => {
     const currentUser = this.currentUser();
     if (!currentUser) {
@@ -95,7 +87,6 @@ export class MockDatabaseStore {
     return this.state().users.filter(u => ids.includes(u.id));
   });
 
-  /** Rohe Kontakt-IDs des aktuellen Nutzers (fuer Firebase-Sync). */
   contactUserIds(): string[] {
     return this.state().contactUserIds ?? [];
   }
@@ -105,9 +96,6 @@ export class MockDatabaseStore {
     return this.state().channels.filter(c => c.memberIds.includes(userId));
   });
 
-  // Onboarding-Zustand: eingeloggter (kein Gast) Nutzer, der noch keinem Channel
-  // beigetreten ist / erstellt wurde / eingeladen wurde. Fuer ihn wird die Hilfe
-  // als Startseite gezeigt und Nachrichten-/Channel-Funktionen sind gesperrt.
   readonly onboardingActive = computed(() =>
     !this.isGuest() && this.currentUser() != null && this.joinedChannels().length === 0
   );
@@ -121,8 +109,6 @@ export class MockDatabaseStore {
     this.state().channels.filter(c => !c.isPrivate)
   );
 
-  // Alle Channels, die der aktuelle User sehen darf: oeffentlich ODER er ist Mitglied.
-  // Einzige Quelle fuer Suche/Mentions, damit private Channels nirgends leaken.
   readonly visibleChannels = computed(() => {
     const userId = this.state().currentUserId;
     return this.state().channels.filter(c => !c.isPrivate || c.memberIds.includes(userId));
@@ -226,9 +212,6 @@ export class MockDatabaseStore {
     return formatTime(date);
   }
 
-  // Bewertet den Online-Status anhand des letzten Heartbeats neu. Wird per Timer
-  // aufgerufen, damit Nutzer ohne frischen Heartbeat offline werden, auch wenn
-  // kein neues Firestore-Snapshot mehr eintrifft. Aktueller Nutzer bleibt online.
   refreshPresence(): void {
     const now = Date.now();
     const currentId = this.state().currentUserId;
@@ -254,8 +237,6 @@ export class MockDatabaseStore {
     this.persistState(nextState);
   }
 
-  // Entfernt einen User komplett: aus allen Channels, alle seine Nachrichten,
-  // seine Reaktionen, zugehoerige Threads sowie aus Usern/Kontakten.
   deleteUserEverywhere(userId: string): void {
     this.patchState((state) => {
       const deletedMessageIds = new Set(

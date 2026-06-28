@@ -35,9 +35,7 @@ export class GoogleLoginComponent implements OnInit {
   private readonly googleProvider = new GoogleAuthProvider();
 
   async ngOnInit(): Promise<void> {
-    // Wurde per Redirect angemeldet (Mobil / Popup-Fallback), kehrt der Browser
-    // auf diese Seite zurück. Das Ergebnis hier einsammeln und wie den Popup-Pfad
-    // behandeln, damit der Login auch ohne funktionierendes Popup durchläuft.
+
     try {
       const result = await runInInjectionContext(this.injector, () => getRedirectResult(this.auth));
       if (result?.user) {
@@ -55,19 +53,19 @@ export class GoogleLoginComponent implements OnInit {
       );
       await this.emitSuccess(result);
     } catch (error) {
-      // Auf Mobilgeräten werden Popups häufig blockiert -> auf Redirect ausweichen.
+
       if (this.shouldFallbackToRedirect(error)) {
         try {
           await runInInjectionContext(this.injector, () =>
             signInWithRedirect(this.auth, this.googleProvider),
           );
-          return; // Seite navigiert weg; Ergebnis kommt in ngOnInit zurück.
+          return;
         } catch (redirectError) {
           this.emitError(redirectError);
           return;
         }
       }
-      // Vom Nutzer abgebrochenes Popup ist kein Fehler -> still ignorieren.
+
       if (this.isUserCancellation(error)) {
         return;
       }

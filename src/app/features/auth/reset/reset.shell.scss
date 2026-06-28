@@ -28,9 +28,6 @@ $error-pink: #ED1E79;
     padding: 16px;
   }
 
-  /* ≤530px: Die auth-shell ist jetzt der gemeinsame Flow-/Scroll-Container
-     (Logo -> Karte -> Links). Karte einfach im Fluss zentrieren, Höhe = Inhalt,
-     kein festes top/bottom-Padding mehr -> nichts überlagert sich. */
   @media (max-width: 530px) {
     align-items: center;
     justify-content: flex-start;
@@ -125,10 +122,6 @@ $error-pink: #ED1E79;
   }
 }
 
-/* =========================================================
-   Karte als Flow-Layout (kein absolute) -> flüssig 1920 → 320,
-   nichts kollidiert/wird abgeschnitten.
-   ========================================================= */
 .login-container {
   position: relative;
   display: flex;
@@ -143,7 +136,6 @@ $error-pink: #ED1E79;
   overflow: visible;
   padding: fluid(431, 1920, 72, 88) fluid(431, 1920, 28, 53) fluid(431, 1920, 28, 48);
 
-  /* Desktop (Logo in der Ecke): großzügige, mitskalierende Höhe wie im Original */
   @media (min-width: 531px) {
     min-height: fluid(531, 1920, 440, 560);
   }

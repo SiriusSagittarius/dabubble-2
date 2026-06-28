@@ -22,20 +22,12 @@ const GUEST_USER: MockUser =
 export class MockDatabaseAuthService {
   private readonly store = inject(MockDatabaseStore);
 
-  /**
-   * Liefert eine fuer den User sichtbare Channel-Auswahl. Bleibt der aktuell
-   * gewaehlte Channel privat und der User ist kein Mitglied, wird auf einen
-   * sichtbaren Channel (beigetretener oder erster oeffentlicher) gewechselt.
-   */
   private resolveVisibleChannelId(channels: MockChannel[], selectedChannelId: string, userId: string): string {
     const current = channels.find((channel) => channel.id === selectedChannelId);
     if (current && current.memberIds.includes(userId)) {
       return selectedChannelId;
     }
 
-    // Nur einen Channel oeffnen, dem der Nutzer wirklich angehoert. Kein
-    // automatisches Oeffnen eines fremden Channels – das wuerde Gaeste in
-    // Channels zeigen, in denen sie kein Mitglied sind.
     const joined = channels.find((channel) => channel.memberIds.includes(userId));
     return joined?.id ?? '';
   }
@@ -66,9 +58,9 @@ export class MockDatabaseAuthService {
   }
 
   loginAsGuest(): MockUser {
-    // localStorage leeren damit kein alter State überlebt.
+
     this.store.clearStorage();
-    // Danach frisch aus dem Seed laden und Gast einloggen.
+
     const guest = GUEST_USER;
     this.store.patchState((state) => ({
       ...state,
@@ -179,9 +171,7 @@ export class MockDatabaseAuthService {
     }
 
     if (state.isGuestSession) {
-      // Gast-Logout: alle temporaer erstellten Daten loeschen (Channels,
-      // Nachrichten, Threads die der Gast erzeugt hat), damit nichts im
-      // localStorage zurueckbleibt.
+
       const guestChannelIds = new Set(
         state.channels.filter(c => c.createdBy === currentUserId).map(c => c.id)
       );
@@ -324,8 +314,6 @@ export class MockDatabaseAuthService {
       isPublic,
     };
 
-    // Neue User starten ohne Channel: sie sehen zuerst die Hilfe/Onboarding und
-    // muessen selbst einen Channel erstellen, beitreten oder eingeladen werden.
     this.store.patchState((state) => ({
       ...state,
       currentUserId: newUser.id,
@@ -375,8 +363,6 @@ export class MockDatabaseAuthService {
     }));
   }
 
-  // Uebernimmt einen bereits existierenden (oeffentlichen) Nutzer in die eigene
-  // private Kontaktliste, ohne einen neuen Nutzer anzulegen.
   addExistingContact(userId: string): void {
     const state = this.store.state();
     const ids = state.contactUserIds ?? [];

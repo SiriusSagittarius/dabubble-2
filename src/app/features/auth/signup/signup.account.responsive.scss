@@ -1,21 +1,5 @@
 @use '../../../styles/fluid' as *;
 
-/* =========================================================
-   SIGNUP – RESPONSIVE
-   - Formular-Schritt ("Konto erstellen"): Container wird auf
-     kleinen Screens flexibel (Innenelemente regelt signup.form.scss).
-   - Avatar-Schritt ("Wähle deinen Avatar"): komplett als Flow-
-     Layout (kein absolute, auto-Höhe, overflow sichtbar) -> nichts
-     kollidiert/wird abgeschnitten und alles skaliert flüssig.
-
-   Zwei nahtlose fluid-Zonen, die bei 430/431 exakt aneinander
-   anschließen (gleiche Grenzwerte -> kein Sprung):
-     • 431px … 1920px
-     • 320px … 430px
-   ========================================================= */
-
-/* ---------- Seiten-Hintergrund ---------- */
-/* 531–640px: Logo sitzt in der Ecke -> Karte zentriert. */
 @media (min-width: 531px) and (max-width: 640px) {
   .page-background {
     padding: 24px 16px;
@@ -23,12 +7,6 @@
   }
 }
 
-/* ≤530px: Die auth-shell ist jetzt der gemeinsame Flow-/Scroll-Container
-   (Logo -> Karte -> Links). Der Karten-Hintergrund darf deshalb nicht mehr
-   die volle Höhe einnehmen oder mit festen top/bottom-Paddings Platz fürs
-   Logo reservieren — beide Schritte (Formular + Avatar) einfach im Fluss
-   zentrieren, Höhe = Inhalt. So überlagert nichts mehr und nichts wird
-   abgeschnitten. */
 @media (max-width: 530px) {
   .page-background {
     align-items: center;
@@ -40,9 +18,6 @@
   }
 }
 
-/* =========================================================
-   FORMULAR-SCHRITT ("Konto erstellen") — Flow-Layout, flüssig 1920 → 431
-   ========================================================= */
 .login-container:not(:has(.avatar-step)) {
   display: flex;
   flex-direction: column;
@@ -53,11 +28,6 @@
   padding: fluid(431, 1920, 32, 44) fluid(431, 1920, 28, 53) fluid(431, 1920, 28, 44);
 }
 
-/* Beide Schritte ("Konto erstellen" + "Wähle deinen Avatar"):
-   Zurück-Button + Titel in einer Zeile. Flex-Layout statt absolutem Button
-   -> Button und Titel sind echte Flex-Geschwister und können sich nie
-   überlappen. gap = Mindestabstand, min-width:0 am Titel erlaubt Umbruch
-   statt Überlauf, der ::after-Spacer (Button-Breite) hält den Titel mittig. */
 .login-header-bar {
   display: flex;
   align-items: center;
@@ -67,19 +37,19 @@
 }
 
 .login-header-bar .btn-back {
-  position: static; /* überschreibt die absolute Basis-Positionierung */
-  flex: 0 0 30px;   /* feste Button-Breite, schrumpft nie */
+  position: static;
+  flex: 0 0 30px;
 }
 
 .login-header-bar .title {
-  flex: 1 1 auto;   /* nimmt den restlichen Platz */
-  min-width: 0;     /* erlaubt Umbruch statt Überlauf in den Button */
+  flex: 1 1 auto;
+  min-width: 0;
   text-align: center;
 }
 
 .login-header-bar::after {
   content: '';
-  flex: 0 0 40px;   /* Platzhalter = Button-Breite -> Titel bleibt mittig */
+  flex: 0 0 40px;
 }
 
 .login-container:not(:has(.avatar-step)) .login-header {
@@ -99,7 +69,6 @@
   font-size: fluid(431, 1920, 14, 20);
 }
 
-/* Formular-Schritt — Mobil, flüssig 430 → 320 (Anschlusswerte = Min der 431er-Zone) */
 @media (max-width: 430px) {
   .login-container:not(:has(.avatar-step)) {
     width: 100%;
@@ -208,10 +177,6 @@
   margin-top: fluid(431, 1920, 20, 28);
 }
 
-/* =========================================================
-   AVATAR-SCHRITT — Mobil, flüssig 430px → 320px
-   Anschlusswerte = Minimalwerte der 431er-Zone -> kein Sprung
-   ========================================================= */
 @media (max-width: 430px) {
   .login-container:has(.avatar-step) {
     width: 100%;
@@ -255,7 +220,6 @@
   }
 }
 
-/* ---------- Success-Overlay mobil ---------- */
 @media (max-width: 480px) {
   .signup-success-overlay {
     right: auto;

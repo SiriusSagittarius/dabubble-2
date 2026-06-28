@@ -14,7 +14,6 @@ interface AvatarOption {
   label: string;
 }
 
-// Mind. 8 Zeichen mit je 1 Groß-, 1 Kleinbuchstabe, 1 Zahl und 1 Sonderzeichen.
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
 @Component({

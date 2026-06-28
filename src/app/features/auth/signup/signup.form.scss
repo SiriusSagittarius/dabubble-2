@@ -9,7 +9,6 @@
     $text-gray: #686868;
     $menu-color: #42526E;
 
-    // Formular im Fluss (kein absolute) -> skaliert flüssig, nichts kollidiert
     .login-form {
       position: relative;
       width: 100%;
@@ -26,7 +25,6 @@
       }
     }
 
-    // Input-Reihen: im Fluss, Inline-top aus dem Template wird überschrieben
     .input-group {
       position: relative !important;
       width: 100%;
@@ -114,7 +112,6 @@
       }
     }
 
-    // Fehlermeldung unterhalb der Eingabefelder (absolut -> kein Layout-Shift)
     .error-text {
       position: absolute;
       bottom: -20px;
@@ -134,8 +131,6 @@
       }
     }
 
-    // Passwort-Richtlinie: dauerhaft sichtbarer Hinweis im Fluss unter dem Feld.
-    // Wird pink, sobald das Feld berührt und ungültig ist.
     .password-hint {
       margin: 0 0 0 fluid(431, 1920, 20, 32);
       font-family: 'Nunito', sans-serif;
@@ -155,7 +150,6 @@
       }
     }
 
-    // Untere Reihe: Datenschutz-Hinweis + Weiter-Button, gestapelt im Fluss
     .bottom-row {
       display: flex;
       flex-direction: column;
@@ -189,7 +183,6 @@
       }
     }
 
-    // Checkbox für Datenschutzerklärung
     .policy-container {
       position: relative;
       width: auto;
@@ -223,9 +216,6 @@
       display: none;
     }
 
-    // Icon-basierte Checkbox (Material check_box / check_box_outline_blank).
-    // Form (leer/abgehakt) kommt aus dem SVG im Template, Farbe + Hover-Kreis
-    // hier per CSS.
     .custom-checkbox {
       width: 24px;
       height: 24px;
@@ -238,7 +228,6 @@
       transition: background-color 0.2s ease, color 0.2s ease;
       flex-shrink: 0;
 
-      // Hover (abgehakt & nicht): kraeftiger Farbton + heller Kreis-Hintergrund.
       &:hover {
         background-color: $light-purple-bg;
         color: $purple-1;
@@ -280,7 +269,6 @@
       }
     }
 
-    // Weiter-Button im Fluss, unten rechts
     .action-footer {
       position: relative;
       right: auto;

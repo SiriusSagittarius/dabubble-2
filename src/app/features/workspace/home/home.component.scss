@@ -44,7 +44,7 @@
   bottom: 30px;
   display: grid;
   gap: 20px;
-  /* Sidebar(366) + Chat(min460, ≥Thread) + Thread(max485, min320) */
+
   grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) minmax(320px, 485px);
   box-sizing: border-box;
   transition: grid-template-columns 0.3s ease-in-out;
@@ -62,24 +62,20 @@
   }
 }
 
-/* 961px–1350px: max 2 Spalten — Sidebar fällt weg wenn Thread offen */
 @media (min-width: 961px) and (max-width: 1350px) {
-  /* Thread offen: Sidebar weg, Chat + Thread */
+
   .main-layout:not(.thread-collapsed) {
     grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
   }
 
-  /* Thread zu: Sidebar + Chat */
   .main-layout.thread-collapsed {
     grid-template-columns: minmax(320px, 366px) minmax(460px, 1fr) 0px;
   }
 
-  /* Sidebar manuell collapsed + Thread zu: nur Chat */
   .main-layout.sidebar-collapsed.thread-collapsed {
     grid-template-columns: 0px minmax(0px, 1fr) 0px;
   }
 
-  /* Sidebar manuell collapsed + Thread offen: Chat + Thread */
   .main-layout.sidebar-collapsed:not(.thread-collapsed) {
     grid-template-columns: 0px minmax(460px, 1fr) minmax(320px, 485px);
   }
@@ -92,7 +88,7 @@
 }
 
 @media (max-width: 960px) {
-  /* Basis: top setzen, Rand wie Header (20px) */
+
   .main-layout,
   .main-layout.thread-collapsed,
   .main-layout.sidebar-collapsed,
@@ -103,7 +99,6 @@
     gap: 0;
   }
 
-  /* Sidebar offen, Thread zu: nur Sidebar */
   .main-layout.thread-collapsed:not(.sidebar-collapsed) {
     grid-template-columns: minmax(0px, 1fr) 0px 0px;
   }
@@ -112,12 +107,10 @@
     grid-template-columns: 0px minmax(0px, 1fr) 0px;
   }
 
-  /* Thread offen + Sidebar zu: nur Thread */
   .main-layout.sidebar-collapsed:not(.thread-collapsed) {
     grid-template-columns: 0px 0px minmax(0px, 1fr);
   }
 
-  /* Thread offen + Sidebar offen: nur Thread */
   .main-layout:not(.thread-collapsed):not(.sidebar-collapsed) {
     grid-template-columns: 0px 0px minmax(0px, 1fr);
   }
@@ -236,9 +229,7 @@
   &:hover .menu-icon {
     filter: invert(10%) sepia(85%) saturate(5427%) hue-rotate(240deg) brightness(80%) contrast(105%);
   }
-  
 
-  /* Zustand: Offen */
   &:not(.collapsed)::after {
     content: 'Workspace-Menü schließen';
     color: #000;
@@ -248,7 +239,6 @@
     font-weight: 700;
   }
 
-  /* Zustand: Geschlossen */
   &.collapsed::after {
     content: 'Workspace-Menü öffnen';
     color: #000;
@@ -260,7 +250,7 @@
 }
 
 @media (max-width: 430px) {
-  /* Side-Tab ausblenden – Sidebar via Header-Back-Button erreichbar */
+
   .workspace-menu-close-button {
     display: none;
   }

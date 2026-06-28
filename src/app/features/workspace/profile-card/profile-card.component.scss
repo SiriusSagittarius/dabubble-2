@@ -34,7 +34,6 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* ---- Header row: title left, close button right ---- */
 .profile-card-header {
   display: flex;
   align-items: center;
@@ -74,7 +73,6 @@
   outline: none;
 }
 
-/* ---- Avatar: centered ---- */
 .avatar-section {
   display: flex;
   justify-content: center;
@@ -133,7 +131,6 @@
   cursor: pointer;
 }
 
-/* ---- Edit icon button ---- */
 .edit-icon-button {
   border: 0;
   border-radius: 20px;
@@ -158,7 +155,6 @@
   display: block;
 }
 
-/* ---- Mobile ---- */
 @media (max-width: 520px) {
   .profile-card {
     padding: 28px 24px 32px;

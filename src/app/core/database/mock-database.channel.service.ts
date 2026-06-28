@@ -122,7 +122,6 @@ export class MockDatabaseChannelService {
 
     const channel = this.store.state().channels.find((entry) => entry.id === channelId);
 
-    // Private Channels: kein Selbst-Beitritt. Mitglieder nur ueber explizites Hinzufuegen.
     if (!channel || channel.isPrivate) {
       return false;
     }

@@ -46,11 +46,6 @@
       opacity: 0;
     }
 
-    /* Skaliert die gesamte Intro-Komposition (Symbol + Wort) flüssig herunter,
-       damit "DABubble" auf schmalen Viewports (~1060px abwärts) nicht mehr rechts
-       abgeschnitten wird. Verankert am finalen Logo-Punkt oben links (75/75px),
-       sodass auf Desktop (>= ~1060px -> scale 1) die Übergabe ans echte Logo
-       unverändert bleibt. */
     .login-intro-stage {
       position: absolute;
       inset: 0;
@@ -351,7 +346,6 @@
         border-radius: 30px;
       }
     }
-
 
     @media (max-width: 530px) {
       .login-wrapper {

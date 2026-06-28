@@ -1,6 +1,5 @@
 @use 'fluid' as *;
 
-
 @media (max-width: 530px) {
   .auth-shell:has(.avatar-step) .auth-logo--signup {
     top: fluid(320, 1920, 58.95, 75);
@@ -25,7 +24,6 @@ body {
 
   overflow: hidden;
 }
-
 
 @media (max-width: 520px) {
   .emoji-picker-popover .emoji-mart-anchors {

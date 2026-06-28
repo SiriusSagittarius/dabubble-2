@@ -36,7 +36,7 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
   protected addChannelMembersStep = false;
   protected addChannelMemberMode: 'all' | 'selected' = 'all';
   protected pendingAddChannelId: string | null = null;
-  // Beim Oeffnen des Dialogs aktiver Channel; Quelle fuer "Alle Mitglieder von ...".
+
   protected addChannelSourceChannelId: string | null = null;
   protected readonly showAddMembersSuggestions = signal(false);
   protected readonly selectedAddMemberIds = signal<string[]>([]);
@@ -111,8 +111,6 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
     const name = this.addChannelNameDraft.trim();
     if (!name) return;
 
-    // Zuletzt gesehenen Channel festhalten, BEVOR createChannel den aktiven
-    // Channel auf den neuen umstellt. Quelle fuer "Alle Mitglieder von ...".
     this.addChannelSourceChannelId = this.database.activeChannel()?.id || null;
 
     const channel = this.database.createChannel(name, [], this.addChannelIsPrivate);
@@ -140,7 +138,7 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
     }
 
     if (this.addChannelMemberMode === 'all') {
-      // Auch im "alle"-Modus nur eigene Kontakte uebernehmen.
+
       const contactIds = new Set(this.database.contactUsers().map((user) => user.id));
       const memberIds = (this.addChannelSourceChannel()?.memberIds ?? []).filter((id) =>
         contactIds.has(id),
@@ -158,7 +156,6 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
     this.closeAddChannelDialog();
   }
 
-  // Beim Dialog-Start aktiver Channel; dessen Mitglieder fuellen Option "alle".
   protected addChannelSourceChannel() {
     const id = this.addChannelSourceChannelId;
     if (!id) return null;
@@ -265,8 +262,6 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
     const channel = channelId ? this.database.channels().find((c) => c.id === channelId) : null;
     const activeMemberIds = channel?.memberIds ?? [];
 
-    // Es duerfen ausschliesslich eigene Kontakte hinzugefuegt werden – sowohl beim
-    // Erstellen eines Channels als auch beim Hinzufuegen zu einem bestehenden.
     const candidates = this.database.contactUsers();
 
     const filtered = candidates.filter((user) => {
@@ -339,11 +334,9 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
     this.profileUser.set(null);
   }
 
-
   protected openContactProfile(userId: string): void {
     this.profileDialog.open(userId);
   }
-
 
   protected profileAvatarSrc(): string {
     const user = this.profileUser();

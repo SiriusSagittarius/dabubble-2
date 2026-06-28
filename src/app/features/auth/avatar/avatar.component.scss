@@ -1,4 +1,4 @@
-// Variablen für das Design basierend auf neu 5.txt
+
 $purple-primary: #444DF2;
 $white: #FFFFFF;
 $shadow-color: rgba(0, 0, 0, 0.08);
@@ -15,7 +15,6 @@ $text-muted: #6B7280;
   box-sizing: border-box;
 }
 
-// Frame 79
 .avatar-card {
   position: relative;
   width: 606px;
@@ -31,7 +30,6 @@ $text-muted: #6B7280;
   font-family: 'Nunito', sans-serif;
 }
 
-// Header Bereich
 .card-header {
   position: relative;
   width: 100%;
@@ -60,7 +58,6 @@ $text-muted: #6B7280;
   }
 }
 
-// Wähle deinen Avatar
 .card-title {
   margin: 0;
   font-style: normal;
@@ -72,7 +69,6 @@ $text-muted: #6B7280;
   user-select: none;
 }
 
-// Inhalt
 .card-content {
   display: flex;
   flex-direction: column;
@@ -83,7 +79,6 @@ $text-muted: #6B7280;
   margin-top: -24px;
 }
 
-// 81. Profile (Großer Kreis)
 .profile-preview {
   width: 168px;
   height: 168px;
@@ -131,7 +126,6 @@ $text-muted: #6B7280;
   }
 }
 
-// Avatar Liste Row
 .avatar-list {
   display: flex;
   flex-direction: row;
@@ -141,7 +135,6 @@ $text-muted: #6B7280;
   border-radius: 16px;
 }
 
-// Einzelne Avatar Interaktion (72px x 72px)
 .avatar-item {
   width: 72px;
   height: 72px;
@@ -183,14 +176,12 @@ $text-muted: #6B7280;
   }
 }
 
-// Footer Bereich
 .card-footer {
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
 
-// 10. Button primary
 .btn-primary {
   width: 107px;
   height: 49px;

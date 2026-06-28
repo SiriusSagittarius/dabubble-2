@@ -1,6 +1,4 @@
-/* ==========================================
-   REAKTIONEN & REACTION CHIPS (Thread)
-   ========================================== */
+
 .message-reaction-actions {
   position: relative;
   width: fit-content;
@@ -46,7 +44,6 @@
   line-height: 1;
 }
 
-/* Der Button-Container */
 .reaction-add-button {
   background: transparent;
   border: none;
@@ -56,11 +53,10 @@
   align-items: center;
   justify-content: center;
   position: relative;
- 
-  width: 24px; 
+
+  width: 24px;
   height: 24px;
 }
-
 
 .reaction-add-icon {
   width: 100%;
@@ -79,7 +75,6 @@
   background-position: center;
 }
 
-/* Vollflaechiges Overlay, damit ein Klick ausserhalb der Emoji-Liste sie schliesst */
 .emoji-picker-overlay {
   position: fixed;
   inset: 0;
@@ -149,10 +144,6 @@
   opacity: 1;
 }
 
-
-/* ==========================================
-   ZUSÄTZLICHE UTILITIES & HOVERS (Aus Part 10)
-   ========================================== */
 .members-area:hover .members-icon {
   filter: brightness(0) saturate(100%) invert(32%) sepia(86%) saturate(2413%) hue-rotate(223deg)
     brightness(99%) contrast(97%);

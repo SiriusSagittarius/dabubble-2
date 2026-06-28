@@ -305,8 +305,6 @@ export class MockDatabaseMessageService {
     return updatedMessage;
   }
 
-  // Loescht nur die Direktnachricht-Unterhaltung mit einem Nutzer (alle
-  // Nachrichten im gemeinsamen DM-Channel), nicht den Nutzer/Kontakt selbst.
   deleteDirectConversation(otherUserId: string): boolean {
     const currentUser = this.store.currentUser();
 

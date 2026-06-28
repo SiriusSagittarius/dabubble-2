@@ -124,7 +124,6 @@ export class ProfileCardComponent {
   protected readonly isEditing = signal(false);
   protected readonly editAvatarImage = signal<string | null>(null);
 
-  /** Zwischenspeicher für Link-Eingaben im Edit-Modus. */
   protected readonly editLinkValues = signal<Map<string, string>>(new Map());
 
   protected readonly linkTemplates: LinkTemplate[] = LINK_TEMPLATES;
@@ -141,7 +140,6 @@ export class ProfileCardComponent {
     return !!user && user.id === this.database.currentUser()?.id;
   });
 
-  /** Aufgelöste Links für die Anzeige-Seite: nur Einträge mit Wert, mit fertigem href. */
   protected readonly profileLinks = computed(() => {
     const user = this.profileUser();
     const rawLinks = user?.links ?? [];
@@ -251,7 +249,6 @@ export class ProfileCardComponent {
     input.value = '';
   }
 
-  /** Komprimiert ein Bild via Canvas auf max. 800px und JPEG-Qualität 0.75 (≈ <500 KB). */
   private compressImage(file: File): Promise<string> {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -301,8 +298,7 @@ export class ProfileCardComponent {
     });
 
     if (updated) {
-      // Nur angemeldete Nutzer schreiben ihr Profil nach Firebase. Gaeste
-      // bearbeiten ihr Profil nur temporaer in der laufenden Sitzung.
+
       if (!this.database.isGuest()) {
         void runInInjectionContext(this.injector, () =>
           this.firebaseUsers.upsertCurrentUserProfile({

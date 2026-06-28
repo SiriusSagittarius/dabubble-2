@@ -16,9 +16,6 @@ export interface FirebaseUserProfile {
   contactUserIds?: string[] | null;
 }
 
-// Firestore-Dokumente sind auf 1 MB begrenzt. Sehr grosse Custom-Bilder (Data-URLs)
-// werden daher NICHT synchronisiert (bleiben lokal), damit der restliche Profil-
-// Schreibvorgang (Name/E-Mail/Avatar-ID) nie fehlschlaegt.
 const MAX_AVATAR_IMAGE_LENGTH = 900_000;
 
 @Injectable({ providedIn: 'root' })
@@ -39,8 +36,6 @@ export class FirebaseUserService {
       lastLoginAt: serverTimestamp(),
     };
 
-    // Avatar nur schreiben, wenn er hier mitgegeben wird. Logins ohne Avatar
-    // lassen die gespeicherte Auswahl dank merge:true unangetastet.
     if (profile.avatarImage && profile.avatarImage.length <= MAX_AVATAR_IMAGE_LENGTH) {
       data['avatarImage'] = profile.avatarImage;
       data['avatarId'] = null;
@@ -49,7 +44,6 @@ export class FirebaseUserService {
       data['avatarImage'] = null;
     }
 
-    // Frei beschreibbares Profil (Ueber mich + Links) nur schreiben, wenn angegeben.
     if (typeof profile.bio === 'string') {
       data['bio'] = profile.bio;
     }
@@ -68,11 +62,6 @@ export class FirebaseUserService {
     );
   }
 
-  /**
-   * Schreibt die Kontaktliste (IDs) des aktuellen Nutzers in sein eigenes
-   * users/{uid}-Dokument. Gaeste haben keinen Firebase-Auth-User -> kein
-   * Schreibvorgang (Kontakte bleiben dann nur lokal in der Sitzung).
-   */
   async updateContactIds(contactUserIds: string[]): Promise<void> {
     const uid = this.auth.currentUser?.uid;
     if (!uid) {

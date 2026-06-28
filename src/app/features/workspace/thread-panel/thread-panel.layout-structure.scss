@@ -1,6 +1,4 @@
-/* ==========================================
-   THREAD AUTOCOMPLETE & REAKTIONEN (Aus Part 8 & 9)
-   ========================================== */
+
 .thread-contact-suggestions-list {
   position: absolute;
   width: 340px;
@@ -17,7 +15,6 @@
   z-index: 30;
 }
 
-/* Spezifischer Scroll-Korrekturwert für den Emoji-Picker innerhalb des schmalen Threads */
 :host ::ng-deep .emoji-picker-popover-thread .emoji-mart-scroll {
 
   padding-top: 10px;
@@ -59,8 +56,8 @@
   font-family: Nunito, sans-serif;
 
   @media (max-width: 430px) {
-    border-radius: 0px;  
-      
+    border-radius: 0px;
+
   }
 }
 
@@ -183,7 +180,6 @@
   display: none;
 }
 
-
 .thread-message {
   position: relative;
   box-sizing: border-box;
@@ -274,7 +270,6 @@
   align-items: flex-end;
 }
 
-
 .thread-message-meta {
   display: flex;
   align-items: center;
@@ -331,7 +326,7 @@
   }
   .thread-header{
     height: 60px;
-  } 
+  }
 }
 
 @media (max-width: 425px) {

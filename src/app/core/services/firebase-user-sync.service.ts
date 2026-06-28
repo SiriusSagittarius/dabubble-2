@@ -16,11 +16,6 @@ export class FirebaseUserSyncService {
   private unsubThreads: (() => void) | null = null;
   private authUnsubscribe: (() => void) | null = null;
 
-  /**
-   * Registriert eine Firestore-Collection-Subscription innerhalb des Angular
-   * Injection-Context. Noetig, weil der onAuthStateChanged-Callback ausserhalb
-   * des Context laeuft und AngularFire sonst warnt.
-   */
   private onSnap(
     path: string,
     handler: (snap: QuerySnapshot<DocumentData>) => void,

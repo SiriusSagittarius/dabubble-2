@@ -1,5 +1,5 @@
-/* Fortsetzung von chat-area.emoji-edit.scss — wegen 400-Zeilen-Regel ausgelagert. */
-/* Desktop: "Bearbeiten" / "Speichern" als blauer Text statt Stift-Icon. */
+
+
 .channel-edition-action-text {
   font-family: Nunito, sans-serif;
   font-size: 18px;
@@ -7,7 +7,6 @@
   color: #444df2;
 }
 
-/* Mobil (<= 530px): wieder Stift-/Haken-Icon als runder Button, Text aus. */
 @media (max-width: 530px) {
   .channel-edition-edit-button {
     width: 32px;
@@ -115,7 +114,6 @@
   outline: none;
 }
 
-/* Mobiler Kopf nur ≤430px (siehe Media Query unten) */
 .channel-edition-mobile-head {
   display: none;
 }
@@ -127,7 +125,6 @@
     padding: 0;
   }
 
-  /* Desktop-Kopfzeile (# Name + X) durch den mobilen App-Kopf ersetzen */
   .channel-edition-top-row {
     display: none;
   }

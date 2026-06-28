@@ -132,8 +132,7 @@ export class LoginComponent {
   }
 
   protected async loginAsGuest(): Promise<void> {
-    // Etwaige echte Firebase-Session zuerst beenden, damit der Firestore-Sync
-    // nicht mit einer alten UID laeuft und die Gast-Session ueberschreibt.
+
     try {
       if (this.auth.currentUser) {
         await runInInjectionContext(this.injector, () => signOut(this.auth));

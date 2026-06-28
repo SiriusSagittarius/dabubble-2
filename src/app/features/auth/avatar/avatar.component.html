@@ -1,6 +1,6 @@
 <div class="component-container">
   <div class="avatar-card">
-    
+
     <div class="card-header">
       <button class="back-button" (click)="onBack()" aria-label="Zurück">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -8,12 +8,12 @@
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
       </button>
-      
+
       <h1 class="card-title">Wähle&nbsp;deinen Avatar</h1>
     </div>
 
     <div class="card-content">
-      
+
       <div class="profile-preview" [style.backgroundColor]="selectedAvatar.color">
         <div class="avatar-svg-container" [innerHTML]="selectedAvatar.svgMarkup"></div>
       </div>
@@ -25,8 +25,8 @@
 
       <div class="avatar-list">
         @for (avatar of avatars; track avatar.id) {
-          <button 
-            class="avatar-item" 
+          <button
+            class="avatar-item"
             [class.active]="selectedAvatar.id === avatar.id"
             [style.backgroundColor]="avatar.color"
             (click)="selectAvatar(avatar)"
