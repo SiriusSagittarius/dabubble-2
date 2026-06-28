@@ -29,12 +29,15 @@ export class MockDatabaseAuthService {
    */
   private resolveVisibleChannelId(channels: MockChannel[], selectedChannelId: string, userId: string): string {
     const current = channels.find((channel) => channel.id === selectedChannelId);
-    if (current && (!current.isPrivate || current.memberIds.includes(userId))) {
+    if (current && current.memberIds.includes(userId)) {
       return selectedChannelId;
     }
 
+    // Nur einen Channel oeffnen, dem der Nutzer wirklich angehoert. Kein
+    // automatisches Oeffnen eines fremden Channels – das wuerde Gaeste in
+    // Channels zeigen, in denen sie kein Mitglied sind.
     const joined = channels.find((channel) => channel.memberIds.includes(userId));
-    return joined?.id ?? channels.find((channel) => !channel.isPrivate)?.id ?? selectedChannelId;
+    return joined?.id ?? '';
   }
 
   syncUsersFromFirestore(users: FirestoreUserEntry[], currentUserUid: string | null): void {
@@ -54,6 +57,7 @@ export class MockDatabaseAuthService {
     this.store.patchState((state) => ({
       ...state,
       currentUserId: user.id,
+      isGuestSession: false,
       selectedChannelId: this.resolveVisibleChannelId(state.channels, state.selectedChannelId, user.id),
       users: state.users.map((entry) => (entry.id === user.id ? { ...entry, isOnline: true } : entry)),
     }));
@@ -62,25 +66,17 @@ export class MockDatabaseAuthService {
   }
 
   loginAsGuest(): MockUser {
-    // Gast immer per fester ID aufloesen. Fehlt er (z.B. weil der Firebase-Sync
-    // die Nutzerliste ersetzt hat), aus dem Seed wiederherstellen statt auf
-    // users[0] auszuweichen - sonst landet man im naechstbesten echten Account.
-    const guest = this.store.findUser('user-guest') ?? GUEST_USER;
-    this.store.patchState((state) => {
-      const guestExists = state.users.some((entry) => entry.id === guest.id);
-      const users = guestExists
-        ? state.users.map((entry) => (entry.id === guest.id ? { ...entry, isOnline: true } : entry))
-        : [...state.users, { ...guest, isOnline: true }];
-
-      return {
-        ...state,
-        users,
-        currentUserId: guest.id,
-        isGuestSession: true,
-        selectedChannelId: this.resolveVisibleChannelId(state.channels, state.selectedChannelId, guest.id),
-      };
-    });
-
+    // localStorage leeren damit kein alter State überlebt.
+    this.store.clearStorage();
+    // Danach frisch aus dem Seed laden und Gast einloggen.
+    const guest = GUEST_USER;
+    this.store.patchState((state) => ({
+      ...state,
+      users: [...state.users, { ...guest, isOnline: true }],
+      currentUserId: guest.id,
+      isGuestSession: true,
+      selectedChannelId: '',
+    }));
     return guest;
   }
 
@@ -103,6 +99,7 @@ export class MockDatabaseAuthService {
       this.store.patchState((state) => ({
         ...state,
         currentUserId: existingUser.id,
+        isGuestSession: false,
         selectedChannelId: this.resolveVisibleChannelId(state.channels, state.selectedChannelId, existingUser.id),
         users: state.users.map((user) => (user.id === existingUser.id ? updatedUser : user)),
       }));
@@ -123,6 +120,7 @@ export class MockDatabaseAuthService {
     this.store.patchState((state) => ({
       ...state,
       currentUserId: newUser.id,
+      isGuestSession: false,
       users: [...state.users, newUser],
       channels: state.channels.map((channel) =>
         channel.id === state.selectedChannelId
@@ -174,16 +172,52 @@ export class MockDatabaseAuthService {
   }
 
   logout(): void {
-    const currentUserId = this.store.state().currentUserId;
+    const state = this.store.state();
+    const currentUserId = state.currentUserId;
     if (!currentUserId) {
       return;
     }
 
-    this.store.patchState((state) => ({
-      ...state,
+    if (state.isGuestSession) {
+      // Gast-Logout: alle temporaer erstellten Daten loeschen (Channels,
+      // Nachrichten, Threads die der Gast erzeugt hat), damit nichts im
+      // localStorage zurueckbleibt.
+      const guestChannelIds = new Set(
+        state.channels.filter(c => c.createdBy === currentUserId).map(c => c.id)
+      );
+      const remainingChannels = state.channels
+        .filter(c => c.createdBy !== currentUserId)
+        .map(c => ({ ...c, memberIds: c.memberIds.filter(id => id !== currentUserId) }));
+      const remainingMessages = state.messages.filter(
+        m => m.authorId !== currentUserId && !guestChannelIds.has(m.channelId)
+      );
+      const remainingThreadIds = new Set(remainingMessages.map(m => m.threadId).filter(Boolean));
+      const remainingThreads = state.threads.filter(
+        t => !guestChannelIds.has(t.channelId) && remainingThreadIds.has(t.id)
+      );
+      const remainingUsers = state.users.filter(u => u.id !== currentUserId);
+
+      this.store.patchState(() => ({
+        ...state,
+        currentUserId: '',
+        isGuestSession: false,
+        selectedChannelId: '',
+        selectedThreadId: '',
+        channels: remainingChannels,
+        messages: remainingMessages,
+        threads: remainingThreads,
+        users: remainingUsers,
+      }));
+      return;
+    }
+
+    this.store.patchState((s) => ({
+      ...s,
       currentUserId: '',
       isGuestSession: false,
-      users: state.users.map((user) => (user.id === currentUserId ? { ...user, isOnline: false } : user)),
+      selectedChannelId: '',
+      selectedThreadId: '',
+      users: s.users.map((user) => (user.id === currentUserId ? { ...user, isOnline: false } : user)),
     }));
   }
 
@@ -295,6 +329,7 @@ export class MockDatabaseAuthService {
     this.store.patchState((state) => ({
       ...state,
       currentUserId: newUser.id,
+      isGuestSession: false,
       users: [...state.users, newUser],
     }));
 

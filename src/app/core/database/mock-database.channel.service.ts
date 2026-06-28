@@ -106,7 +106,9 @@ export class MockDatabaseChannelService {
       channels: state.channels.map((channel) => (channel.id === channelId ? nextChannel : channel)),
     }));
 
-    void this.chatStore.updateChannelMembers(nextChannel.id, nextChannel.memberIds);
+    if (!this.store.isGuest()) {
+      void this.chatStore.updateChannelMembers(nextChannel.id, nextChannel.memberIds);
+    }
 
     return nextChannel;
   }
@@ -146,7 +148,9 @@ export class MockDatabaseChannelService {
       channels: nextChannels,
     }));
 
-    void this.chatStore.updateChannelMembers(channelId, nextMembers);
+    if (!this.store.isGuest()) {
+      void this.chatStore.updateChannelMembers(channelId, nextMembers);
+    }
 
     return true;
   }

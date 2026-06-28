@@ -269,7 +269,6 @@
     }
   </div>
 
-  @if (!database.isGuest()) {
   <form
     class="thread-input-box"
     aria-label="Antwort schreiben"
@@ -337,7 +336,6 @@
       </button>
     </div>
   </form>
-  }
 
   @if (activeEmojiPicker() === 'thread') {
     <div class="thread-emoji-picker-layer" (click)="closeEmojiPicker()">

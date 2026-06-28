@@ -233,17 +233,25 @@ export class ChatArea extends ChatAreaBase {
     if (!draft.startsWith('#') && !draft.includes('#')) return [];
     const hashIndex = draft.lastIndexOf('#');
     const query = draft.slice(hashIndex + 1).trim().toLowerCase();
-    return this.database.visibleChannels().filter((c) => c.name.toLowerCase().includes(query));
+    // Nur Channels vorschlagen, in denen der Nutzer Mitglied ist.
+    return this.database.joinedChannels().filter((c) => c.name.toLowerCase().includes(query));
   }
 
   protected recipientUserSuggestions() {
     const draft = this.uiState.newMessageRecipient();
     if (!draft.trimStart().startsWith('@')) return [];
     const query = draft.slice(draft.indexOf('@') + 1).trim().toLowerCase();
+    const currentId = this.database.currentUser()?.id;
+    const contactIds = new Set(this.database.contactUsers().map((u) => u.id));
+    const memberIds = new Set(
+      this.database.joinedChannels().flatMap((c) => c.memberIds)
+    );
+    // Nur eigene Kontakte und Mitglieder aus eigenen Channels vorschlagen.
     return this.database.users().filter((u) => {
-      const name = u.name.toLowerCase();
-      const email = u.email.toLowerCase();
-      return !query || name.includes(query) || email.includes(query);
+      if (u.id === currentId) return false;
+      if (!contactIds.has(u.id) && !memberIds.has(u.id)) return false;
+      if (!query) return true;
+      return u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query);
     }).sort((a, b) => a.name.localeCompare(b.name));
   }
 

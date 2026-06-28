@@ -125,7 +125,9 @@ export class MockDatabaseStore {
 
   readonly activeChannel = computed(() => {
     const state = this.state();
-    return state.channels.find((channel) => channel.id === state.selectedChannelId) ?? state.channels[0] ?? EMPTY_CHANNEL;
+    const selected = state.channels.find((c) => c.id === state.selectedChannelId);
+    if (selected && selected.memberIds.includes(state.currentUserId)) return selected;
+    return state.channels.find((c) => c.memberIds.includes(state.currentUserId)) ?? EMPTY_CHANNEL;
   });
 
   readonly activeChannelMembers = computed(() => {
@@ -305,6 +307,12 @@ export class MockDatabaseStore {
       this.persistState(seed);
       return seed;
     }
+  }
+
+  clearStorage(): void {
+    this.getStorage()?.removeItem(STORAGE_KEY);
+    const seed = cloneState(MOCK_DATABASE_SEED);
+    this.state.set(seed);
   }
 
   private persistState(state: MockDatabaseState): void {

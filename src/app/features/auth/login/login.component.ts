@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 
 import { MockDatabaseService } from '../../../core/database/mock-database.service';
+import { UiStateService } from '../../../core/services/ui-state.service';
 import { GoogleLoginComponent, GoogleLoginSuccess } from '../google-login/google-login';
 import { FirebaseUserService } from '../../../core/services/firebase-user.service';
+import { FirebaseUserSyncService } from '../../../core/services/firebase-user-sync.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +23,9 @@ export class LoginComponent {
   private readonly auth = inject(Auth);
   private readonly injector = inject(EnvironmentInjector);
   private readonly database = inject(MockDatabaseService);
+  private readonly uiState = inject(UiStateService);
   private readonly firebaseUsers = inject(FirebaseUserService);
+  private readonly firebaseSync = inject(FirebaseUserSyncService);
   private loginSuccessTimer: ReturnType<typeof setTimeout> | null = null;
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
   private introTimers: ReturnType<typeof setTimeout>[] = [];
@@ -127,8 +131,19 @@ export class LoginComponent {
     }
   }
 
-  protected loginAsGuest(): void {
+  protected async loginAsGuest(): Promise<void> {
+    // Etwaige echte Firebase-Session zuerst beenden, damit der Firestore-Sync
+    // nicht mit einer alten UID laeuft und die Gast-Session ueberschreibt.
+    try {
+      if (this.auth.currentUser) {
+        await runInInjectionContext(this.injector, () => signOut(this.auth));
+      }
+    } catch (error) {
+      console.error('Sign-out before guest login failed', error);
+    }
     this.database.loginAsGuest();
+    this.firebaseSync.startGuestSnapshots();
+    this.uiState.openHelp();
     this.router.navigate(['/home']);
   }
 

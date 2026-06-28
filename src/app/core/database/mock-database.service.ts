@@ -94,12 +94,14 @@ export class MockDatabaseService {
       reactions?: Array<{ emoji: string; count: number; userIds: string[] }>;
     }>,
   ): void {
+    if (this.isGuestSession()) return;
     this.messageService.syncMessagesFromFirestore(messages);
   }
 
   syncThreadsFromFirestore(
     threads: Array<{ id: string; channelId: string; originMessageId: string }>,
   ): void {
+    if (this.isGuestSession()) return;
     this.messageService.syncThreadsFromFirestore(threads);
   }
 

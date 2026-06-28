@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Output, computed, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MockDatabaseService } from '../../../core/database/mock-database.service';
-import { UiStateService } from '../../../core/services/ui-state.service';
-import { ProfileDialogService } from '../../../core/services/profile-dialog.service';
 import { SidebarCaretIconComponent } from './sidebar-caret-icon.component';
 import { SidebarDmListItemComponent } from './sidebar-dm-list-item.component';
+import { SidebarChannelSublistComponent } from './sidebar-channel-sublist.component';
+import { SidebarDevspaceSearchComponent } from './sidebar-devspace-search.component';
+import { SidebarContactsBase } from './sidebar.contacts.base';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent],
+  imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent, SidebarChannelSublistComponent, SidebarDevspaceSearchComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: [
     './sidebar.channels.scss',
@@ -20,28 +20,26 @@ import { SidebarDmListItemComponent } from './sidebar-dm-list-item.component';
     './sidebar.kontakte-2.scss',
   ],
 })
-export class Sidebar {
+export class Sidebar extends SidebarContactsBase {
   @Output() itemSelected = new EventEmitter<void>();
 
-  protected readonly database = inject(MockDatabaseService);
-  protected readonly uiState = inject(UiStateService);
-  private readonly profileDialog = inject(ProfileDialogService);
+  protected emitItemSelected(): void {
+    this.itemSelected.emit();
+  }
 
   protected readonly channelsExpanded = signal(true);
   protected readonly directMessagesExpanded = signal(false);
-  protected readonly kontakteExpanded = signal(false);
-  protected readonly privateContactsExpanded = signal(true);
-  protected readonly teamExpanded = signal(false);
-  protected readonly meineChannelsExpanded = signal(true);
+  // Drei Hauptgruppen im Channels-Reiter (Akkordeon: immer nur eine offen)
   protected readonly alleChannelsExpanded = signal(false);
+  protected readonly subscribedChannelsExpanded = signal(false);
+  protected readonly ownChannelsExpanded = signal(true);
+  // Unterkategorien oeffentlich/privat (Akkordeon: nur eine offen pro Gruppe)
+  protected readonly subscribedPublicExpanded = signal(true);
+  protected readonly subscribedPrivateExpanded = signal(false);
+  protected readonly ownPublicExpanded = signal(true);
+  protected readonly ownPrivateExpanded = signal(false);
   protected readonly devspaceSearchOpen = signal(false);
   protected readonly devspaceSearchQuery = signal('');
-  protected readonly addContactOpen = signal(false);
-  protected readonly addContactFirstName = signal('');
-  protected readonly addContactLastName = signal('');
-  protected readonly addContactEmail = signal('');
-  protected readonly addContactPhone = signal('');
-  protected readonly kontakteSearchQuery = signal('');
 
   protected readonly searchShowChannels = computed(() =>
     this.devspaceSearchQuery().startsWith('#')
@@ -61,61 +59,51 @@ export class Sidebar {
     );
   });
 
-  private readonly _channelMemberIds = computed(() => {
-    const ids = new Set<string>();
-    this.database.joinedChannels().forEach(c => c.memberIds.forEach(id => ids.add(id)));
-    return ids;
-  });
-
-  private readonly _contactIds = computed(() =>
-    new Set(this.database.contactUsers().map(u => u.id))
-  );
-
-  // Nur eigene Kontakte, Channel-Mitglieder und öffentliche User
+  // Nur User die mit dem aktuellen User in mindestens einem Channel sind
   protected readonly filteredUsers = computed(() => {
     const q = this.devspaceSearchQuery().slice(1).toLowerCase();
     const currentUserId = this.database.currentUser()?.id;
-    const contactIds = this._contactIds();
     const memberIds = this._channelMemberIds();
     return this.database.users().filter(u => {
       if (u.id === currentUserId) return false;
-      const visible = u.isPublic || contactIds.has(u.id) || memberIds.has(u.id);
-      return visible && (!q || u.name.toLowerCase().includes(q));
+      return memberIds.has(u.id) && (!q || u.name.toLowerCase().includes(q));
     });
-  });
-
-  // Kontakte-Liste: eigene Kontakte + Channel-Mitglieder; bei Suche auch öffentliche
-  protected readonly visibleContacts = computed(() => {
-    const currentUserId = this.database.currentUser()?.id;
-    const contactIds = this._contactIds();
-    const memberIds = this._channelMemberIds();
-    const q = this.kontakteSearchQuery().toLowerCase().trim();
-    return this.database.users().filter(u => {
-      if (u.id === currentUserId) return false;
-      const isBase = contactIds.has(u.id) || memberIds.has(u.id);
-      if (!q) return isBase;
-      const nameMatches = u.name.toLowerCase().includes(q);
-      return nameMatches && (isBase || u.isPublic === true);
-    });
-  });
-
-  // Suche nach oeffentlichen Kontakten, die noch nicht in der eigenen Liste sind.
-  protected readonly contactSearchResults = computed(() => {
-    const q = this.kontakteSearchQuery().toLowerCase().trim();
-    if (!q) return [];
-    const currentUserId = this.database.currentUser()?.id;
-    const contactIds = this._contactIds();
-    return this.database.users().filter((u) =>
-      u.id !== currentUserId &&
-      !u.isGuest &&
-      u.isPublic !== false &&
-      !contactIds.has(u.id) &&
-      u.name.toLowerCase().includes(q)
-    );
   });
 
   protected readonly joinedChannelIds = computed(() =>
     new Set(this.database.joinedChannels().map(c => c.id))
+  );
+
+  // ===== Channel-Kategorien =====
+  // Eigene Channels: vom aktuellen Nutzer erstellt. Erscheinen NUR hier, nicht
+  // zusaetzlich unter "Abonnierte", um Duplikate zu vermeiden.
+  private readonly _ownChannels = computed(() => {
+    const userId = this.database.currentUser()?.id;
+    if (!userId) return [];
+    return this.database.joinedChannels().filter(c => c.createdBy === userId);
+  });
+
+  protected readonly ownPublicChannels = computed(() =>
+    this._ownChannels().filter(c => !c.isPrivate)
+  );
+
+  protected readonly ownPrivateChannels = computed(() =>
+    this._ownChannels().filter(c => c.isPrivate)
+  );
+
+  // Abonnierte Channels: beigetreten, aber NICHT selbst erstellt.
+  private readonly _subscribedChannels = computed(() => {
+    const userId = this.database.currentUser()?.id;
+    if (!userId) return [];
+    return this.database.joinedChannels().filter(c => c.createdBy !== userId);
+  });
+
+  protected readonly subscribedPublicChannels = computed(() =>
+    this._subscribedChannels().filter(c => !c.isPrivate)
+  );
+
+  protected readonly subscribedPrivateChannels = computed(() =>
+    this._subscribedChannels().filter(c => c.isPrivate)
   );
 
   // DM-Liste: bereits gefuehrte Gespraeche + das gerade geoeffnete (auch wenn
@@ -132,6 +120,12 @@ export class Sidebar {
 
   protected channelIsActive(channelId: string): boolean {
     return this.database.selectedChannelId() === channelId;
+  }
+
+  // Vom aktuellen Nutzer erstellter Channel? Solche koennen nicht verlassen
+  // werden, daher zeigt "Alle Channels" dort statt Verlassen einen Hinweis.
+  protected isOwnChannel(channel: { createdBy: string }): boolean {
+    return channel.createdBy === this.database.currentUser()?.id;
   }
 
   protected toggleChannels(): void {
@@ -155,50 +149,52 @@ export class Sidebar {
     this.kontakteExpanded.set(next);
   }
 
-  // Kontakte-Bereich als Akkordeon: Suche, Kontakte und Team – es ist immer nur
-  // eines offen. Oeffnen einer Liste schliesst die andere und leert die Suche.
-  protected togglePrivateContacts(): void {
-    const next = !this.privateContactsExpanded();
-    if (next) {
-      this.teamExpanded.set(false);
-      this.kontakteSearchQuery.set('');
-    }
-    this.privateContactsExpanded.set(next);
-  }
-
-  protected toggleTeam(): void {
-    const next = !this.teamExpanded();
-    if (next) {
-      this.privateContactsExpanded.set(false);
-      this.kontakteSearchQuery.set('');
-    }
-    this.teamExpanded.set(next);
-  }
-
-  // Suche aktiv -> Kontakte- und Team-Liste schliessen.
-  protected onKontakteSearchFocus(): void {
-    this.privateContactsExpanded.set(false);
-    this.teamExpanded.set(false);
-  }
-
-  // Alle/Meine Channels: nur eines von beiden offen
+  // Hauptgruppen als Akkordeon: Oeffnen einer Gruppe schliesst die anderen,
+  // sodass immer nur eine der drei Channel-Gruppen offen ist.
   protected toggleAlleChannels(): void {
     const next = !this.alleChannelsExpanded();
-    this.meineChannelsExpanded.set(false);
+    this.subscribedChannelsExpanded.set(false);
+    this.ownChannelsExpanded.set(false);
     this.alleChannelsExpanded.set(next);
   }
 
-  protected toggleMeineChannels(): void {
-    const next = !this.meineChannelsExpanded();
+  protected toggleSubscribedChannels(): void {
+    const next = !this.subscribedChannelsExpanded();
     this.alleChannelsExpanded.set(false);
-    this.meineChannelsExpanded.set(next);
+    this.ownChannelsExpanded.set(false);
+    this.subscribedChannelsExpanded.set(next);
   }
 
-  protected avatarSvgPath(userId: string): string {
-    const avatarImage = this.database.findUser(userId)?.avatarImage;
-    if (avatarImage) return avatarImage;
+  protected toggleOwnChannels(): void {
+    const next = !this.ownChannelsExpanded();
+    this.alleChannelsExpanded.set(false);
+    this.subscribedChannelsExpanded.set(false);
+    this.ownChannelsExpanded.set(next);
+  }
 
-    return `/assets/icons/${this.userAvatarId(userId)}.svg`;
+  // Unterkategorien oeffentlich/privat als Akkordeon: immer nur eine offen.
+  protected toggleSubscribedPublic(): void {
+    const next = !this.subscribedPublicExpanded();
+    this.subscribedPrivateExpanded.set(false);
+    this.subscribedPublicExpanded.set(next);
+  }
+
+  protected toggleSubscribedPrivate(): void {
+    const next = !this.subscribedPrivateExpanded();
+    this.subscribedPublicExpanded.set(false);
+    this.subscribedPrivateExpanded.set(next);
+  }
+
+  protected toggleOwnPublic(): void {
+    const next = !this.ownPublicExpanded();
+    this.ownPrivateExpanded.set(false);
+    this.ownPublicExpanded.set(next);
+  }
+
+  protected toggleOwnPrivate(): void {
+    const next = !this.ownPrivateExpanded();
+    this.ownPublicExpanded.set(false);
+    this.ownPrivateExpanded.set(next);
   }
 
   protected openDevspaceSearch(): void {
@@ -239,141 +235,16 @@ export class Sidebar {
     this.onSelectChannel(channelId);
   }
 
-  protected openUserProfile(userId: string): void {
-    this.profileDialog.open(userId);
+  // Channel verlassen. Stoppt das Klick-Event, damit nicht zugleich der Channel
+  // ausgewaehlt wird.
+  protected leaveChannel(channelId: string, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.database.leaveChannel(channelId);
   }
 
   protected openHelp(): void {
     this.uiState.openHelp();
     this.itemSelected.emit();
-  }
-
-  // Oeffentlichen Kontakt in die eigene private Kontaktliste uebernehmen.
-  protected addPublicContact(userId: string): void {
-    this.database.addExistingContact(userId);
-  }
-
-  // ===== Kontakt-Kontextmenue =====
-  protected readonly openContactMenuId = signal<string | null>(null);
-  protected readonly deleteArmedId = signal<string | null>(null);
-  private deletePressTimer: ReturnType<typeof setTimeout> | null = null;
-
-  protected toggleContactMenu(userId: string): void {
-    this.openContactMenuId.update((id) => (id === userId ? null : userId));
-    this.deleteArmedId.set(null);
-  }
-
-  protected closeContactMenu(): void {
-    this.openContactMenuId.set(null);
-    this.deleteArmedId.set(null);
-  }
-
-  protected contactMessage(userId: string): void {
-    this.uiState.openDirectMessage(userId);
-    this.itemSelected.emit();
-    this.closeContactMenu();
-  }
-
-  protected contactProfile(userId: string): void {
-    this.profileDialog.open(userId);
-    this.closeContactMenu();
-  }
-
-  // Zweistufiges Loeschen: erster Klick "scharf schalten", zweiter Klick loescht
-  // nur die DM-Unterhaltung mit diesem Nutzer, nicht den Kontakt selbst.
-  protected contactDelete(userId: string): void {
-    if (this.deleteArmedId() === userId) {
-      this.database.deleteDirectConversation(userId);
-      this.deleteArmedId.set(null);
-      this.closeContactMenu();
-    } else {
-      this.deleteArmedId.set(userId);
-    }
-  }
-
-  // Langes Druecken schaltet das Loeschen ebenfalls scharf.
-  protected onDeletePressStart(userId: string): void {
-    this.clearDeletePressTimer();
-    this.deletePressTimer = setTimeout(() => this.deleteArmedId.set(userId), 600);
-  }
-
-  protected onDeletePressEnd(): void {
-    this.clearDeletePressTimer();
-  }
-
-  private clearDeletePressTimer(): void {
-    if (this.deletePressTimer !== null) {
-      clearTimeout(this.deletePressTimer);
-      this.deletePressTimer = null;
-    }
-  }
-
-  protected openAddContact(): void {
-    this.addContactFirstName.set('');
-    this.addContactLastName.set('');
-    this.addContactEmail.set('');
-    this.addContactPhone.set('');
-    this.addContactOpen.set(true);
-  }
-
-  protected closeAddContact(): void {
-    this.addContactOpen.set(false);
-  }
-
-  protected submitAddContact(): void {
-    const first = this.addContactFirstName().trim();
-    const last = this.addContactLastName().trim();
-    const email = this.addContactEmail().trim();
-    if (!first || !email) return;
-    const name = last ? `${first} ${last}` : first;
-    this.database.addContact(name, email, this.addContactPhone().trim() || undefined);
-    this.closeAddContact();
-  }
-
-  protected exportContacts(): void {
-    const data = this.database.contactUsers().map(u => ({ name: u.name, email: u.email ?? '' }));
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'kontakte.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  protected importContacts(): void {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json,application/json';
-    input.onchange = (event: Event) => {
-      const file = (event.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const data = JSON.parse(reader.result as string);
-          if (!Array.isArray(data)) return;
-          for (const entry of data) {
-            if (typeof entry.name === 'string' && typeof entry.email === 'string') {
-              this.database.addContact(entry.name, entry.email);
-            }
-          }
-        } catch {}
-      };
-      reader.readAsText(file);
-    };
-    input.click();
-  }
-
-  private userAvatarId(userId: string): number {
-    const user = this.database.findUser(userId);
-    if (!user) return 1;
-    if (typeof user.avatarId === 'number' && user.avatarId >= 1 && user.avatarId <= 6) return user.avatarId;
-    const classMatch = user.avatarClass?.match(/avatar-(\d+)/);
-    if (classMatch) {
-      const id = Number(classMatch[1]);
-      if (id >= 1 && id <= 6) return id;
-    }
-    return 1;
   }
 }

@@ -275,7 +275,6 @@
           [class.message-left]="!isOwn"
           [class.message-editing]="isOwn && editingMessageId() === message.id"
         >
-          @if (!database.isGuest()) {
           <div class="message-hover-actions-menu">
             <button type="button" class="message-hover-action-btn" aria-label="Mit Haken reagieren" (click)="addReaction(message.id, 'check')">
               <span class="message-hover-action-emoji">✅</span>
@@ -305,7 +304,6 @@
               </div>
             }
           </div>
-          }
           @if (isOwn && activeMessageMenuId() === message.id) {
             <div class="message-edit-menu">
               <button type="button" class="message-edit-menu-item" (click)="startEditingMessage(message.id, message.body)">Nachricht bearbeiten</button>
@@ -352,7 +350,6 @@
                       </span>
                     </div>
                   }
-                  @if (!database.isGuest()) {
                   <button type="button" class="reaction-add-button" aria-label="Reaktion hinzufuegen" (click)="toggleEmojiPicker('reaction-row-' + message.id)">
                     <img src="/assets/icons/add-re.svg" alt="" class="reaction-add-icon" />
                   </button>
@@ -366,7 +363,6 @@
                       ></emoji-mart>
                     </div>
                   }
-                  }
                 </div>
               }
             </div>
@@ -375,7 +371,6 @@
       }
     </div>
 
-    @if (!database.isGuest()) {
     <form
       class="message-box composer-box"
       aria-label="Nachricht schreiben"
@@ -428,5 +423,4 @@
         <button type="submit" class="send-button" aria-label="Senden"><img src="/assets/icons/send.svg" alt="" class="send-icon" /></button>
       </div>
     </form>
-    }
 </div>

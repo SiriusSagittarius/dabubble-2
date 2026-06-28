@@ -1,0 +1,48 @@
+<div class="devspace-search-box">
+  <div class="devspace-search-header">
+    <span class="devspace-search-title">Search</span>
+    <button type="button" class="devspace-search-close" (click)="close.emit()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="devspace-search-row">
+    <input
+      type="text"
+      placeholder="Devspace durchsuchen"
+      class="devspace-search-input"
+      name="devspaceSearch" aria-label="Devspace durchsuchen"
+      [ngModel]="query()"
+      (ngModelChange)="queryChange.emit($event)"
+    />
+    <img src="/assets/icons/search-icon.svg" alt="" class="devspace-search-icon" />
+  </div>
+
+  @if (showChannels()) {
+    <nav class="search-result-list">
+      @for (channel of channels(); track channel.id) {
+        <button type="button" class="search-result-item" (click)="selectChannel.emit(channel.id); close.emit()">
+          <span class="search-result-prefix">#</span>
+          <span class="search-result-name">{{ channel.name }}</span>
+        </button>
+      }
+      @if (channels().length === 0) {
+        <span class="search-result-empty">Keine Channels gefunden</span>
+      }
+    </nav>
+  }
+  @if (showUsers()) {
+    <nav class="search-result-list">
+      @for (user of users(); track user.id) {
+        <button type="button" class="search-result-item" (click)="openDirectMessage.emit(user.id); close.emit()">
+          <img class="search-result-avatar" [src]="avatarSvgPath(user.id)" [alt]="user.name" />
+          <span class="search-result-name">{{ user.name }}</span>
+        </button>
+      }
+      @if (users().length === 0) {
+        <span class="search-result-empty">Keine Kontakte gefunden</span>
+      }
+    </nav>
+  }
+
+  @if (showDefault()) {
+    <p class="search-hint"># für Channels &nbsp;·&nbsp; @ für Kontakte</p>
+  }
+</div>

@@ -1,5 +1,4 @@
 /* Fortsetzung von sidebar.channels.scss — wegen 400-Zeilen-Regel ausgelagert. */
-.channel-list,
 .dm-list {
   min-height: 0;
   display: flex;
@@ -9,6 +8,31 @@
   max-height: 200px;
   padding-right: 4px;
   margin: 0 35px;
+  scrollbar-width: thin;
+  scrollbar-color: #c7cbfa transparent;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #c7cbfa; border-radius: 2px; }
+}
+
+/* Channel-Gruppe: Kopf (Toggle) bleibt stehen, nur die Items scrollen. */
+.channel-list {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 35px;
+}
+
+/* Scrollender Bereich INNERHALB einer Channel-Gruppe (ohne den Kopf). */
+.channel-list-scroll {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  max-height: 200px;
+  padding-right: 4px;
   scrollbar-width: thin;
   scrollbar-color: #c7cbfa transparent;
   &::-webkit-scrollbar { width: 4px; }
@@ -42,6 +66,7 @@
 }
 
 .channel-item:hover:not(.active) .channel-item-prefix,
+.channel-item:hover:not(.active) .channel-item-name,
 .dm-item:hover:not(.dm-item-active) .dm-name {
   color: #444df2;
 }
@@ -123,6 +148,13 @@
   background: #444df2;
 }
 
+.channel-item-add {
+  flex-direction: row;
+  gap: 10px;
+  padding: 6px 18px;
+  margin: 0 35px;
+}
+
 .channel-item-add-label {
   transition: color 0.2s ease;
 }
@@ -149,6 +181,12 @@
   padding: 4px 12px 2px;
   font: inherit;
   text-align: left;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.channel-sublist-toggle:hover {
+  background: #eceefe;
 }
 
 .channel-sublist-caret {
@@ -168,6 +206,93 @@
 .channel-sublist-toggle:hover .channel-sublist-caret { fill: #444df2; }
 .channel-sublist-toggle:hover .channel-sublist-label { color: #444df2; }
 .channel-sublist-toggle.sublist-expanded .channel-sublist-caret { transform: rotate(90deg); }
+
+/* Zaehler-Badge im Unterlisten-Kopf (z. B. Anzahl aller Channels). */
+.channel-sublist-count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #adb0d9;
+  background: #eceefe;
+  border-radius: 999px;
+  padding: 1px 8px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Genestete Unterliste (öffentlich/privat innerhalb Abonniert/Eigen).
+   Liegt bereits im 35px-eingerueckten .channel-list -> nur kleiner Links-Versatz. */
+.channel-sublist-nested {
+  margin-left: 15px;
+  margin-right: 0;
+  max-height: none;
+  overflow: visible;
+}
+
+.channel-sublist-toggle-nested {
+  padding-left: 4px;
+}
+
+.channel-sublist-toggle-nested .channel-sublist-label {
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* "Alle Channels"-Eintrag: anklickbarer Link + Beitreten/Verlassen-Button. */
+.channel-item-available {
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.channel-item-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  font: inherit;
+}
+
+.channel-item-available.active .channel-item-prefix,
+.channel-item-available.active .channel-item-name {
+  color: #444df2;
+  font-weight: 700;
+}
+
+.channel-leave-btn {
+  margin-left: auto;
+  border: 1px solid #adb0d9;
+  border-radius: 999px;
+  background: transparent;
+  color: #797ef3;
+  font-family: Nunito, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.channel-leave-btn:hover {
+  background: #444df2;
+  border-color: #444df2;
+  color: #fff;
+}
+
+/* Hinweis statt Button bei selbst erstellten Channels (nicht verlassbar). */
+.channel-owner-tag {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #adb0d9;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
 @media (max-width: 960px) {
   .sidebar-card {

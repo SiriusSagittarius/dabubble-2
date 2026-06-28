@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, ViewChild, ElementRef, signal, inject, computed } from '@angular/core';
+import { Component, HostListener, ViewChild, ElementRef, signal, inject, computed, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { Router } from '@angular/router';
+import { Auth, signOut } from '@angular/fire/auth';
 import { MockDatabaseService } from '../../../core/database/mock-database.service';
 import { ProfileDialogService } from '../../../core/services/profile-dialog.service';
 
@@ -15,6 +16,8 @@ export class Profile {
   private readonly router = inject(Router);
   private readonly database = inject(MockDatabaseService);
   private readonly profileDialog = inject(ProfileDialogService);
+  private readonly auth = inject(Auth);
+  private readonly injector = inject(EnvironmentInjector);
 
   protected profileMenuOpen = signal(false);
   protected readonly currentUser = computed(() => this.database.currentUser());
@@ -47,9 +50,16 @@ export class Profile {
     this.profileDialog.open(user.id);
   }
 
-  protected logout(): void {
+  protected async logout(): Promise<void> {
     this.profileMenuOpen.set(false);
     this.profileDialog.close();
+    // Firebase-Session beenden, sonst meldet onAuthStateChanged den alten Nutzer
+    // gleich wieder an und der Firestore-Sync ueberschreibt z.B. eine Gast-Session.
+    try {
+      await runInInjectionContext(this.injector, () => signOut(this.auth));
+    } catch (error) {
+      console.error('Sign-out failed', error);
+    }
     this.database.logout();
     void this.router.navigate(['/login']);
   }

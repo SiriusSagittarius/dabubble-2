@@ -30,6 +30,77 @@ export class FirebaseUserSyncService {
     );
   }
 
+  startGuestSnapshots(): void {
+    this.unsubUsers = this.onSnap('users', (snap) => {
+      const profiles = snap.docs.map((doc) => {
+        const d = doc.data() as DocumentData;
+        const uid = doc.id;
+        const email = d['email'];
+        if (!uid || !email) return null;
+        return {
+          uid,
+          email: email as string,
+          name: (d['name'] as string | undefined) ?? email as string,
+          picture: (d['picture'] as string | null | undefined) ?? null,
+          avatarId: (d['avatarId'] as number | null | undefined) ?? null,
+          avatarImage: (d['avatarImage'] as string | null | undefined) ?? null,
+          lastActiveAt: null,
+          bio: null,
+          links: null,
+          profileCategories: null,
+        };
+      }).filter((e): e is NonNullable<typeof e> => !!e);
+      this.database.syncUsersFromFirestore(profiles, null);
+    });
+
+    this.unsubChannels = this.onSnap('channels', (snap) => {
+      const profiles = snap.docs.map((doc) => {
+        const d = doc.data() as DocumentData;
+        const id = doc.id;
+        const name = d['name'];
+        if (!id || !name) return null;
+        return {
+          id,
+          name: name as string,
+          description: (d['description'] as string | undefined) ?? '',
+          memberIds: ((d['memberIds'] as string[] | undefined) ?? []).filter(id => id !== 'user-guest'),
+          createdBy: (d['createdBy'] as string | undefined) ?? '',
+          createdAt: (d['createdAt'] as string | undefined) ?? undefined,
+          isPrivate: (d['isPrivate'] as boolean | undefined) ?? false,
+        };
+      }).filter((e): e is NonNullable<typeof e> => !!e);
+      this.database.syncChannelsFromFirestore(profiles);
+    });
+
+    this.unsubMessages = this.onSnap('messages', (snap) => {
+      const profiles = snap.docs.map((doc) => {
+        const d = doc.data() as DocumentData;
+        const id = doc.id;
+        if (!id || !d['channelId'] || !d['authorId'] || !d['body'] || !d['createdAt']) return null;
+        return {
+          id,
+          channelId: d['channelId'] as string,
+          authorId: d['authorId'] as string,
+          body: d['body'] as string,
+          createdAt: d['createdAt'] as string,
+          threadId: d['threadId'] as string | undefined,
+          reactions: (d['reactions'] as Array<{ emoji: string; count: number; userIds: string[] }> | undefined) ?? [],
+        };
+      }).filter((e): e is NonNullable<typeof e> => !!e);
+      this.database.syncMessagesFromFirestore(profiles);
+    });
+
+    this.unsubThreads = this.onSnap('threads', (snap) => {
+      const profiles = snap.docs.map((doc) => {
+        const d = doc.data() as DocumentData;
+        const id = doc.id;
+        if (!id || !d['channelId'] || !d['originMessageId']) return null;
+        return { id, channelId: d['channelId'] as string, originMessageId: d['originMessageId'] as string };
+      }).filter((e): e is NonNullable<typeof e> => !!e);
+      this.database.syncThreadsFromFirestore(profiles);
+    });
+  }
+
   start(): void {
     if (this.authUnsubscribe) {
       return;
@@ -131,7 +202,7 @@ export class FirebaseUserSyncService {
               id,
               name: name as string,
               description: (d['description'] as string | undefined) ?? '',
-              memberIds: (d['memberIds'] as string[] | undefined) ?? [],
+              memberIds: ((d['memberIds'] as string[] | undefined) ?? []).filter(id => id !== 'user-guest'),
               createdBy: (d['createdBy'] as string | undefined) ?? user.uid,
               createdAt: (d['createdAt'] as string | undefined) ?? undefined,
               isPrivate: (d['isPrivate'] as boolean | undefined) ?? false,

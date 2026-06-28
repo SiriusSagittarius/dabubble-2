@@ -25,11 +25,21 @@ export class Home {
   protected readonly sidebarCollapsed = signal(false);
   protected readonly threadCollapsed = signal(true);
 
-  // Hilfe-/Onboarding-Ansicht: manuell geoeffnet ODER automatisch fuer neue User
-  // (noch ohne Channel). Ersetzt den Hauptbereich und blendet den Thread aus.
-  protected readonly helpVisible = computed(
-    () => this.uiState.showHelp() || this.database.onboardingActive(),
-  );
+  // Hilfe-/Onboarding-Ansicht: manuell geoeffnet ODER automatisch, wenn kein
+  // Channel aktiv ist (z.B. neuer User ohne Channel, nach Verlassen aller
+  // Channels oder nach Neustart, solange nichts ausgewaehlt ist) – sofern nicht
+  // gerade eine DM oder der "Neue Nachricht"-Bereich geoeffnet ist.
+  protected readonly helpVisible = computed(() => {
+    if (this.uiState.showHelp()) return true;
+    if (this.database.onboardingActive()) return true;
+    // Kein eingeloggter User -> nichts anzeigen.
+    if (!this.database.currentUser()) return false;
+    // Kein aktiver Channel (Mitglied) und keine offene DM/Intro -> Hilfe zeigen.
+    // Gilt fuer Gaeste und normale Nutzer gleichermassen.
+    const hasActiveChannel = !!this.database.activeChannel().id;
+    const hasDmOrIntro = !!this.uiState.selectedDirectMessageUserId() || this.uiState.showMainChatIntro();
+    return !hasActiveChannel && !hasDmOrIntro;
+  });
 
   constructor() {
     // DM geoeffnet (z.B. ueber "Nachricht" in der Profil-Karte) -> Sidebar mobil schliessen
