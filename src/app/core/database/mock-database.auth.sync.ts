@@ -125,15 +125,29 @@ export function applyFirestoreUserSync(
         ? currentUserUid
         : state.currentUserId;
 
-    let nextContactUserIds = state.contactUserIds;
+    // Kontakte des aktuellen Nutzers kommen aus seinem Firestore-Profil.
+    // Bei einem Account-Wechsel (Login/Registrierung) ist Firestore allein
+    // maßgeblich – so „erbt" ein neuer Account keine Kontakte aus dem
+    // localStorage des zuvor auf diesem Gerät genutzten Accounts. Bleibt
+    // derselbe Nutzer angemeldet, behalten wir lokale, noch nicht
+    // synchronisierte Neuzugänge (optimistische Updates).
+    const knownIds = new Set(nextUsers.map((user) => user.id));
     const currentEntry = users.find((entry) => entry.uid === nextCurrentUserId);
-    if (currentEntry && Array.isArray(currentEntry.contactUserIds)) {
-      const knownIds = new Set(nextUsers.map((user) => user.id));
-      const fromFirestore = currentEntry.contactUserIds.filter((id) => knownIds.has(id));
+    const fromFirestore = Array.isArray(currentEntry?.contactUserIds)
+      ? currentEntry!.contactUserIds.filter((id) => knownIds.has(id))
+      : [];
+    const userChanged = nextCurrentUserId !== state.currentUserId;
+
+    let nextContactUserIds: string[];
+    if (userChanged) {
+      nextContactUserIds = fromFirestore;
+    } else if (currentEntry) {
       const localOnly = (state.contactUserIds ?? []).filter(
         (id) => knownIds.has(id) && !fromFirestore.includes(id),
       );
       nextContactUserIds = Array.from(new Set([...fromFirestore, ...localOnly]));
+    } else {
+      nextContactUserIds = (state.contactUserIds ?? []).filter((id) => knownIds.has(id));
     }
 
     return {

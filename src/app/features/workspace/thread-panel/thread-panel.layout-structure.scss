@@ -224,8 +224,8 @@
 
 .thread-reply-small {
   width: 100%;
-  min-height: 150px;
   justify-content: flex-end;
+  min-height: 150px;
   padding: 10px 30px 10px 0;
 }
 
@@ -245,9 +245,7 @@
   transform: translateX(0);
 }
 
-.thread-message-right .thread-avatar {
-  transform: translateX(18px);
-}
+
 
 .thread-content-block {
   display: flex;
@@ -265,7 +263,6 @@
 }
 
 .thread-content-right {
-  width: fit-content;
   max-width: 100%;
   align-items: flex-end;
 }

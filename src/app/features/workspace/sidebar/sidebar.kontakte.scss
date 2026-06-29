@@ -307,3 +307,28 @@
 }
 
 .kontakte-contact-item-open { background: #eceefe; }
+
+.sidebar-legal {
+  padding: 12px 4px 4px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+}
+
+.sidebar-legal-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #686868;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 4px 8px;
+  transition: color 0.15s, background-color 0.15s;
+
+  &:hover,
+  &:focus-visible {
+    color: #444df2;
+    background: #eceefe;
+    outline: none;
+  }
+}

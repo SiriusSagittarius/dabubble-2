@@ -7,12 +7,13 @@ import { SidebarChannelSublistComponent } from './sidebar-channel-sublist.compon
 import { SidebarDevspaceSearchComponent } from './sidebar-devspace-search.component';
 import { SidebarDeleteAccountComponent } from './sidebar-delete-account.component';
 import { SidebarHelpButtonComponent } from './sidebar-help-button.component';
+import { SidebarLegalLinksComponent } from './sidebar-legal-links.component';
 import { SidebarContactsBase } from './sidebar.contacts.base';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent, SidebarChannelSublistComponent, SidebarDevspaceSearchComponent, SidebarDeleteAccountComponent, SidebarHelpButtonComponent],
+  imports: [CommonModule, FormsModule, SidebarCaretIconComponent, SidebarDmListItemComponent, SidebarChannelSublistComponent, SidebarDevspaceSearchComponent, SidebarDeleteAccountComponent, SidebarHelpButtonComponent, SidebarLegalLinksComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: [
     './sidebar.channels.scss',

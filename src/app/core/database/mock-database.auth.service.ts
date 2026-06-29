@@ -52,6 +52,9 @@ export class MockDatabaseAuthService {
       isGuestSession: false,
       selectedChannelId: this.resolveVisibleChannelId(state.channels, state.selectedChannelId, user.id),
       users: state.users.map((entry) => (entry.id === user.id ? { ...entry, isOnline: true } : entry)),
+      // Kontakte des einloggenden Nutzers kommen aus Firestore (siehe Sync),
+      // nicht aus dem localStorage eines zuvor genutzten Accounts.
+      contactUserIds: [],
     }));
 
     return { ok: true, user };
@@ -94,6 +97,7 @@ export class MockDatabaseAuthService {
         isGuestSession: false,
         selectedChannelId: this.resolveVisibleChannelId(state.channels, state.selectedChannelId, existingUser.id),
         users: state.users.map((user) => (user.id === existingUser.id ? updatedUser : user)),
+        contactUserIds: [],
       }));
 
       return updatedUser;
@@ -114,6 +118,7 @@ export class MockDatabaseAuthService {
       currentUserId: newUser.id,
       isGuestSession: false,
       users: [...state.users, newUser],
+      contactUserIds: [],
       channels: state.channels.map((channel) =>
         channel.id === state.selectedChannelId
           ? { ...channel, memberIds: Array.from(new Set([...channel.memberIds, newUser.id])) }
@@ -207,6 +212,7 @@ export class MockDatabaseAuthService {
       isGuestSession: false,
       selectedChannelId: '',
       selectedThreadId: '',
+      contactUserIds: [],
       users: s.users.map((user) => (user.id === currentUserId ? { ...user, isOnline: false } : user)),
     }));
   }
@@ -319,6 +325,9 @@ export class MockDatabaseAuthService {
       currentUserId: newUser.id,
       isGuestSession: false,
       users: [...state.users, newUser],
+      // Frischer Account: keine geerbten Kontakte aus einem vorher auf diesem
+      // Gerät genutzten Account.
+      contactUserIds: [],
     }));
 
     return { ok: true, user: newUser };
