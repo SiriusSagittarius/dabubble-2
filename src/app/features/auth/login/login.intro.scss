@@ -49,8 +49,12 @@
     .login-intro-stage {
       position: absolute;
       inset: 0;
-      transform-origin: 75px 75px;
-      transform: scale(clamp(0.35, calc(0.37 + (100vw - 320px) / 780px * 0.63), 1));
+      // Pivot in der Bildmitte: Intro startet/bleibt immer zentriert –
+      // egal wie stark skaliert wird (kein "Einfrieren" in der Ecke).
+      transform-origin: 50% 50%;
+      // Fluid scale: 430px viewport -> 0.4, erreicht 1.0 bei 1100px (Desktop unverändert).
+      // Den führenden 0.4-Wert anpassen, um das Mobile-Intro größer/kleiner zu machen.
+      transform: scale(clamp(0.36, calc(0.4 + (100vw - 430px) / 670px * 0.6), 1));
     }
 
     .login-intro-brand {

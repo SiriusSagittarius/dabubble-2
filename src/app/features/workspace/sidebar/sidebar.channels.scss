@@ -135,9 +135,20 @@
 .sidebar-section {
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  min-height: 40px; /* Header-Höhe: eingeklappte Sections nie unter die Kopfzeile schrumpfen */
   gap: 10px;
-  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c7cbfa transparent;
+}
+
+.sidebar-section::-webkit-scrollbar { width: 4px; }
+.sidebar-section::-webkit-scrollbar-track { background: transparent; }
+.sidebar-section::-webkit-scrollbar-thumb { background: #c7cbfa; border-radius: 2px; }
+
+/* Inhalte nicht zusammenquetschen (sonst überlappen die Listen) — bei Platzmangel scrollt die Section */
+.sidebar-section > * {
+  flex-shrink: 0;
 }
 
 .channels-header-row {
