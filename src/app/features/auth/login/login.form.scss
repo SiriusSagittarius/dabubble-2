@@ -360,10 +360,10 @@
       }
     }
 
-    @media (max-width: 390px) {
+    @media (max-width: 320px) {
       .login-intro-brand {
-        width: 70px;
-        height: 69px;
+        width: auto;
+        height: auto;
         animation: loginIntroBrandTravelMobile 3.05s cubic-bezier(0.2, 0.86, 0.18, 1) both;
       }
 

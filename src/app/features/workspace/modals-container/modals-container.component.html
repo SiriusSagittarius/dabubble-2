@@ -235,6 +235,9 @@
             <span class="add-channel-hash" aria-hidden="true">#</span>
             <input id="add-channel-name" name="addChannelName" type="text" class="add-channel-input add-channel-input-with-icon" placeholder="z. B. Kooperationsprojekte" [(ngModel)]="addChannelNameDraft" />
           </div>
+          @if (addChannelNameTaken()) {
+            <p class="add-channel-name-error" role="alert">Diesen Channel gibt es schon. Bitte wähle einen anderen Namen.</p>
+          }
           <label class="add-channel-label add-channel-description-label" for="add-channel-description">Beschreibung <span>(optional)</span></label>
           <div class="add-channel-field">
             <input id="add-channel-description" name="addChannelDescription" type="text" class="add-channel-input" placeholder="Dein Text hier" [(ngModel)]="addChannelDescriptionDraft" />
@@ -263,7 +266,7 @@
             </div>
           </div>
           <div class="add-channel-actions">
-            <button type="submit" class="add-channel-submit" [disabled]="!addChannelNameDraft.trim()">Erstellen</button>
+            <button type="submit" class="add-channel-submit" [disabled]="!addChannelNameDraft.trim() || addChannelNameTaken()">Erstellen</button>
           </div>
         </form>
       } @else {

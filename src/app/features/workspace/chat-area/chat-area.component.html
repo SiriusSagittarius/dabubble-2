@@ -339,14 +339,14 @@
                 <div class="message-reaction-actions" aria-label="Reaktionen">
                   @for (reaction of message.reactions; track reaction.emoji) {
                     <div class="reaction-chip-wrap">
-                      <button type="button" class="reaction-chip" aria-label="Reaktion">
+                      <button type="button" class="reaction-chip" aria-label="Reaktion" (click)="addReaction(message.id, reaction.emoji)">
                         <span class="reaction-icon reaction-icon-text">{{ reactionIcon(reaction.emoji) }}</span>
                         <span>{{ reaction.count }}</span>
                       </button>
                       <span class="reaction-hover-bubble thread-reaction-hover-bubble">
                         <span class="thread-reaction-hover-icon">{{ reactionIcon(reaction.emoji) }}</span>
                         <span class="thread-reaction-hover-user">{{ reactionHoverUser(reaction) }}</span>
-                        <span class="thread-reaction-hover-text">hat {{ reaction.count }} mal reagiert</span>
+                        <span class="thread-reaction-hover-text">{{ reactionHoverText(reaction) }}</span>
                       </span>
                     </div>
                   }

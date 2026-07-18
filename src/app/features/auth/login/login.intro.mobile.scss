@@ -1,0 +1,54 @@
+// Mobile-Variante des Login-Intros (≤530px):
+// Die Desktop-Bühnenskalierung (clamp mit 0.36-Untergrenze) friert unter
+// ~386px ein, wodurch die rechtslastige Logo+Wort-Komposition rechts
+// abgeschnitten wird. Hier stattdessen: Bühne unskaliert lassen und die
+// gesamte Skalierung/Zentrierung in eigenen Keyframes am Brand-Element
+// machen — Landung exakt auf dem echten Logo (oben zentriert, 56px hoch).
+
+@media (max-width: 530px) {
+  .login-intro-stage {
+    transform: none;
+  }
+
+  .login-intro-brand {
+    animation-name: loginIntroBrandTravelMobile;
+  }
+}
+
+// Brand-Box: 240×236, transform-origin left top.
+// Komposition (Mark + Wortzug ab left:282px) ≈ 772px breit.
+// Phase 1: Mark mittig (240×236 × 0.35 → translate um die halbe Größe).
+// Phase 2: Komposition mittig (772 × 0.35 ≈ 270px → -135px), passt ab 320px.
+// Phase 3: oben zentriert landen — 236 × 0.237 ≈ 56px = Höhe des echten Logos,
+//          772 × 0.237 ≈ 183px breit → -92px zentriert, top 28px = Shell-Padding.
+@keyframes loginIntroBrandTravelMobile {
+  0% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-42px, -41px) scale(0.35);
+  }
+
+  18% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-42px, -41px) scale(0.35);
+  }
+
+  38% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-135px, -41px) scale(0.35);
+  }
+
+  68% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-135px, -41px) scale(0.35);
+  }
+
+  100% {
+    left: 50%;
+    top: 28px;
+    transform: translate(-92px, 0) scale(0.237);
+  }
+}

@@ -60,11 +60,26 @@ export class MockDatabaseChannelService {
     this.store.patchState((state) => ({ ...state, selectedChannelId: channelId, selectedThreadId: threadId }));
   }
 
+  isChannelNameTaken(name: string, excludeChannelId?: string): boolean {
+    const normalized = name.trim().toLowerCase();
+
+    if (!normalized) {
+      return false;
+    }
+
+    return this.store
+      .state()
+      .channels.some(
+        (channel) =>
+          channel.id !== excludeChannelId && channel.name.trim().toLowerCase() === normalized,
+      );
+  }
+
   createChannel(name: string, memberIds: string[] = [], isPrivate = false): MockChannel | null {
     const trimmedName = name.trim();
     const currentUser = this.store.currentUser();
 
-    if (!trimmedName || !currentUser) {
+    if (!trimmedName || !currentUser || this.isChannelNameTaken(trimmedName)) {
       return null;
     }
 
@@ -211,6 +226,10 @@ export class MockDatabaseChannelService {
     const currentChannel = this.store.state().channels.find((channel) => channel.id === channelId);
 
     if (!currentChannel) {
+      return null;
+    }
+
+    if (updates.name !== undefined && this.isChannelNameTaken(updates.name, channelId)) {
       return null;
     }
 

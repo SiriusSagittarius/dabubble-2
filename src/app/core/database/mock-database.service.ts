@@ -231,6 +231,10 @@ export class MockDatabaseService {
     this.channelService.selectChannel(channelId);
   }
 
+  isChannelNameTaken(name: string, excludeChannelId?: string): boolean {
+    return this.channelService.isChannelNameTaken(name, excludeChannelId);
+  }
+
   createChannel(name: string, memberIds: string[] = [], isPrivate = false): MockChannel | null {
     if (this.isGuest()) {
       return null;

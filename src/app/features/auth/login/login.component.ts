@@ -15,7 +15,7 @@ import { FirebaseUserSyncService } from '../../../core/services/firebase-user-sy
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule, RouterLink, GoogleLoginComponent],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.intro.scss', './login.form.scss'],
+  styleUrls: ['./login.intro.scss', './login.intro.mobile.scss', './login.form.scss'],
 })
 export class LoginComponent {
   private readonly router = inject(Router);

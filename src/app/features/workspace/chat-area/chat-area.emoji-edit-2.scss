@@ -42,7 +42,9 @@
 
 .channel-edition-description {
   margin-top: 18px;
-  max-height: 96px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   overflow: hidden;
 }
 
@@ -66,11 +68,9 @@
 .channel-edition-input-description { margin-top: 18px; }
 
 .channel-edition-divider {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 144px;
+  width: 100%;
   height: 1px;
+  margin-top: 24px;
   background: #e2e4ff;
 }
 
@@ -251,6 +251,7 @@
     top: auto;
     width: 100%;
     height: auto;
+    flex-shrink: 0;
     border-radius: 24px;
     padding: 24px 22px;
   }
@@ -259,6 +260,7 @@
   .channel-edition-section-description {
     top: auto;
     height: auto;
+    min-height: 0;
   }
 
   .channel-edition-value {
@@ -266,6 +268,8 @@
   }
 
   .channel-edition-description {
+    display: block;
+    -webkit-line-clamp: unset;
     max-height: none;
     overflow: visible;
   }

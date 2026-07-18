@@ -107,9 +107,13 @@ export class ModalsContainer extends ModalsContainerAvatarBase {
     this.profileEditMode = false;
     this.profileEditName = '';
   }
+  protected addChannelNameTaken(): boolean {
+    return this.database.isChannelNameTaken(this.addChannelNameDraft);
+  }
+
   protected createAddChannel(): void {
     const name = this.addChannelNameDraft.trim();
-    if (!name) return;
+    if (!name || this.addChannelNameTaken()) return;
 
     this.addChannelSourceChannelId = this.database.activeChannel()?.id || null;
 

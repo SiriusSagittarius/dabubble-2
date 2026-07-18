@@ -132,7 +132,16 @@ export class ThreadPanel {
     if (!reaction || !reaction.userIds) {
       return '';
     }
-    return reaction.userIds.map((uid: string) => this.database.userName(uid)).join(', ');
+
+    const names = reaction.userIds.map((uid: string) => this.database.userName(uid)).filter(Boolean);
+
+    if (names.length <= 1) return names[0] ?? '';
+
+    return `${names.slice(0, -1).join(', ')} und ${names[names.length - 1]}`;
+  }
+
+  protected reactionHoverText(reaction: any): string {
+    return (reaction?.userIds?.length ?? 0) > 1 ? 'haben reagiert' : 'hat reagiert';
   }
 
   protected threadContactSuggestions() {

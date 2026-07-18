@@ -82,8 +82,16 @@ export abstract class ChatAreaBase {
   }
 
   protected reactionHoverUser(reaction: { userIds: string[] }): string {
-    const name = reaction.userIds.map((userId) => this.database.userName(userId)).find(Boolean);
-    return name ?? 'Reaktion';
+    const names = reaction.userIds.map((userId) => this.database.userName(userId)).filter(Boolean);
+
+    if (names.length === 0) return 'Reaktion';
+    if (names.length === 1) return names[0];
+
+    return `${names.slice(0, -1).join(', ')} und ${names[names.length - 1]}`;
+  }
+
+  protected reactionHoverText(reaction: { userIds: string[] }): string {
+    return reaction.userIds.length > 1 ? 'haben reagiert' : 'hat reagiert';
   }
 
   protected avatarSvgPath(userId: string): string {

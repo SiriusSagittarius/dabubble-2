@@ -209,7 +209,7 @@
 
 .channel-edition-section-name { top: 104px; height: 144px; }
 
-.channel-edition-section-description { top: 270px; height: 270px; }
+.channel-edition-section-description { top: 270px; height: auto; min-height: 270px; }
 
 .channel-edition-section-row {
   display: flex;
